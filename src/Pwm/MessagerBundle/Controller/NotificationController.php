@@ -441,13 +441,14 @@ class NotificationController extends Controller
     $objPHPExcel = $this->get('phpexcel')->createPHPExcelObject($path);
     $secteurs= $objPHPExcel->getSheet(0);
     $highestRow  = $secteurs->getHighestRow(); 
-    $contacts='%2B237694210203';
+    $contacts='+237694210203';
     for ($row = 0; $row <= $highestRow; ++$row) {
              $numeroCell = $secteurs->getCellByColumnAndRow(0, $row)->getFormattedValue();
-             $numero='%2B237'.$numeroCell;
+             $numero='+237'.$numeroCell;
              $contacts=$contacts.','.$numero;
      }
-      $msg=$form->getData()['msg'];
+      $msg=urlencode($form->getData()['msg']);
+      $contacts=urlencode($contacts);
       $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPMC&msg='.$msg;
      // $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET');
        $this->addFlash('success', $url);
