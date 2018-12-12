@@ -203,7 +203,7 @@ class NotificationController extends Controller
          $notification = new Notification();
          $notification
          ->setTitre('Messages non lus')
-         ->setSousTitre("Vous avez de nombreux messages non consultés. Si vous aspirez à un concours, vous devez être attentif à toutes les annonces. ");
+         ->setSousTitre("Vous avez de nombreux messages non consultés. Si vous aspirez à un concours, vous devez être attentif à toutes les annonces.");
          $notification->setIncludeMail(false);
         $data=array('page'=>'rappel');
         $event=new NotificationEvent($registrations,$notification,$data);
@@ -448,9 +448,9 @@ class NotificationController extends Controller
              $contacts=$contacts.'%2C'.$numero;
      }
       $msg=$form->getData()['msg'];
-      $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPM&msg='.$msg;
+      $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPMC&msg='.$msg;
       $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET');
-       $this->addFlash('success', $url);
+       $this->addFlash('success', $res);
     return $this->redirectToRoute('sms_send');  
     }
     return $this->render('MessagerBundle:notification:sms.html.twig', array(
