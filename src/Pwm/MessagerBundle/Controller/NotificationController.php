@@ -441,18 +441,35 @@ class NotificationController extends Controller
     $objPHPExcel = $this->get('phpexcel')->createPHPExcelObject($path);
     $secteurs= $objPHPExcel->getSheet(0);
     $highestRow  = $secteurs->getHighestRow(); 
-    $contacts='+237694210203';
-    for ($row = 0; $row <= $highestRow; ++$row) {
+    //$contacts='+237694210203';
+     $msg=urlencode($form->getData()['msg']);
+    /*for ($row = 0; $row <= $highestRow; ++$row) {
              $numeroCell = $secteurs->getCellByColumnAndRow(0, $row)->getFormattedValue();
              $numero='+237'.$numeroCell;
              $contacts=$contacts.','.$numero;
+     }*/
+   $logPath = $this->get('kernel')->getRootDir(). "/../web/logs.txt";
+   $mode = (!file_exists($logPath)) ? 'w':'a';
+   $logfile = fopen($logPath, $mode);
+for ($row = 0; $row <= $highestRow; ++$row) {
+             $numeroCell = $secteurs->getCellByColumnAndRow(0, $row)->getFormattedValue();
+             $numero='+237'.$numeroCell;
+             $contacts=urlencode($numero);
+       $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPMC&msg='.$msg;  
+         $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET',false);  
+         fwrite($logfile, "\r\n". $res);       
      }
-      $msg=urlencode($form->getData()['msg']);
-      $contacts=urlencode($contacts);
-      $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPMC&msg='.$msg;
-     // $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET');
-       $this->addFlash('success', $url);
-    return $this->redirectToRoute('sms_send');  
+     fclose($logfile);
+     
+    $content = file_get_contents($logPath);
+    $response = new Response();
+    //set headers
+    $response->headers->set('Content-Type', 'mime/type');
+    $response->headers->set('Content-Disposition', 'attachment;filename="logs.txt"');
+    $response->setContent($content); 
+     // 
+       return $response;
+    //return $this->redirectToRoute('sms_send');  
     }
     return $this->render('MessagerBundle:notification:sms.html.twig', array(
             'send_form' => $form->createView(),
