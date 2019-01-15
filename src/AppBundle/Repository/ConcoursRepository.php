@@ -16,7 +16,7 @@ class ConcoursRepository extends \Doctrine\ORM\EntityRepository
   */
   public function findList($start=0){
     $qb = $this->createQueryBuilder('s');
-       $qb ->orderBy('s.nomConcours', 'asc'); 
+       $qb ->orderBy('s.nom', 'asc'); 
     $query=$qb->getQuery();
     $query->setFirstResult($start)->setMaxResults(10);
      return $query->getResult();
