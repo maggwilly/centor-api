@@ -64,13 +64,14 @@ class SessionRepository extends \Doctrine\ORM\EntityRepository
    // $query->setFirstResult(0)->setMaxResults(3);
      return $query->getResult();
 }
-     /**
-  *Nombre de synchro effectue par utilisateur 
-  */
+
   public function findEnVus(){
-    $qb = $this->createQueryBuilder('s')->orderBy('s.nombreInscrit', 'desc')->where('s.archived=:archived')->setParameter('archived',false); 
+    $qb = $this->createQueryBuilder('s')->orderBy('s.nombreInscrit', 'desc')
+    ->where('s.archived=:archived')
+    ->andWhere('s.nombreInscrit>500')
+    ->setParameter('archived',false); 
     $query=$qb->getQuery();
-   // $query->setFirstResult(0)->setMaxResults(6);
+    //$query->setFirstResult(0)->setMaxResults(8);
      return $query->getResult();
 } 
 
