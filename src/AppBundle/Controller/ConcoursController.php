@@ -6,6 +6,8 @@ use AppBundle\Entity\Concours;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
+use FOS\RestBundle\View\View; 
 /**
  * Concour controller.
  *
