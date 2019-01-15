@@ -51,7 +51,7 @@ class SessionRepository extends \Doctrine\ORM\EntityRepository
     $qb = $this->createQueryBuilder('s')->orderBy('s.dateLancement', 'desc')
     ->where('s.archived=:archived and s.dateLancement is not NULL')->setParameter('archived',false); 
     $query=$qb->getQuery();
-    $query->setFirstResult(0)->setMaxResults(6);
+    //$query->setFirstResult(0)->setMaxResults(6);
      return $query->getResult();
 } 
 
@@ -70,7 +70,7 @@ class SessionRepository extends \Doctrine\ORM\EntityRepository
   public function findEnVus(){
     $qb = $this->createQueryBuilder('s')->orderBy('s.nombreInscrit', 'desc')->where('s.archived=:archived')->setParameter('archived',false); 
     $query=$qb->getQuery();
-    $query->setFirstResult(0)->setMaxResults(6);
+   // $query->setFirstResult(0)->setMaxResults(6);
      return $query->getResult();
 } 
 
@@ -81,7 +81,7 @@ class SessionRepository extends \Doctrine\ORM\EntityRepository
     ->andWhere('c.dateMax<=:dateMax or c.dateMax is NULL')->setParameter('dateMax', $user->getDateMax())
     ->orderBy('c.nomConcours', 'asc'); 
     $query=$qb->getQuery();
-    $query->setFirstResult(0)->setMaxResults(10);
+    //$query->setFirstResult(0)->setMaxResults(10);
      return $query->getResult();
 } 
 

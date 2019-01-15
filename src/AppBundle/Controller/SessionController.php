@@ -52,6 +52,52 @@ class SessionController extends Controller
          return  $sessions;
      }
 
+
+        /**
+     * Lists all Produit entities.
+     *@Rest\View()
+     */
+     public function jsonCountAction(Request $request,Info $info=null)
+     {
+         $em = $this->getDoctrine()->getManager();
+         $recents =$em->getRepository('AppBundle:Session')->findRecents();
+         $envue =$em->getRepository('AppBundle:Session')->findEnVus();
+         $forusers =is_null($info)?array():$em->getRepository('AppBundle:Session')->findForUser($info);
+         $concours = $em->getRepository('AppBundle:Concours')->findAll();
+         $sessions =$em->getRepository('AppBundle:Session')->findList(0,'true','dateLancement');
+         return array(
+            'recentsCount' =>count($recents) ,
+            'envueCount' =>count($envue),
+            'forusersCount' =>count($forusers),
+            'concoursCount' =>count($concours),
+            'sessionsCount' =>count($sessions),
+          );
+     }
+
+         /**
+     * Lists all Produit entities.
+     *@Rest\View(serializerGroups={"session"})
+     */
+     public function jsonSelectAction(Request $request,Concours $concours=null,Info $info=null)
+     {
+         $filter=$request->query->get('filter');
+         $em = $this->getDoctrine()->getManager();
+         switch ($filter) {
+             case 'en_vus':
+                 $sessions =$em->getRepository('AppBundle:Session')->findEnVus();
+              return  $sessions;
+              case 'recents':
+                 $sessions =$em->getRepository('AppBundle:Session')->findRecents();
+              return  $sessions; 
+             case 'interessants':
+                 $sessions =is_null($info)?array():$em->getRepository('AppBundle:Session')->findForUser($info);
+              return  $sessions;   
+             case 'ecole':
+                 $sessions =is_null($concours)?array():$em->getRepository('AppBundle:Session')->findAll($concours);
+              return  $sessions;                                        
+         }  
+     }
+
         /**
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"session"})
@@ -62,6 +108,7 @@ class SessionController extends Controller
           $sessions =$em->getRepository('AppBundle:Session')->findRecents();
          return  $sessions;
      }
+
 
 
     /**

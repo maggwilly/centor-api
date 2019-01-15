@@ -18,15 +18,24 @@ class ConcoursController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $concours = $em->getRepository('AppBundle:Concours')->findAll();
-
         return $this->render('concours/index.html.twig', array(
             'concours' => $concours,
         ));
     }
 
         /**
+     * Lists all Produit entities.
+     *@Rest\View(serializerGroups={"concours"})
+     */
+     public function jsonIndexAction(Request $request)
+     {
+        $em = $this->getDoctrine()->getManager();
+        $concours = $em->getRepository('AppBundle:Concours')->findAll();
+         return  $concours;
+     }
+      
+     /**
      * Creates a new session entity.
      *
      */
@@ -41,6 +50,8 @@ class ConcoursController extends Controller
      $em->flush();
    return $this->redirectToRoute('concours_index');
     }
+
+
 
  /**
  * @Security("is_granted('ROLE_CONTROLEUR')")
