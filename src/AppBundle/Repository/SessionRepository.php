@@ -33,7 +33,7 @@ class SessionRepository extends \Doctrine\ORM\EntityRepository
    
     $query=$qb->getQuery();
       if($all!='true')
-    $query->setFirstResult($start)->setMaxResults(8);
+    $query->setFirstResult($start)->setMaxResults(10);
      return $query->getResult();
 }
 

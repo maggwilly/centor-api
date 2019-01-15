@@ -10,4 +10,15 @@ namespace AppBundle\Repository;
  */
 class ConcoursRepository extends \Doctrine\ORM\EntityRepository
 {
+
+   /**
+  *Nombre de synchro effectue par utilisateur 
+  */
+  public function findList($start=0){
+    $qb = $this->createQueryBuilder('s');
+       $qb ->orderBy('s.nomConcours', 'asc'); 
+    $query=$qb->getQuery();
+    $query->setFirstResult($start)->setMaxResults(10);
+     return $query->getResult();
+}
 }

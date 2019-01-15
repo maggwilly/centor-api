@@ -3,6 +3,13 @@ resultat_index_json:
     defaults: { _controller: "AppBundle:Resultat:jsonIndex"}
     methods:  GET
 
+concours_index_json:
+    path:     /concours/json
+    defaults: { _controller: "AppBundle:Concours:jsonIndex"}
+    methods:  GET
+
+
+
 session_index_json:
     path:     /session/json
     defaults: { _controller: "AppBundle:Session:jsonIndex"}

@@ -31,7 +31,10 @@ class ConcoursController extends Controller
      public function jsonIndexAction(Request $request)
      {
         $em = $this->getDoctrine()->getManager();
-        $concours = $em->getRepository('AppBundle:Concours')->findAll();
+        $all=$request->query->get('all');
+        $order=$request->query->get('order');
+        $start=$request->query->get('start');
+        $concours = $em->getRepository('AppBundle:Concours')->findList($start);
          return  $concours;
      }
       
