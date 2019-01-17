@@ -16,8 +16,8 @@ session_index_json:
     methods:  GET
 
 session_home_count_json:
-    path:     /session/home/count/{id}/json
-    defaults: { _controller: "AppBundle:Session:jsonCount","id":"null"}
+    path:     /session/home/count/{uid}/json
+    defaults: { _controller: "AppBundle:Session:jsonCount","uid":"null"}
     methods:  GET
 
 session_selected_json:
