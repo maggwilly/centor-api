@@ -84,11 +84,11 @@ class SessionController extends Controller
          $em = $this->getDoctrine()->getManager();
          switch ($filter) {
              case 'en_vus':
-                 return $em->getRepository('AppBundle:Session')->findEnVus();
+                 return $this->jsonEnVusAction($request);
               case 'recents':
-                 return $em->getRepository('AppBundle:Session')->findRecents(); 
+                 return $this->jsonRecentsAction($request); 
              case 'interessants':
-               return  is_null($info)?array():$em->getRepository('AppBundle:Session')->findForUser($info); 
+               return  $this->jsonForUserAction($request,$info); 
              case 'ecole':
                 return is_null($concours)?array():$em->getRepository('AppBundle:Session')->findAll($concours);
                                             
