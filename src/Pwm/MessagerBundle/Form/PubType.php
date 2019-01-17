@@ -14,13 +14,9 @@ class PubType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('nomDeCampagne')
-        ->add('type', ChoiceType::class, array(
-                                 'choices'  => array(
-                                  'html_image' => 'HTML + Image', 'html' => 'HTML centré'),
-                                   ))
-        ->add('base64Image')
-        ->add('html')
-        ->add('description')
+        ->add('type', 'text', array('label'  =>'Action' ))
+        ->add('base64Image', array('label'  =>"lien direct vers l'image" ))
+        ->add('text', 'text', array('label'  =>'lien direct' ))
         ->add('startDate')
         ->add('endDate');
     }
