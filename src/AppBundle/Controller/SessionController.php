@@ -84,17 +84,14 @@ class SessionController extends Controller
          $em = $this->getDoctrine()->getManager();
          switch ($filter) {
              case 'en_vus':
-                 $sessions =$em->getRepository('AppBundle:Session')->findEnVus();
-              return  $sessions;
+                 return $em->getRepository('AppBundle:Session')->findEnVus();
               case 'recents':
-                 $sessions =$em->getRepository('AppBundle:Session')->findRecents();
-              return  $sessions; 
+                 return $em->getRepository('AppBundle:Session')->findRecents(); 
              case 'interessants':
-                 $sessions =is_null($info)?array():$em->getRepository('AppBundle:Session')->findForUser($info);
-              return  $sessions;   
+               return  is_null($info)?array():$em->getRepository('AppBundle:Session')->findForUser($info); 
              case 'ecole':
-                 $sessions =is_null($concours)?array():$em->getRepository('AppBundle:Session')->findAll($concours);
-              return  $sessions;                                        
+                return is_null($concours)?array():$em->getRepository('AppBundle:Session')->findAll($concours);
+                                            
          }  
      }
 
