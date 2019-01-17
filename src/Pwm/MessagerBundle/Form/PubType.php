@@ -15,7 +15,7 @@ class PubType extends AbstractType
     {
         $builder->add('nomDeCampagne')
         ->add('type', 'text', array('label'  =>'Action' ))
-        ->add('base64Image''text', array('label'  =>"lien direct vers l'image" ))
+        ->add('base64Image','text', array('label'  =>"lien direct vers l'image" ))
         ->add('text', 'text', array('label'  =>'lien direct' ))
         ->add('startDate')
         ->add('endDate');
