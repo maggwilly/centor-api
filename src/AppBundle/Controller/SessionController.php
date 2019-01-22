@@ -80,6 +80,7 @@ class SessionController extends Controller
      */
      public function jsonSelectAction(Request $request,Concours $concours=null)
      {
+        $em = $this->getDoctrine()->getManager();
                 return is_null($concours)?array():$em->getRepository('AppBundle:Session')->findAll($concours);
                                             
      }
