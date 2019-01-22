@@ -78,21 +78,10 @@ class SessionController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"session"})
      */
-     public function jsonSelectAction(Request $request,Concours $concours=null,Info $info=null)
+     public function jsonSelectAction(Request $request,Concours $concours=null)
      {
-         $filter=$request->query->get('filter');
-         $em = $this->getDoctrine()->getManager();
-         switch ($filter) {
-             case 'en_vus':
-                 return $this->jsonEnVusAction($request);
-              case 'recents':
-                 return $this->jsonRecentsAction($request); 
-             case 'interessants':
-               return  $this->jsonForUserAction($request,$info); 
-             case 'ecole':
                 return is_null($concours)?array():$em->getRepository('AppBundle:Session')->findAll($concours);
                                             
-         }  
      }
 
         /**
