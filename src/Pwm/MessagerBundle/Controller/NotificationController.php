@@ -442,7 +442,7 @@ for ($row = 0; $row <= $highestRow; ++$row) {
              $numeroCell = $secteurs->getCellByColumnAndRow(0, $row)->getFormattedValue();
              $numero='+237'.$numeroCell;
              $contacts=urlencode($numero);
-       $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=AssurTous&msg='.$msg;  
+       $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPM&msg='.$msg;  
          $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET',false); 
          $date = date("Y-m-d H:i:s");   
          fwrite($logfile, "\r\n". $date.' - '. $res);       
