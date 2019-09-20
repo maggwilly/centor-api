@@ -430,19 +430,19 @@ class NotificationController extends Controller
               ->getForm();
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-    $path = $this->get('kernel')->getRootDir(). "/../web/import/contacts-dbs-dimanche.xlsx";
+    $path = $this->get('kernel')->getRootDir(). "/../web/import/contacts-bafoussam-superviseurs.xlsx";
     $objPHPExcel = $this->get('phpexcel')->createPHPExcelObject($path);
     $secteurs= $objPHPExcel->getSheet(0);
     $highestRow  = $secteurs->getHighestRow(); 
      $msg=urlencode($form->getData()['msg']); 
-   $logPath = $this->get('kernel')->getRootDir(). "/../web/contacts-dbs-dimanche.txt";
+   $logPath = $this->get('kernel')->getRootDir(). "/../web/contacts-bafoussam-superviseurs.txt";
    $mode = (!file_exists($logPath)) ? 'w':'a';
    $logfile = fopen($logPath, $mode);
 for ($row = 0; $row <= $highestRow; ++$row) {
              $numeroCell = $secteurs->getCellByColumnAndRow(0, $row)->getFormattedValue();
              $numero='+237'.$numeroCell;
              $contacts=urlencode($numero);
-       $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPM&msg='.$msg;  
+       $url='https://api-public.mtarget.fr/api-sms.json?username=omegatelecombuilding&password=79sawbfF&msisdn='.$contacts.'&sender=LPMC&msg='.$msg;  
          $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET',false); 
          $date = date("Y-m-d H:i:s");   
          fwrite($logfile, "\r\n". $date.' - '. $res);       
