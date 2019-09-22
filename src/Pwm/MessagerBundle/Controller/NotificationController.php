@@ -430,12 +430,12 @@ class NotificationController extends Controller
               ->getForm();
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-    $path = $this->get('kernel')->getRootDir(). "/../web/import/contacts-bafoussam-superviseurs.xlsx";
+    $path = $this->get('kernel')->getRootDir(). "/../web/import/contacts-9h.xlsx";
     $objPHPExcel = $this->get('phpexcel')->createPHPExcelObject($path);
     $secteurs= $objPHPExcel->getSheet(0);
     $highestRow  = $secteurs->getHighestRow(); 
      $msg=urlencode($form->getData()['msg']); 
-   $logPath = $this->get('kernel')->getRootDir(). "/../web/contacts-bafoussam-superviseurs.txt";
+   $logPath = $this->get('kernel')->getRootDir(). "/../web/contacts-9h.txt";
    $mode = (!file_exists($logPath)) ? 'w':'a';
    $logfile = fopen($logPath, $mode);
 for ($row = 0; $row <= $highestRow; ++$row) {
@@ -452,7 +452,7 @@ for ($row = 0; $row <= $highestRow; ++$row) {
     $content = file_get_contents($logPath);
     $response = new Response();
     $response->headers->set('Content-Type', 'mime/type');
-    $response->headers->set('Content-Disposition', 'attachment;filename="logs.txt"');
+    $response->headers->set('Content-Disposition', 'attachment;filename="contacts-9h.txt"');
     $response->setContent($content); 
        return $response;
     }
