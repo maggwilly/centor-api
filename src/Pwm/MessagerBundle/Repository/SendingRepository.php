@@ -12,15 +12,12 @@ use Pwm\MessagerBundle\Entity\Registration;
 class SendingRepository extends \Doctrine\ORM\EntityRepository
 {
 
-	  /**
-  *Nombre de synchro effectue par utilisateur 
-  */
+
   public function findList($registration,$uid,$start){
-        //connected and registed
        $qb = $this->createQueryBuilder('a')->join('a.registration','r');
        $qb->where('a.registration=:registration')
         ->orWhere('r.info=:uid')
-      ->setParameter('registration',$registration)->setParameter('uid',$uid);
+        ->setParameter('registration',$registration)->setParameter('uid',$uid);
         $qb->orderBy('a.date', 'desc'); 
          $query=$qb->getQuery();
          $query->setFirstResult($start)->setMaxResults(20);

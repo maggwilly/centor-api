@@ -63,7 +63,6 @@ class SessionController extends Controller
          return  $sessions;
      }
 
-
     /**
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"session"})

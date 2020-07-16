@@ -3,18 +3,21 @@
 namespace Pwm\MessagerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use SolrBundle\Entity\SolrSearchResult;
+use FS\SolrBundle\Doctrine\Annotation as Solr;
 /**
  * Notification
- *
+* @Solr\Document()
+* @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="notification")
  * @ORM\Entity(repositoryClass="Pwm\MessagerBundle\Repository\NotificationRepository")
+  * @ORM\HasLifecycleCallbacks
  */
 class Notification
 {
     /**
      * @var int
-     *
+     * @Solr\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,14 +26,14 @@ class Notification
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="titre", type="string", length=255)
      */
     private $titre;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="text", type="text")
      */
     private $text;
@@ -38,28 +41,28 @@ class Notification
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="tag", type="string", length=255, options={"default" : "public"})
      */
     private $tag; 
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="sousTitre", type="text")
      */
     private $sousTitre;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
@@ -74,7 +77,7 @@ class Notification
 
     /**
      * @var \DateTime
-     *
+     * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
@@ -132,8 +135,16 @@ class Notification
    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
    */
     private $user;
-
-
+    /**
+     *@ORM\PostLoad()
+     */
+    public function indexHandler()
+    {
+        $this->title=$this->titre;
+        $this->description=$this->text;
+        $this->resultType='Annonce';
+        return $this->user==null;
+    }
     /**
      * Constructor
      */

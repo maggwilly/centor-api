@@ -2,64 +2,70 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Pwm\MessagerBundle\Entity\Notification;
+use SolrBundle\Entity\SolrSearchResult;
+use FS\SolrBundle\Doctrine\Annotation as Solr;
 /**
  * Concours
- *
+ * @Solr\Document()
+  * @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="concours_ecole")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ConcoursRepository")
-   * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks
  */
-class Concours
+class Concours extends SolrSearchResult
 {
     /**
      * @var int
-     *
+     * @Solr\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
+
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="ecole", type="string", length=255)
      */
     private $ecole;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
+
      * @ORM\Column(name="abreviation", type="string", length=255, nullable=true)
      */
     private $abreviation;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="descriptionEcole", type="text", length=255, nullable=true)
      */
     private $descriptionEcole;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="descriptionConcours", type="text", length=255, nullable=true)
      */
     private $descriptionConcours;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="contacts", type="string", length=255, nullable=true)
      */
     private $contacts;
@@ -77,20 +83,21 @@ class Concours
     private $imageEntity;
 
      /**
+
    * @ORM\OneToMany(targetEntity="AppBundle\Entity\Session", mappedBy="concours", cascade={"persist"})
    */
     private $sessions;
 
         /**
      * @var string
-     *
+         * @Solr\Field(type="string")
      * @ORM\Column(name="serie", type="string", length=255, nullable=true)
      */
     private $serie;
 
         /**
      * @var string
-     *
+         * @Solr\Field(type="string")
      * @ORM\Column(name="niveau", type="string", length=255, nullable=true)
      */
     private $niveau;
@@ -115,7 +122,7 @@ class Concours
     public function __construct(Programme $programme=null)
     {
          
-        $this->sessions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sessions = new ArrayCollection();
         if($programme!=null){
         $this->nom=$programme->getNom();
         $this->ecole=$programme->getEcole();
@@ -141,8 +148,16 @@ class Concours
        ->setSousTitre("Découvrir  l'école/ faculté ".$this->getEcole()." et le concours de ".$this->getNom())
        ->setText('<h2>'.$this->getNom().'</h2>'.'<p>'.$this->descriptionEcole.'</p>'.'<p>'.$this->descriptionConcours.'</p>');
     }
-
-
+/**
+*@ORM\PostLoad()
+ */
+    public function indexHandler()
+    {
+        $this->title=$this->ecole.' - '.$this->abreviation;
+        $this->description=$this->descriptionEcole.' '.$this->contacts;
+        $this->resultType='Ecole';
+        return true;
+    }
     /**
      * Get id
      *
@@ -327,11 +342,11 @@ class Concours
     /**
      * Set imageEntity
      *
-     * @param \AppBundle\Entity\Image $imageEntity
+     * @param Image $imageEntity
      *
      * @return Concours
      */
-    public function setImageEntity(\AppBundle\Entity\Image $imageEntity = null)
+    public function setImageEntity(Image $imageEntity = null)
     {
         $this->imageEntity = $imageEntity;
 
@@ -341,7 +356,7 @@ class Concours
     /**
      * Get imageEntity
      *
-     * @return \AppBundle\Entity\Image
+     * @return Image
      */
     public function getImageEntity()
     {
@@ -351,11 +366,11 @@ class Concours
     /**
      * Add session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param Session $session
      *
      * @return Concours
      */
-    public function addSession(\AppBundle\Entity\Session $session)
+    public function addSession(Session $session)
     {
        $session->setConcours($this);
         $this->sessions[] = $session;
@@ -366,9 +381,9 @@ class Concours
     /**
      * Remove session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param Session $session
      */
-    public function removeSession(\AppBundle\Entity\Session $session)
+    public function removeSession(Session $session)
     {
         $this->sessions->removeElement($session);
     }
@@ -458,11 +473,11 @@ class Concours
     /**
      * Set articleDescriptif
      *
-     * @param \Pwm\MessagerBundle\Entity\Notification $articleDescriptif
+     * @param Notification $articleDescriptif
      *
      * @return Concours
      */
-    public function setArticleDescriptif(\Pwm\MessagerBundle\Entity\Notification $articleDescriptif = null)
+    public function setArticleDescriptif(Notification $articleDescriptif = null)
     {
         $this->articleDescriptif = $articleDescriptif;
 
@@ -472,10 +487,36 @@ class Concours
     /**
      * Get articleDescriptif
      *
-     * @return \Pwm\MessagerBundle\Entity\Notification
+     * @return Notification
      */
     public function getArticleDescriptif()
     {
         return $this->articleDescriptif;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->getNom();
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->defaultDescription();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return 'Concours';
+    }
+
 }

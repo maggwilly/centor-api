@@ -1,3 +1,8 @@
+solr:
+    resource: "@SolrBundle/Controller/"
+    type:     annotation
+    prefix:   /v1
+
 messager:
     resource: "@MessagerBundle/Resources/config/routing.yml"
     prefix:   /v1
@@ -17,12 +22,6 @@ user_homepage:
     defaults: { _controller: "AppBundle:App:index" }
     methods:  GET
 
-
-homepage:
-    path:     /
-    defaults: { _controller: "AppBundle:App:index" }
-    methods:  GET
- 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 

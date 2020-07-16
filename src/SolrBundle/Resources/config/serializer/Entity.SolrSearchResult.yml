@@ -1,0 +1,19 @@
+SolrBundle\Entity\SolrSearchResult:
+    exclusion_policy: none
+    properties:
+        id:
+             groups: [ 'full']
+        title:
+             groups: ['full']
+        description:
+             groups: [ 'full']
+        resultType:
+             groups: [ 'full']
+        url:
+          groups: [ 'full']
+        date:
+             groups: [ 'full']
+        dateMax:
+          groups: [ 'full']
+        dateConcours:
+          groups: [ 'full']

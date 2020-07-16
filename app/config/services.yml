@@ -64,3 +64,8 @@ services:
           arguments: ["@misteio_cloudinary_wrapper","@doctrine.orm.entity_manager", "@twig","@fmc_manager"]
           tags:
             - { name: kernel.event_listener, event: fill.profil.invited, method: onFillProfilInvited }
+
+      app.jmsserializer.datetimeinterface_handler:
+        class: SolrBundle\DateTimeInterfaceHandler
+        tags:
+          - { name: jms_serializer.handler, type: DateTime, direction: serialization, format: json, method: serializeToJson }

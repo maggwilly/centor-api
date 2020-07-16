@@ -1,6 +1,7 @@
 imports:
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@SolrBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -8,6 +9,8 @@ parameters:
     locale: fr
     jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
     uploads_directory: '%kernel.root_dir%/web/uploads/images'
+    database_driver: pdo_pgsql
+    solr.class: SolrBundle\Solr
 framework:
     #esi:             ~
     translator:      { fallbacks: ["%locale%"] }
@@ -78,6 +81,12 @@ fos_user:
     registration:
         form:
                 type: app_user_registration
+jms_serializer:
+    handlers:
+        datetime:
+            default_format: "Y-m-d\\TH:i:sP" # ATOM
+            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+
 fos_rest:
     disable_csrf_role: ROLE_API
     param_fetcher_listener: true
@@ -106,9 +115,6 @@ fos_rest:
             media_type: # Accept header
                 enabled: true
                 regex: '/(v|version)=(?P<version>[0-9\.]+)/'
-        resolvers:
-            media_type:
-                enabled: true
     exception:
         enabled: false
         codes:
@@ -124,8 +130,6 @@ fos_rest:
     body_listener:
         decoders:
             json: fos_rest.decoder.json
-    param_fetcher_listener:
-        enabled: true
     serializer:
         serialize_null:  false
 
@@ -150,3 +154,11 @@ nelmio_cors:
                 allow_headers: ['*']
                 allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
                 max_age: 3600
+fs_solr:
+    endpoints:
+        searchitems:
+            host: localhost
+            port: 8984
+            path: /solr/
+            core: searchitems
+            timeout: 5

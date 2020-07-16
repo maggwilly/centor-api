@@ -1,55 +1,68 @@
 <?php
 
 namespace Pwm\AdminBundle\Entity;
-
+use FS\SolrBundle\Doctrine\Annotation as Solr;
 use Doctrine\ORM\Mapping as ORM;
+use SolrBundle\Entity\SolrSearchResult;
 /**
  * Ressource
+* @Solr\Document()
+  * @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="ressource")
  * @ORM\Entity(repositoryClass="Pwm\AdminBundle\Repository\RessourceRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Ressource
+class Ressource extends SolrSearchResult
 {
     /**
-     * @var int
+     * @Solr\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
-     *
+     * @Solr\Field(type="integer")
      * @ORM\Column(name="price", type="integer", nullable=true)
      */
     private $price;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="description", type="text", length=255)
      */
-    private $description;
+    protected $description;
+
+    /**
+     *@ORM\PostLoad()
+     */
+    public function indexHandler()
+    {
+        $this->title=$this->nom;
+        $this->resultType='Document';
+        return true;
+    }
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="detail1", type="string", length=255, nullable=true)
      */
     private $detail1;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="detail2", type="string", length=255, nullable=true)
      */
     private $detail2;
@@ -70,7 +83,7 @@ class Ressource
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="style", type="string", length=255, nullable=true)
      */
     private $style;
@@ -85,20 +98,20 @@ class Ressource
 
     /**
      * @var \DateTime
-     *
+     * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="date", type="datetime")
      */
-    private $date;
+    protected $date;
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="url", type="string", length=255)
      */
-    private $url;
+    protected $url;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="label", type="string", length=255, nullable=true)
      */
     private $label;
@@ -606,8 +619,22 @@ class Ressource
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getMatieres()
-    { 
-  
-              return $this->matieres;
+    {
+   return $this->matieres;
+    }
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->getNom();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->getDescription();
     }
 }

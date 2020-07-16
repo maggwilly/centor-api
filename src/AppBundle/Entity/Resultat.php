@@ -3,51 +3,64 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SolrBundle\Entity\SolrSearchResult;
+use FS\SolrBundle\Doctrine\Annotation as Solr;
 
 /**
  * Resultat
- *
+ * @Solr\Document()
+ * @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="resultat_concours")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ResultatRepository")
+ * @ORM\HasLifecycleCallbacks
  */
-class Resultat
+class Resultat extends SolrSearchResult
 {
     /**
      * @var int
-     *
+     * @Solr\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="url", type="text")
      */
-    private $url;
+    protected $url;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="image", type="text",  nullable=true)
      */
     private $imageUrl;
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="description", type="text", length=255)
      */
-    private $description;
+    protected $description;
 
     /**
      * @var \DateTime
-     *
+     * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    private $date;
-
+    protected $date;
+    /**
+     *@ORM\PostLoad()
+     */
+    public function indexHandler()
+    {
+        $this->description=$this->description;
+        $this->title=$this->description;
+        $this->resultType='Resultat';
+        return true;
+    }
 
     /**
      * Get id
@@ -163,6 +176,29 @@ class Resultat
     {
         $this->date=new \DateTime();
     }
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->getDate();
+    }
 
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->getDescription();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return 'Resultat';
+    }
 }
 

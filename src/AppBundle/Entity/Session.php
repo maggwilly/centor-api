@@ -3,55 +3,63 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pwm\AdminBundle\Entity\Abonnement;
 use Pwm\AdminBundle\Entity\Groupe;
+use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\Price;
+use Pwm\AdminBundle\Entity\Ressource;
+use Pwm\MessagerBundle\Entity\Notification;
+use SolrBundle\Entity\SolrSearchResult;
+use FS\SolrBundle\Doctrine\Annotation as Solr;
 /**
  * Session
- *
+ * @Solr\Document()
+ * @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="session")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SessionRepository")
   * @ORM\HasLifecycleCallbacks
  */
-class Session
+class Session extends SolrSearchResult
 {
     /**
      * @var int
-     *
+     * @Solr\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="nom_concours", type="string", length=512, options={"default" : "groupe"},  nullable=true)
      */
     private $nomConcours;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="annee", type="integer",  nullable=true)
      */
     private $annee;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="abreviation", type="string", length=255, nullable=true)
      */
     private $abreviation;
@@ -65,14 +73,14 @@ class Session
 
         /**
      * @var string
-     *
+         * @Solr\Field(type="string")
      * @ORM\Column(name="niveau", type="string", length=255, nullable=true)
      */
     private $niveau;
 
     /**
      * @var \DateTime
-     *
+     * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="date_max", type="date", nullable=true)
      */
     private $dateMax;
@@ -90,35 +98,35 @@ class Session
     private $newressource; 
     /**
      * @var int
-     *
+     * @Solr\Field(type="integer")
      * @ORM\Column(name="nombrePlace", type="integer", nullable=true)
      */
     private $nombrePlace;
 
     /**
      * @var int
-     *
+     * @Solr\Field(type="integer")
      * @ORM\Column(name="nombreInscrit", type="integer", nullable=true)
      */
     private $nombreInscrit;
 
         /**
      * @var \DateTime
-     *
+       * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="dateLancement", type="date", nullable=true)
      */
     private $dateLancement;
 
     /**
      * @var \DateTime
-     *
+     * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="dateConcours", type="date", nullable=true)
      */
     private $dateConcours;
 
     /**
      * @var \DateTime
-     *
+     * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="dateDossier", type="date", nullable=true)
      */
     private $dateDossier;
@@ -130,10 +138,10 @@ class Session
 
           /**
      * @var \DateTime
-     *
+           * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
-    private $date;
+    protected $date;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Programme",inversedBy="sessions")
      */
@@ -165,7 +173,7 @@ class Session
 
         /**
      * @var string
-     *
+     * @Solr\Field(type="string")
      * @ORM\Column(name="uid", type="string", length=255, nullable=true)
      */
     private $owner;
@@ -187,7 +195,7 @@ class Session
 
    /**
      * @var string
-     *
+    * @Solr\Field(type="string")
      * @ORM\Column(name="discussionName", type="string", length=255, options={"default" : "Groupe"})
      */
     private $discussionName;
@@ -202,7 +210,16 @@ class Session
      * @ORM\ManyToOne(targetEntity="Pwm\MessagerBundle\Entity\Notification", cascade={"persist"})
      */
     private $articleDescriptif;
-
+    /**
+     *@ORM\PostLoad()
+     */
+    public function indexHandler()
+    {
+        $this->description=$this->nomConcours.' -  '.$this->abreviation;
+        $this->title=$this->nomConcours.' - '.$this->annee;
+        $this->resultType='Concours';
+        return true;
+    }
   /**
      * Constructor
      */
@@ -267,10 +284,10 @@ class Session
        /**
      * Set user
      *
-     * @param \AppBundle\Entity\User $user
+     * @param User $user
      * @return Question
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -280,7 +297,7 @@ class Session
     /**
      * Get user
      *
-     * @return \AppBundle\Entity\User 
+     * @return User
      */
     public function getUser()
     {
@@ -450,7 +467,7 @@ class Session
      *
      * @return Session
      */
-    public function setPrice(\Pwm\AdminBundle\Entity\Price $price)
+    public function setPrice(Price $price)
     {
         $this->price = $price;
 
@@ -494,11 +511,11 @@ class Session
     /**
      * Set concours
      *
-     * @param \AppBundle\Entity\Concours $concours
+     * @param Concours $concours
      *
      * @return Session
      */
-    public function setConcours(\AppBundle\Entity\Concours $concours = null)
+    public function setConcours(Concours $concours = null)
     {
         $this->concours = $concours;
 
@@ -508,7 +525,7 @@ class Session
     /**
      * Get concours
      *
-     * @return \AppBundle\Entity\Concours
+     * @return Concours
      */
     public function getConcours()
     {
@@ -643,11 +660,11 @@ class Session
     /**
      * Set preparation
      *
-     * @param \AppBundle\Entity\Programme $preparation
+     * @param Programme $preparation
      *
      * @return Session
      */
-    public function setPreparation(\AppBundle\Entity\Programme $preparation = null)
+    public function setPreparation(Programme $preparation = null)
     {
         $this->preparation = $preparation;
 
@@ -657,7 +674,7 @@ class Session
     /**
      * Get preparation
      *
-     * @return \AppBundle\Entity\Programme
+     * @return Programme
      */
     public function getPreparation()
     {
@@ -667,11 +684,11 @@ class Session
     /**
      * Add abonnement
      *
-     * @param \Pwm\AdminBundle\Entity\Abonnement $abonnement
+     * @param Abonnement $abonnement
      *
      * @return Session
      */
-    public function addAbonnement(\Pwm\AdminBundle\Entity\Abonnement $abonnement)
+    public function addAbonnement(Abonnement $abonnement)
     {
         $this->abonnements[] = $abonnement;
 
@@ -681,9 +698,9 @@ class Session
     /**
      * Remove abonnement
      *
-     * @param \Pwm\AdminBundle\Entity\Abonnement $abonnement
+     * @param Abonnement $abonnement
      */
-    public function removeAbonnement(\Pwm\AdminBundle\Entity\Abonnement $abonnement)
+    public function removeAbonnement(Abonnement $abonnement)
     {
         $this->abonnements->removeElement($abonnement);
     }
@@ -701,11 +718,11 @@ class Session
     /**
      * Add info
      *
-     * @param \Pwm\AdminBundle\Entity\Info $info
+     * @param Info $info
      *
      * @return Session
      */
-    public function addInfo(\Pwm\AdminBundle\Entity\Info $info)
+    public function addInfo(Info $info)
     {
         $this->infos[] = $info;
 
@@ -715,9 +732,9 @@ class Session
     /**
      * Remove info
      *
-     * @param \Pwm\AdminBundle\Entity\Info $info
+     * @param Info $info
      */
-    public function removeInfo(\Pwm\AdminBundle\Entity\Info $info)
+    public function removeInfo(Info $info)
     {
         foreach ($this->infos as $key => $value) {
             if($info->getUid()==$value->getUid())
@@ -814,11 +831,11 @@ class Session
      /**
      * Add lien
      *
-     * @param \AppBundle\Entity\Objectif $lien
+     * @param Objectif $lien
      *
      * @return Programme
      */
-    public function addLien(\AppBundle\Entity\Objectif $lien)
+    public function addLien(Objectif $lien)
     {
         $lien->setProgramme( $this);
         $this->liens[] = $lien;
@@ -828,9 +845,9 @@ class Session
     /**
      * Remove lien
      *
-     * @param \AppBundle\Entity\Objectif $lien
+     * @param Objectif $lien
      */
-    public function removePartie(\AppBundle\Entity\Partie $lien)
+    public function removePartie(Partie $lien)
     {
         $this->parties->removeElement($lien);
     }
@@ -839,11 +856,11 @@ class Session
      /**
      * Add lien
      *
-     * @param \AppBundle\Entity\Objectif $lien
+     * @param Objectif $lien
      *
      * @return Programme
      */
-    public function addPartie(\AppBundle\Entity\Partie $lien)
+    public function addPartie(Partie $lien)
     {
        
         $this->parties[] = $lien;
@@ -853,9 +870,9 @@ class Session
     /**
      * Remove lien
      *
-     * @param \AppBundle\Entity\Objectif $lien
+     * @param Objectif $lien
      */
-    public function removeLien(\AppBundle\Entity\Objectif $lien)
+    public function removeLien(Objectif $lien)
     {
         $this->liens->removeElement($lien);
     }
@@ -874,11 +891,11 @@ class Session
     /**
      * Set groupe
      *
-     * @param \Pwm\AdminBundle\Entity\Groupe $groupe
+     * @param Groupe $groupe
      *
      * @return Notification
      */
-    public function setGroupe(\Pwm\AdminBundle\Entity\Groupe $groupe = null)
+    public function setGroupe(Groupe $groupe = null)
     {
         $this->groupe = $groupe;
 
@@ -888,7 +905,7 @@ class Session
     /**
      * Get groupe
      *
-     * @return \Pwm\AdminBundle\Entity\Groupe
+     * @return Groupe
      */
     public function getGroupe()
     {
@@ -924,7 +941,7 @@ class Session
     /**
      * Set owner
      *
-     * @param \Pwm\AdminBundle\Entity\Info $owner
+     * @param Info $owner
      *
      * @return Session
      */
@@ -938,7 +955,7 @@ class Session
     /**
      * Get owner
      *
-     * @return \Pwm\AdminBundle\Entity\Info
+     * @return Info
      */
     public function getOwner()
     {
@@ -948,11 +965,11 @@ class Session
     /**
      * Add party
      *
-     * @param \AppBundle\Entity\Partie $party
+     * @param Partie $party
      *
      * @return Session
      */
-    public function addParty(\AppBundle\Entity\Partie $party)
+    public function addParty(Partie $party)
     {
         $this->parties[] = $party;
 
@@ -962,9 +979,9 @@ class Session
     /**
      * Remove party
      *
-     * @param \AppBundle\Entity\Partie $party
+     * @param Partie $party
      */
-    public function removeParty(\AppBundle\Entity\Partie $party)
+    public function removeParty(Partie $party)
     {
         $this->parties->removeElement($party);
     }
@@ -1006,11 +1023,11 @@ class Session
     /**
      * Add ressource
      *
-     * @param \Pwm\AdminBundle\Entity\Ressource $ressource
+     * @param Ressource $ressource
      *
      * @return Session
      */
-    public function addRessource(\Pwm\AdminBundle\Entity\Ressource $ressource)
+    public function addRessource(Ressource $ressource)
     {
         $this->ressources[] = $ressource;
 
@@ -1020,9 +1037,9 @@ class Session
     /**
      * Remove ressource
      *
-     * @param \Pwm\AdminBundle\Entity\Ressource $ressource
+     * @param Ressource $ressource
      */
-    public function removeRessource(\Pwm\AdminBundle\Entity\Ressource $ressource)
+    public function removeRessource(Ressource $ressource)
     {
         $this->ressources->removeElement($ressource);
     }
@@ -1040,11 +1057,11 @@ class Session
     /**
      * Set articleDescriptif
      *
-     * @param \Pwm\MessagerBundle\Entity\Notification $articleDescriptif
+     * @param Notification $articleDescriptif
      *
      * @return Concours
      */
-    public function setArticleDescriptif(\Pwm\MessagerBundle\Entity\Notification $articleDescriptif = null)
+    public function setArticleDescriptif(Notification $articleDescriptif = null)
     {
         $this->articleDescriptif = $articleDescriptif;
 
@@ -1054,11 +1071,34 @@ class Session
     /**
      * Get articleDescriptif
      *
-     * @return \Pwm\MessagerBundle\Entity\Notification
+     * @return Notification
      */
     public function getArticleDescriptif()
     {
         return $this->articleDescriptif;
     }
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->getNomConcours();
+    }
 
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->getLiens();
+    }
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->getDescription();
+    }
 }
