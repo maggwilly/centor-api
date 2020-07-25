@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  posgresql:
+    container_name: posgresql
+    image: postgres:9.5-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: magloirewilly
+      POSTGRES_DB: db_centor
+    volumes:
+      - ./initial.d:/docker-entrypoint-initdb.d
+      - ./postgresql/folder/:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  solr:
+    image: solr:8
+    container_name: solr
+    ports:
+      - "8984:8983"
+    volumes:
+       - ./solr/data:/var/solr/data
+    command:
+      - solr-precreate
+      - gettingstarted
+      - resultats
+  centor-api:
+    build: .
+    container_name: centor-api
+    command: sh -c "composer install --prefer-source --no-interaction && php app/console server:run --env=prod"
+    links:
+      - posgresql
+    ports:
+      - 8000:80
+    volumes:
+      - .:/var/app

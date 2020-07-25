@@ -1,0 +1,17 @@
+# ignore .git and .cache folders
+/web/bundles/
+/app/bootstrap.php.cache
+/app/cache/*
+/app/config/parameters.yml
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+/app/phpunit.xml
+/vendor/
+/bin/
+# ignore all markdown files (md) beside all README*.md other than README-secret.md
+*.md
+!README*.md
+README-secret.md
+.git
+.cache
