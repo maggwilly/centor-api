@@ -11,4 +11,4 @@ VOLUME ["/var/app"]
 
 WORKDIR /var/app
 
-EXPOSE 80
+EXPOSE 8000
