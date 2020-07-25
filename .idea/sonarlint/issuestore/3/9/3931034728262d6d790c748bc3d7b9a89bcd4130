@@ -1,0 +1,7 @@
+
+n	php:S3776S"TRefactor this function to reduce its Cognitive Complexity from 32 to the 15 allowed.(êÈÅüýÿÿÿÿ
+{	php:S1192-"aDefine a constant instead of duplicating this literal "Pwm\AdminBundle\Form\AnalyseType" 3 times.( í¢íýÿÿÿÿ
+n	php:S1192"TDefine a constant instead of duplicating this literal "AdminBundle:Analyse" 8 times.(ó·••ûÿÿÿÿ
+Iphp:S121D"0Add curly braces around the nested statement(s).(Ú×ÛÖøÿÿÿÿ
+?	php:S1481Ã")Remove this unused "$key" local variable.(‹ŽÔã
+C	php:S1481a")Remove this unused "$key" local variable.(¤­Ô«üÿÿÿÿ

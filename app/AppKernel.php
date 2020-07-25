@@ -24,6 +24,8 @@ class AppKernel extends Kernel
             new Pwm\AdminBundle\AdminBundle(),
             new Pwm\MessagerBundle\MessagerBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+            new FS\SolrBundle\FSSolrBundle(),
+            new SolrBundle\SolrBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

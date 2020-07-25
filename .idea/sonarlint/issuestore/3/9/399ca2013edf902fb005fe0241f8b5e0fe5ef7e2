@@ -1,0 +1,18 @@
+
+r	php:S3973"WUse curly braces or indentation to denote the code conditionally executed by this "if".(ÅÒÅşÿÿÿÿ
+«	php:S2681j"•This statement will not be executed conditionally; only the first statement of this 6-statement block will be. The rest will execute unconditionally.(Æä‚å
+±	php:S2681"•This statement will not be executed conditionally; only the first statement of this 6-statement block will be. The rest will execute unconditionally.(ÅÒÅşÿÿÿÿ
+¬	php:S2681’"•This statement will not be executed conditionally; only the first statement of this 5-statement block will be. The rest will execute unconditionally.(Æä‚å
+ˆ	php:S1192 "nDefine a constant instead of duplicating this literal "https://trainings-fa73e.firebaseio.com/users/" 3 times.(ˆ¤°‘øÿÿÿÿ
+^	php:S1192ª"IDefine a constant instead of duplicating this literal "required" 4 times.(õğğf
+s	php:S1192:"^Define a constant instead of duplicating this literal "Pwm\AdminBundle\Form\InfoType" 4 times.(¤ËÏ”
+^	php:S1192­"HDefine a constant instead of duplicating this literal "choices" 3 times.(ãâı÷
+a	php:S1192""LDefine a constant instead of duplicating this literal "fmc_manager" 3 times.(èåõ
+k	php:S1192"QDefine a constant instead of duplicating this literal "AdminBundle:Info" 4 times.(úù¾ıÿÿÿÿ
+a	php:S1192©"FDefine a constant instead of duplicating this literal "label" 6 times.(ëÔèôûÿÿÿÿ
+Cphp:S121h"0Add curly braces around the nested statement(s).(ÁœòB
+Dphp:S121"0Add curly braces around the nested statement(s).(ÁœòB
+Jphp:S121"0Add curly braces around the nested statement(s).(ÅÒÅşÿÿÿÿ
+C	php:S1481")Remove this unused "$key" local variable.(ÎÄûÿÿÿÿ
+G	php:S1481""2Remove this unused "$fmc_response" local variable.(èåõ
+H	php:S1481œ"2Remove this unused "$fmc_response" local variable.(èåõ

@@ -1,11 +1,12 @@
 parameters:
-    database_host: ec2-54-163-240-54.compute-1.amazonaws.com
+    database_driver: pdo_pgsql
+    database_host: posgresql
     database_port: 5432
-    database_name: dbh3f629fadbss
-    database_user: tgeedmhhwfdzxj
-    database_password: 9ad7438a61a7478d2f8e52ad163631242b03601037160cb51c34a6b941a15224
+    database_name: db_centor
+    database_user: postgres
+    database_password: magloirewilly
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
     mailer_password: null
-    secret: ThisTokenIsNotSoSecretChangeIt
+    secret: d79fccfa0326cb9d214e45c6be226dd58aec74f1
