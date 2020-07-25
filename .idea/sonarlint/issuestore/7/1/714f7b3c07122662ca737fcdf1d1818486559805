@@ -1,8 +1,0 @@
-
-Ephp:S121ä"0Add curly braces around the nested statement(s).(Õ­Ãú
-r	php:S3973º"WUse curly braces or indentation to denote the code conditionally executed by this "if".(¿Ä×þÿÿÿÿÿ
-¬	php:S2681¼"•This statement will not be executed conditionally; only the first statement of this 2-statement block will be. The rest will execute unconditionally.(Û…‰Ú
-x	php:S1448"cClass "Session" has 75 methods, which is greater than 20 authorized. Split it into smaller classes.(Ù‹ã¦
-Ephp:S121 "0Add curly braces around the nested statement(s).(†Ž¸À
-Jphp:S121º"0Add curly braces around the nested statement(s).(¿Ä×þÿÿÿÿÿ
-Ephp:S121Ê"0Add curly braces around the nested statement(s).(ø•Ä¸
