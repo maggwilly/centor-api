@@ -26,8 +26,6 @@ services:
       - "8984:8983"
     volumes:
        - ./solr/data:/var/solr/data
-    command:
-      - solr-precreate
 
   centor-api:
     build: .
