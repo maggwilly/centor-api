@@ -41,4 +41,4 @@ services:
     environment:
       SYMFONY_ENV: prod
       SYMFONY_DEBUG: 1
-    command: sh -c "composer install --no-interaction --prefer-source && /sbin/entrypoint.sh"
+    command: sh -c "/sbin/entrypoint.sh"

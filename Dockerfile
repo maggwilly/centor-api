@@ -8,9 +8,10 @@ RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && mv com
 RUN apt-get install -y libapache2-mod-php7.0 php7.0-common php7.0-pgsql  php7.0-curl php7.0-json php7.0-cgi php7.0-gd php-amqplib php7.0-bcmath
 VOLUME ["/var/www/app"]
 
-COPY  ./.htaccess /etc/apache2/sites-available/000-default.conf
-COPY  ./.htaccess /etc/apache2/sites-enabled/app.conf
-
+COPY  ./000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY  ./000-default.conf /etc/apache2/sites-enabled/app.conf
+RUN chown -R www-data:www-data app/cache
+RUN chown -R www-data:www-data app/logs
 WORKDIR /var/www/app/
-
+RUN composer install --no-interaction --prefer-source --no-dev
 EXPOSE 80
