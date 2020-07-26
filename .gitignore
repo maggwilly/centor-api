@@ -12,3 +12,5 @@
 /composer.phar
 /.composer/
 /.idea/
+/postgresql/
+/web/import/

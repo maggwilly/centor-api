@@ -28,15 +28,17 @@ services:
        - ./solr/data:/var/solr/data
     command:
       - solr-precreate
-      - gettingstarted
-      - resultats
+
   centor-api:
     build: .
     container_name: centor-api
-    command: sh -c "composer install --prefer-source --no-interaction && php app/console server:run --env=prod"
-    links:
+    depends_on:
       - posgresql
     ports:
-      - 8000:8000
+      - 81:80
     volumes:
-      - .:/var/app
+      - .:/var/www/app
+    environment:
+      SYMFONY_ENV: prod
+      SYMFONY_DEBUG: 1
+    command: sh -c "composer install --no-interaction --prefer-source && /sbin/entrypoint.sh"
