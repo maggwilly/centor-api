@@ -157,8 +157,8 @@ nelmio_cors:
 fs_solr:
     endpoints:
         searchitems:
-            host: localhost
-            port: 8984
+            host: solr
+            port: 8983
             path: /solr/
             core: searchitems
-            timeout: 5
+            timeout: 10
