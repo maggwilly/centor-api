@@ -11,5 +11,4 @@ VOLUME ["/var/www/app"]
 COPY  ./000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY  ./000-default.conf /etc/apache2/sites-enabled/app.conf
 WORKDIR /var/www/app/
-RUN composer install --no-interaction --prefer-source
 EXPOSE 80
