@@ -23,7 +23,7 @@ services:
     image: solr:8
     container_name: solr
     ports:
-      - "8984:8983"
+      - "8983:8983"
     volumes:
        - ./solr/data:/var/solr/data
     command:
