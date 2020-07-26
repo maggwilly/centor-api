@@ -10,8 +10,6 @@ VOLUME ["/var/www/app"]
 
 COPY  ./000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY  ./000-default.conf /etc/apache2/sites-enabled/app.conf
-RUN chown -R www-data:www-data app/cache
-RUN chown -R www-data:www-data app/logs
 WORKDIR /var/www/app/
 RUN composer install --no-interaction --prefer-source
 EXPOSE 80
