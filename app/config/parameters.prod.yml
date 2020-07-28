@@ -1,6 +1,6 @@
 parameters:
     database_driver: pdo_pgsql
-    database_host: posgresql
+    database_host: 209.50.52.55
     database_port: 5432
     database_name: db_centor
     database_user: postgres

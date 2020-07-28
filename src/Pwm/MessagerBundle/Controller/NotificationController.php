@@ -322,10 +322,10 @@ class NotificationController extends Controller
      */
     public function editAction(Request $request, Notification $notification)
     {
-        $deleteForm = $this->createDeleteForm($notification);
+         $deleteForm = $this->createDeleteForm($notification);
          $sendForm =$this->createSendForm($notification);
          $editForm = $this->createConditionalForm($notification);//createForm('Pwm\MessagerBundle\Form\NotificationType', $notification);
-        $editForm->handleRequest($request);
+         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
                $this->addFlash('success', 'Modifications  enrégistrées avec succès.');

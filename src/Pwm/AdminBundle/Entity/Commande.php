@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="commande")
  * @ORM\Entity(repositoryClass="Pwm\AdminBundle\Repository\CommandeRepository")
+  * @ORM\HasLifecycleCallbacks
  */
 class Commande
 {
@@ -55,7 +56,7 @@ class Commande
         /**
      * @var string
      *
-     * @ORM\Column(name="order_id", type="string", length=255, nullable=true)
+     * @ORM\Column(name="order_id", type="string", length=255, unique=true)
      */
     private $order_id;
 
@@ -105,28 +106,30 @@ class Commande
         /**
      * Constructor
      */
-    public function __construct(Info $info, \AppBundle\Entity\Session $session=null, $package=null, $amount, \Pwm\AdminBundle\Entity\Ressource $ressource = null)
+    public function __construct(Info $info=null, \AppBundle\Entity\Session $session=null, $package=null, $amount=null, \Pwm\AdminBundle\Entity\Ressource $ressource = null)
     {
         $this->date =new \DateTime();  
          $this->info = $info; 
           $this->session =$session; 
             $this->package =$package; 
               $this->amount =$amount; 
-               $this->currency ='XAF'; 
-                $this->ressource =$ressource; 
+               $this->currency ='XAF';
+                 $this->order_id =$this->PrePersist();
+                   $this->ressource =$ressource;
     }
-    /**
-     * Get id
-     *
-     * @return int
-     */
+     /**
+    * @ORM\PrePersist()
+    */
+    public function PrePersist(){
+     $this->order_id='CT'.uniqid().'CD';
+    }
+
     public function getId()
     {
         return $this->id;
     }
 
-public function getUId() {
-
+    public function getUId() {
         return strtoupper(uniqid());
     }
     /**

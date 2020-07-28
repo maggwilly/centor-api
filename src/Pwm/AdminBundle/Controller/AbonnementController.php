@@ -6,6 +6,7 @@ use Pwm\AdminBundle\Entity\Abonnement;
 use Pwm\MessagerBundle\Entity\Notification;
 use Pwm\AdminBundle\Entity\Info;
 use Pwm\AdminBundle\Entity\Commande;
+use Pwm\AdminBundle\Entity\Price;
 use Pwm\MessagerBundle\Controller\NotificationController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,68 +92,80 @@ class AbonnementController extends Controller
      * Lists all Produit entities.
      *@Rest\View()
      */
-    public function startCommandeAction(Request $request,Info $info, Session $session=null,$package='sepecial')
+    public function startCommandeAction(Request $request,Info $info, $product=null,$package)
     {
-          $em = $this->getDoctrine()->getManager();
-          $amount=0;
-          $commande=$em->getRepository('AdminBundle:Commande')->findOneByUserSession($info,$session);
-            if(is_null($commande)){
-               $commande= new Commande($info, $session, $package, $amount);
-               $em->persist( $commande);
-           }
-              
-          if(is_null($session)){
-            $amount=500;
-            $package='sepecial';
-          }
-          else{
-        switch ($package) {
-          case 'starter':
-            $amount=  $session->getPrice()->getStarter();
-            $commande->setDate(new \DateTime())
-            ->setAmount($amount)
-            ->setPackage($package)
-            ->setSession($session)
-            ->setRessource(null);
-             $em->flush();
-            return array('success'=>true,'id'=>$commande->getId());
-          case 'standard':
-              $amount=$session->getPrice()->getStandard();
-              break;          
-           default:
-               $amount=$session->getPrice()-> getPremium();
-              break;
-        }    
-          $session->removeInfo($info);
-          $session->addInfo($info);
-          }
-            $commande->setDate(new \DateTime())
-            ->setAmount($amount)
-            ->setPackage($package)
-            ->setSession($session)
-            ->setRessource(null);
-             $em->flush(); 
-         // $res=$this->get('payment_service')->getPayementUrl($commande);
-          $res= array('payment_url' => 'https://concours.centor.org/v1/abonnement/'.$commande->getId().'/pay/for/me', );
-        return array('data' =>$res ,'id' =>$commande->getId(),'amount' =>$commande->getAmount());
+    $em = $this->getDoctrine()->getManager();
+    $commande= new Commande($info);
+         if($package=='ressource')
+            $commande=$this->loadCommandeForRessource($info, $product);
+         else
+             $commande=$this->loadCommandeForSesson($info, $product,$package);
+          $em->flush();
+        return $commande;
     }
 
+  public function loadCommandeForRessource($info, $produit){
+         $em = $this->getDoctrine()->getManager();
+         $ressource = $em->getRepository('AdminBundle:Ressource')->find($produit);
+          $commande=$em->getRepository('AdminBundle:Commande')->findOneByUserRessource($info,$ressource);
+            if(is_null($commande)){
+               $commande= new Commande($info);
+               $commande->setDate(new \DateTime())
+               ->setRessource($ressource);
+               $em->persist($commande);
+           } if(!is_null($ressource))
+               $commande->setAmount($ressource->getPrice());
+        return $commande;
+      }
 
+  public function loadCommandeForSesson($info, $produit, $package){
+          $em = $this->getDoctrine()->getManager();
+          $session = $em->getRepository('AppBundle:Session')->find($produit);
+          $commande=$em->getRepository('AdminBundle:Commande')->findOneByUserSession($info,$session);
+            if(is_null($commande)){
+               $commande= new Commande($info, $session);
+               $commande->setDate(new \DateTime())
+               ->setSession($session)->setPackage($package);;
+               $em->persist($commande);
+           }
+           $price= new Price();
+          if(!is_null($session)){
+             $price= $session->getPrice();
+              $session->removeInfo($info);
+              $session->addInfo($info);
+             }
+           else
+             $price = $em->getRepository('AdminBundle:Price')->find(8);
+           $commande->setAmount($this->getForSessonCommande($price,$package));
+        return $commande;
+      }
+
+  public function getForSessonCommande($price ,$package){
+        switch ($package) {
+          case 'starter':
+            return  $price->getStarter();
+          case 'standard':
+              return  $price->getStandard();
+          case 'premium':
+              return $price-> getPremium();
+           }
+           return new Price();
+        }
 
     /**
      * Lists all Produit entities.
-     *@Rest\View(serializerGroups={"abonnement"})
+     *@Rest\View()
      */
-    public function confirmCommandeAction(Request $request,Commande $commande)
-    {
+    public function confirmCommandeAction(Request $request)
+    {    $em = $this->getDoctrine()->getManager();
+        $data=json_decode($this->get("request")->getContent(),true);
+         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['order_id']);
          $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
-         $form->submit($request->request->all(),false);
+         $form->submit( $data,false);
         if ($form->isValid()&&$commande->getStatus()=='SUCCESS') {
-            $em = $this->getDoctrine()->getManager();
             if (is_null($commande->getRessource())) {
-           $abonnement=$em->getRepository('AdminBundle:Abonnement')
-                          ->findMeOnThis($commande->getInfo(), $commande->getSession());
-            if($abonnement==null){
+             $abonnement=$em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
+             if($abonnement==null){
                  $abonnement=new Abonnement($commande); 
                  if(!is_null($commande->getSession())){
                   $commande->getSession()->removeInfo($commande->getInfo()); 
@@ -172,6 +185,7 @@ class AbonnementController extends Controller
         }
         return $form;
     }
+
 
 
     /**

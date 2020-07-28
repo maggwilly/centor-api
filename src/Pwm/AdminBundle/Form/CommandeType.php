@@ -13,7 +13,7 @@ class CommandeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('status')->add('order_id')->add('txnid');
+        $builder->add('status')->add('order_id');
     }
     
     /**
