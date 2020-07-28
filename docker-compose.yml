@@ -15,6 +15,7 @@ services:
       - ./postgresql/folder/:/var/lib/postgresql/data
     networks:
       - adminer-ntw
+      - posgresql-ntw
 
   solr:
     image: solr:8
@@ -39,6 +40,7 @@ services:
       VIRTUAL_HOST: api.cconcours.com
       networks:
         - nginx-proxy
+        - posgresql-ntw
     command: sh -c "composer install --no-interaction --prefer-source && chown -R www-data:www-data app/cache && chown -R www-data:www-data app/logs && /sbin/entrypoint.sh"
 
 
@@ -47,3 +49,5 @@ networks:
     external: true
   adminer-ntw:
     external: true
+  posgresql-ntw:
+    driver: bridge
