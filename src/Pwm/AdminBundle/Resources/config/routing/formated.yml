@@ -9,12 +9,12 @@ get_token_json:
     methods:  [GET,POST] 
 
 commende_start_json:
-    path:     /commende/{info}/{session}/{package}/json
-    defaults: { _controller: "AdminBundle:Abonnement:startCommande","session":0}
+    path:     /commende/{info}/{product}/{package}/json
+    defaults: { _controller: "AdminBundle:Abonnement:startCommande","product":0}
     methods:  [GET,POST] 
 
 commende_confirm_json:
-    path:     /commende/{id}/confirm/json
+    path:     /commende/confirm/json
     defaults: { _controller: "AdminBundle:Abonnement:confirmCommande"}
     methods:  [GET,POST] 
 
@@ -74,4 +74,9 @@ analyse_new_json:
 analyse_show_json:
     path:     /analyse/{studentId}/{session}/{matiere}/{partie}/json
     defaults: { _controller: "AdminBundle:Analyse:showJson",matiere:0,partie:0}
-    methods:  [GET,POST]      
+    methods:  [GET,POST]
+
+price_show_json:
+    path:     /price/{id}/show/json
+    defaults: { _controller: "AdminBundle:Price:showJson", id:0 }
+    methods:  GET

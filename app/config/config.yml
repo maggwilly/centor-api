@@ -157,7 +157,7 @@ nelmio_cors:
 fs_solr:
     endpoints:
         searchitems:
-            host: solr
+            host: 209.50.52.55
             port: 8983
             path: /solr/
             core: searchitems

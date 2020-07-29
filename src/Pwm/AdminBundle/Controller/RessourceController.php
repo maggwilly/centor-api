@@ -168,34 +168,14 @@ class RessourceController extends Controller
     public function showJsonAction(Request $request,Ressource $ressource)
     {    
           $uid=$request->query->get('uid');
-          $paymentUrl=$request->query->get('paymentUrl');
           $em = $this->getDoctrine()->getManager();
           $info = $em->getRepository('AdminBundle:Info')->findOneByUid($uid);
+         if($info==null)
+            return $ressource;
           $commande=$em->getRepository('AdminBundle:Commande')->findOneByUserRessource($info,$ressource);
-          //on paie une seule foid
             if($commande!=null&&$commande->getStatus()==='SUCCESS')
-                 return $ressource;
-            if($ressource->getPrice()==null||$ressource->getPrice()==0)
-                 return $ressource;  
-                 // les inscrit premium ne paient pas    
-               $abonnement = $em->getRepository('AdminBundle:Abonnement')->findHasPremium($info);
-               if(!is_null($abonnement)){
                  return $ressource->setPrice(0);
-               }             
-          if(is_null($commande)||!is_null($commande->getStatus())){
-              $commande= new Commande($info, null, null, $ressource->getPrice(),$ressource);
-                $em->persist( $commande);
-                $em->flush();
-            }else{
-             $commande->setDate(new \DateTime())->setAmount($ressource->getPrice());
-             $em->flush();   
-            }
-            if($paymentUrl)
-                return $ressource->setPaymentUrl($paymentUrl);
-             //$response=$this->get('payment_service')->getPayementUrl($commande);
-              
-        return $ressource->setPaymentUrl('https://concours.centor.org/v1/abonnement/'.$commande->getId().'/pay/for/me');
-        //$ressource->setPaymentUrl($response['payment_url']);
+        return $ressource;
     }
 
     /**

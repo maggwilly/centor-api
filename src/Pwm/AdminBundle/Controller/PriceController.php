@@ -6,6 +6,8 @@ use Pwm\AdminBundle\Entity\Price;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
+use FOS\RestBundle\View\View;
 /**
  * Price controller.
  *
@@ -61,6 +63,20 @@ class PriceController extends Controller
             'price' => $price,
             'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+    /**
+     * Lists all Produit entities.
+     *@Rest\View(serializerGroups={"price"})
+     */
+    public function showJsonAction(Price $price=null)
+    {
+    if($price==null){
+     $em = $this->getDoctrine()->getManager();
+     $price = $em->getRepository('AdminBundle:Price')->find(8);
+        return $price;
+    }
+      return $price;
     }
 
   /**

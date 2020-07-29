@@ -15,7 +15,6 @@ class CommandeRepository extends \Doctrine\ORM\EntityRepository
  public function findOneByUserRessource(Info $info,Ressource $ressource){
  $qb =$this->createQueryBuilder('a')
        ->where('a.info=:info') ->setParameter('info', $info)
-
        ->andWhere('a.ressource=:ressource') ->setParameter('ressource', $ressource);
         return   $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
  }	
@@ -23,8 +22,12 @@ class CommandeRepository extends \Doctrine\ORM\EntityRepository
   public function findOneByUserSession(Info $info,Session $session=null){
  $qb =$this->createQueryBuilder('a')
        ->where('a.info=:info') ->setParameter('info', $info)->andWhere('a.status is NULL');
-       // if (!is_null($session)) 
-     // $qb ->andWhere('a.session=:session') ->setParameter('session', $session);
         return   $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
  }
+
+  public function findOneByOrderId($order_id){
+      $qb =$this->createQueryBuilder('a')
+        ->where('a.order_id=:order_id') ->setParameter('order_id', $order_id);
+         return  $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
+  }
 }
