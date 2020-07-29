@@ -1,0 +1,19 @@
+Pwm\AdminBundle\Entity\Commande:
+    exclusion_policy: none
+    properties:
+        id:
+            groups: ['commande', 'full']
+        order_id:
+             groups: ['commande', 'full']
+        currency:
+             groups: ['commande', 'full']
+        status:
+             groups: ['commande', 'full']
+        amount:
+             groups: ['commande', 'full']
+        date:
+             groups: ['commande', 'full']
+             expose: true
+             type: DateTime<'Y-m-d'>           
+        info:
+             groups: ['commande', 'full']

@@ -2,15 +2,15 @@ Pwm\AdminBundle\Entity\Info:
     exclusion_policy: none
     properties:
         uid:
-             groups: ['info', 'full']         
+             groups: ['info','commande', 'full']
         email:
-             groups: ['info', 'full']             
+             groups: ['info', 'commande','full']
         displayName:
-             groups: ['info', 'full']
+             groups: ['info','commande', 'full']
         photoURL:
              groups: ['info', 'full']
         phone:
-             groups: ['info', 'full']
+             groups: ['info','commande', 'full']
 
         ville:
              groups: ['info', 'full']

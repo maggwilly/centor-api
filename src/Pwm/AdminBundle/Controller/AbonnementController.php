@@ -90,7 +90,7 @@ class AbonnementController extends Controller
 
     /**
      * Lists all Produit entities.
-     *@Rest\View()
+     *@Rest\View(serializerGroups={"commande"})
      */
     public function startCommandeAction(Request $request,Info $info, $product=null,$package)
     {
@@ -154,7 +154,7 @@ class AbonnementController extends Controller
 
     /**
      * Lists all Produit entities.
-     *@Rest\View()
+     *@Rest\View(serializerGroups={"commande"})
      */
     public function confirmCommandeAction(Request $request)
     {    $em = $this->getDoctrine()->getManager();
