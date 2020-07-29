@@ -13,11 +13,9 @@ services:
     volumes:
       - ./initial.d:/docker-entrypoint-initdb.d
       - ./postgresql/folder/:/var/lib/postgresql/data
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+    networks:
+      - adminer-ntw
+      - posgresql-ntw
 
   solr:
     image: solr:8
@@ -33,10 +31,23 @@ services:
     depends_on:
       - posgresql
     ports:
-      - 80:80
+      - 8000:80
     volumes:
       - .:/var/www/app
     environment:
       SYMFONY_ENV: prod
       SYMFONY_DEBUG: 1
+      VIRTUAL_HOST: api.cconcours.com
+    networks:
+        - nginx-proxy
+        - posgresql-ntw
     command: sh -c "composer install --no-interaction --prefer-source && chown -R www-data:www-data app/cache && chown -R www-data:www-data app/logs && /sbin/entrypoint.sh"
+
+
+networks:
+  nginx-proxy:
+    external: true
+  adminer-ntw:
+    external: true
+  posgresql-ntw:
+    driver: bridge
