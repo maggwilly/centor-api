@@ -104,7 +104,7 @@ class Analyse
    * @ORM\ManyToOne(targetEntity="Info" )
     * @ORM\JoinColumn(name="uid",referencedColumnName="uid")
    */
-    private $uid;
+    private $studentId;
 
      /**
      * Constructor

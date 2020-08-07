@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use SolrBundle\Entity\SolrSearchResult;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
 
 /**
@@ -51,6 +52,10 @@ class Resultat extends SolrSearchResult
      * @ORM\Column(name="date", type="datetime", nullable=true)
      */
     protected $date;
+
+
+      private $file;
+
     /**
      *@ORM\PostLoad()
      */
@@ -200,5 +205,25 @@ class Resultat extends SolrSearchResult
     {
         return 'Resultat';
     }
+
+          /**
+           * Sets file.
+           *
+           * @param UploadedFile $file
+           */
+          public function setFile(UploadedFile $file = null)
+          {
+              $this->file = $file;
+          }
+
+          /**
+           * Get file.
+           *
+           * @return UploadedFile
+           */
+          public function getFile()
+          {
+              return $this->file;
+          }
 }
 

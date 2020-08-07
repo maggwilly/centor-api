@@ -161,16 +161,16 @@ class AbonnementController extends Controller
         $data=json_decode($this->get("request")->getContent(),true);
          $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['order_id']);
          $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
-         $form->submit( $data,false);
+         $form->submit($data,false);
         if ($form->isValid()&&$commande->getStatus()=='SUCCESS') {
             if (is_null($commande->getRessource())) {
              $abonnement=$em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
              if($abonnement==null){
                  $abonnement=new Abonnement($commande); 
                  if(!is_null($commande->getSession())){
-                  $commande->getSession()->removeInfo($commande->getInfo()); 
-                  $commande->getSession()->addInfo($commande->getInfo());
-                  $commande->getSession()->setNombreInscrit($commande->getSession()->getNombreInscrit()+1) ;
+                   $commande->getSession()->removeInfo($commande->getInfo());
+                   $commande->getSession()->addInfo($commande->getInfo());
+                   $commande->getSession()->setNombreInscrit($commande->getSession()->getNombreInscrit()+1);
                   }              
                  $em->persist($abonnement);
                 }
@@ -180,7 +180,7 @@ class AbonnementController extends Controller
               }
               $em->flush();
               $event= new CommandeEvent($commande);
-               $this->get('event_dispatcher')->dispatch('commande.confirmed', $event);
+              $this->get('event_dispatcher')->dispatch('commande.confirmed', $event);
             return $commande;
         }
         return $form;

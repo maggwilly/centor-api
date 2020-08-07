@@ -13,9 +13,7 @@ class ResultatType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('description')->add('url', UrlType::class, array(
-    'label' => 'Lien de télechargement',
-));
+        $builder->add('description')->add('file','file', array('label' => 'Fichier' )) ;
     }
     
     /**

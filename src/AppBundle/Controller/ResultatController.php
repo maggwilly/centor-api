@@ -37,10 +37,10 @@ class ResultatController extends Controller
      */
      public function jsonIndexAction(Request $request)
      {
-        $all=$request->query->get('all');
-        $start=$request->query->get('start');
+         $all=$request->query->get('all');
+         $start=$request->query->get('start');
          $em = $this->getDoctrine()->getManager();
-          $resultats =$em->getRepository('AppBundle:Resultat')->findList($start,$all);
+         $resultats =$em->getRepository('AppBundle:Resultat')->findList($start,$all);
          return  $resultats;
      }
 
@@ -56,29 +56,30 @@ class ResultatController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($resultat);
-            $notification = new Notification('public',false,true);
-             $notification
-             ->setTitre($resultat->getDescription())
-             ->setSousTitre($resultat->getDescription()." dispobible en téléchargement ")
-             ->setText($resultat->getDescription()." Sont disponibles ");
-              $notification->setUser($this->getUser())
-               ->setIncludeMail(false);
-           $registrations = $em->getRepository('MessagerBundle:Registration')->findAll();
-            $data=array(
-                        'page'=>'resultat'
-                      );
-            $event=new NotificationEvent($registrations,$notification, $data);
-            $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);        
-              $this->addFlash('success', 'Enrégistrement effectué');
+            //$this->get('event_dispatcher')->dispatch('document.create.thumnail', $event);;
+            $this->dispatchNotificationEvent($resultat);
+            $this->addFlash('success', 'Enrégistrement effectué');
            return   $this->redirectToRoute('resultat_index');
         }elseif($form->isSubmitted())
                $this->addFlash('error', 'Certains champs ne sont pas corrects.');
-
         return $this->render('resultat/new.html.twig', array(
             'resultat' => $resultat,
             'form' => $form->createView(),
         ));
-    }
+       }
+        public function dispatchNotificationEvent(Resultat $resultat){
+                $em = $this->getDoctrine()->getManager();
+               $notification = new Notification('public',false,true);
+               $notification->setTitre($resultat->getDescription())
+               ->setSousTitre($resultat->getDescription()." dispobible en téléchargement ")
+               ->setText($resultat->getDescription()." Sont disponibles ");
+                $notification->setUser($this->getUser())
+                 ->setIncludeMail(false);
+                 $registrations = $em->getRepository('MessagerBundle:Registration')->findAll();
+                 $data=array('page'=>'resultat' );
+                 $event=new NotificationEvent($registrations,$notification, $data);
+                 $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
+                }
 
     /**
      * Finds and displays a resultat entity.

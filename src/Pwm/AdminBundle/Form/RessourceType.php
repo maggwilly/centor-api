@@ -28,9 +28,6 @@ class RessourceType extends AbstractType
         ->add('detail2','text', array(
            'label' => 'Autre détail 2','required' =>false
          ))
-        ->add('detail3','text', array(
-           'label' => 'Autre détail 3','required' =>false
-         ))
         ->add('label','choice', array(
            'label' => 'Label','required' =>false,
            'choices'=>array(
@@ -47,13 +44,11 @@ class RessourceType extends AbstractType
          )) 
         ->add('price','integer', array(
           'label' => 'Prix de la ressource',
-         ))       
-        ->add('url', UrlType::class, array(
-          'label' => 'Lien de télechargement',
          ))
-        ->add('imageUrl', UrlType::class, array(
-       'label' => 'Lien vers la photo',
-));
+        ->add('file','file', array(
+          'label' => 'Fichier',
+         ))
+         );
     }
     
     /**

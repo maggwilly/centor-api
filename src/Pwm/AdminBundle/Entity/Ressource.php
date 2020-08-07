@@ -2,6 +2,7 @@
 
 namespace Pwm\AdminBundle\Entity;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 use SolrBundle\Entity\SolrSearchResult;
 /**
@@ -43,15 +44,6 @@ class Ressource extends SolrSearchResult
      */
     protected $description;
 
-    /**
-     *@ORM\PostLoad()
-     */
-    public function indexHandler()
-    {
-        $this->title=$this->nom;
-        $this->resultType='Document';
-        return true;
-    }
 
     /**
      * @var string
@@ -142,7 +134,11 @@ class Ressource extends SolrSearchResult
      *
      * @ORM\Column(name="isPublic", type="boolean", nullable=true)
      */
-    private $isPublic;   
+    private $isPublic;
+
+
+      private $file;
+
     /**
      * Constructor
      */
@@ -152,6 +148,16 @@ class Ressource extends SolrSearchResult
         $this->sessions = new \Doctrine\Common\Collections\ArrayCollection();
          $this->matieres = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+        /**
+         *@ORM\PostLoad()
+         */
+        public function indexHandler()
+        {
+            $this->title=$this->nom;
+            $this->resultType='Document';
+            return true;
+        }
     /**
      * Get id
      *
@@ -637,4 +643,24 @@ class Ressource extends SolrSearchResult
     {
         return $this->getDescription();
     }
+
+      /**
+       * Sets file.
+       *
+       * @param UploadedFile $file
+       */
+      public function setFile(UploadedFile $file = null)
+      {
+          $this->file = $file;
+      }
+
+      /**
+       * Get file.
+       *
+       * @return UploadedFile
+       */
+      public function getFile()
+      {
+          return $this->file;
+      }
 }
