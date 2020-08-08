@@ -23,12 +23,12 @@ security:
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js|media)/
             security: false
         
         public:
       # since anonymous is allowed users will not be forced to login
-           pattern:   ^/(login|register)$
+           pattern:   ^/(login|register|media)$
            anonymous:      true
 
         mobile:
