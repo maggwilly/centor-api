@@ -1,7 +1,7 @@
 
 parameters:
 #    parameter_name: value
-     base_data_dir: /opt/data/c-centor
+     base_data_dir: /var/www/app/data
      my_service_connection: default
      logout.target: /
 

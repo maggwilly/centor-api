@@ -36,7 +36,6 @@ services:
       - 8000:80
     volumes:
       - .:/var/www/app
-      - ../data/c-centor:/opt/data/c-centor
     environment:
       SYMFONY_ENV: prod
       SYMFONY_DEBUG: 1
