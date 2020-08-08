@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Resultat;
+use AppBundle\Event\FileCreationEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
@@ -56,7 +57,8 @@ class ResultatController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($resultat);
-            //$this->get('event_dispatcher')->dispatch('document.create.thumnail', $event);;
+            $em->flush();
+            $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($resultat));
             $this->dispatchNotificationEvent($resultat);
             $this->addFlash('success', 'Enrégistrement effectué');
            return   $this->redirectToRoute('resultat_index');

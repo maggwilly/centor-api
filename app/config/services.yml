@@ -1,7 +1,7 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
+
 parameters:
 #    parameter_name: value
+     base_data_dir: /opt/data/c-centor
      my_service_connection: default
      logout.target: /
 
@@ -10,10 +10,7 @@ services:
          class: AppBundle\Service\FMCManager
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 
-      payment_service:
-         class: AppBundle\Service\PayementService
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
-      
+
       app.form.registration:
                 class: AppBundle\Form\RegistrationType
                 tags:
@@ -28,7 +25,20 @@ services:
           class: AppBundle\Event\CreateListener
           arguments: ["@misteio_cloudinary_wrapper","@doctrine.orm.entity_manager", "@twig","@fmc_manager"]
           tags:
-            - { name: kernel.event_listener, event: object.created, method: onObjetCreated }
+            - { name: kernel.event_listener, event: question.created, method: onQuestionCreated }
+
+      file_object_creation_listener:
+        class: AppBundle\Event\FileObjectCreationListener
+        arguments: ["@doctrine.orm.entity_manager", "@fmc_manager","%base_data_dir%"]
+        tags:
+          - { name: kernel.event_listener, event: file.object.created, method: onFileObjectCreated }
+
+      app.listener.doctrineevent:
+        class: AppBundle\Event\DoctrineEventListener
+        arguments: ["@router"]
+        tags:
+          - { name: doctrine.event_listener, event: postLoad, lazy: true }
+
       create_user_listener:
           class: AppBundle\Event\CreateListener
           arguments: ["@misteio_cloudinary_wrapper","@doctrine.orm.entity_manager", "@twig","@fmc_manager"]

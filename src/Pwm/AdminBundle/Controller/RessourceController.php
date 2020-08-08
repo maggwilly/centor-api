@@ -2,6 +2,7 @@
 
 namespace Pwm\AdminBundle\Controller;
 
+use AppBundle\Event\FileCreationEvent;
 use Pwm\AdminBundle\Entity\Ressource;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +54,7 @@ class RessourceController extends Controller
                    }           
             $em->persist($ressource);
             $em->flush();
-            // TODO dispash createThumnailEvent
+            $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($ressource));
             if($ressource->getIsPublic())
                  $this->pushInGroup($ressource);
              else

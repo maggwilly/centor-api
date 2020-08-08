@@ -1,4 +1,4 @@
-AppBundle\Entity\Resultat:
+AppBundle\Entity\Image:
   properties:
     file:
       - File:

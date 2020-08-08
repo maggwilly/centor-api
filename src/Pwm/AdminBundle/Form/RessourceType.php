@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use AppBundle\Form\ImageType;
+
 class RessourceType extends AbstractType
 {
     /**
@@ -36,19 +38,10 @@ class RessourceType extends AbstractType
                     'urgent'=>'urgent',
                     )
          ))
-        ->add('style','text', array(
-           'label' => 'Type de document (pdf/image/doc/excel etc.)',
-         ))
-        ->add('size','text', array(
-           'label' => 'Nombre de pages',
-         )) 
         ->add('price','integer', array(
           'label' => 'Prix de la ressource',
          ))
-        ->add('file','file', array(
-          'label' => 'Fichier',
-         ))
-         );
+    ->add('fileEntity',   new ImageType(), array('label'=>'Document','required'=>true));
     }
     
     /**

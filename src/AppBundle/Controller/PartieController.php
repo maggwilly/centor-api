@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Matiere;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\User;
+use AppBundle\Event\FileCreationEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
@@ -121,6 +122,7 @@ class PartieController extends Controller
             $matiere->addUnite($partie);
             $em->persist($partie);
             $em->flush();
+            $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($partie));
              $this->addFlash('success', 'Enrégistrement effectué');
             return $this->redirectToRoute('partie_index', array('id' => $partie->getMatiere()->getId()));
         }elseif($form->isSubmitted())

@@ -1,19 +1,22 @@
 <?php
 
 namespace Pwm\AdminBundle\Entity;
+
+use AppBundle\Entity\FileObject;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 use SolrBundle\Entity\SolrSearchResult;
+
 /**
  * Ressource
-* @Solr\Document()
-  * @Solr\SynchronizationFilter(callback="indexHandler")
+ * @Solr\Document()
+ * @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="ressource")
  * @ORM\Entity(repositoryClass="Pwm\AdminBundle\Repository\RessourceRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Ressource extends SolrSearchResult
+class Ressource extends SolrSearchResult implements FileObject
 {
     /**
      * @Solr\Id
@@ -66,12 +69,12 @@ class Ressource extends SolrSearchResult
      */
     private $detail3;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="detail4", type="string", length=255, nullable=true)
      */
-    private $detail4;   
+    private $detail4;
 
     /**
      * @var string
@@ -80,12 +83,12 @@ class Ressource extends SolrSearchResult
      */
     private $style;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="size", type="string", length=255, nullable=true)
      */
-    private $size;   
+    private $size;
 
 
     /**
@@ -97,7 +100,7 @@ class Ressource extends SolrSearchResult
     /**
      * @var string
      * @Solr\Field(type="string")
-     * @ORM\Column(name="url", type="string", length=255)
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     protected $url;
 
@@ -110,54 +113,60 @@ class Ressource extends SolrSearchResult
     /**
      * @var string
      *
-     * @ORM\Column(name="imageUrl", type="string", length=255)
+     * @ORM\Column(name="imageUrl", type="string", length=255, nullable=true)
      */
     private $imageUrl;
 
-      /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session" )
-   */
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session" )
+     */
     private $session;
 
     /**
-   * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Session",inversedBy="ressources", cascade={"persist","remove"})*/
-    private $sessions; 
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Session",inversedBy="ressources", cascade={"persist","remove"})
+     */
+    private $sessions;
 
-        /**
-   * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Matiere",inversedBy="ressources", cascade={"persist","remove"})*/
-    private $matieres; 
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Matiere",inversedBy="ressources", cascade={"persist","remove"})
+     */
+    private $matieres;
 
-    private $paymentUrl; 
+    private $paymentUrl;
 
-        /**
+    /**
      * @var int
      *
      * @ORM\Column(name="isPublic", type="boolean", nullable=true)
      */
     private $isPublic;
 
-
-      private $file;
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $fileEntity;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->date =new \DateTime();
+        $this->date = new \DateTime();
         $this->sessions = new \Doctrine\Common\Collections\ArrayCollection();
-         $this->matieres = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->matieres = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-        /**
-         *@ORM\PostLoad()
-         */
-        public function indexHandler()
-        {
-            $this->title=$this->nom;
-            $this->resultType='Document';
-            return true;
-        }
+    /**
+     * @ORM\PostLoad()
+     */
+    public function indexHandler()
+    {
+        $this->title = $this->nom;
+        $this->resultType = 'Document';
+        return true;
+    }
+
     /**
      * Get id
      *
@@ -167,18 +176,20 @@ class Ressource extends SolrSearchResult
     {
         return $this->id;
     }
-      /**
-    * @ORM\PrePersist()
-    * @ORM\PreUpdate()
-    */
-    public function PrePersist(){
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function PrePersist()
+    {
 
 
-       $this->setIsPublic(empty($this->sessions));
+        $this->setIsPublic(empty($this->sessions));
 
     }
 
- 
+
     /**
      * Set price
      *
@@ -322,6 +333,7 @@ class Ressource extends SolrSearchResult
     {
         return $this->detail4;
     }
+
     /**
      * Set detail3
      *
@@ -345,6 +357,7 @@ class Ressource extends SolrSearchResult
     {
         return $this->detail3;
     }
+
     /**
      * Set url
      *
@@ -366,7 +379,9 @@ class Ressource extends SolrSearchResult
      */
     public function getUrl()
     {
-        return $this->url;
+        if($this->url!=null)
+         return $this->url;
+    return ($this->fileEntity!=null)?$this->fileEntity->getUrl():"";
     }
 
     /**
@@ -390,7 +405,9 @@ class Ressource extends SolrSearchResult
      */
     public function getImageUrl()
     {
-        return $this->imageUrl;
+        if($this->imageUrl!=null)
+            return $this->imageUrl;
+        return ($this->fileEntity!=null)?$this->fileEntity->getThumnnailUrl():"";
     }
 
     /**
@@ -417,7 +434,7 @@ class Ressource extends SolrSearchResult
         return $this->session;
     }
 
-     /**
+    /**
      * Set date
      *
      * @param \DateTime $date
@@ -441,7 +458,6 @@ class Ressource extends SolrSearchResult
         return $this->date;
     }
 
-   
 
     /**
      * Set style
@@ -563,7 +579,7 @@ class Ressource extends SolrSearchResult
         return $this->isPublic;
     }
 
-       /**
+    /**
      * Add session
      *
      * @param \AppBundle\Entity\Session $session
@@ -594,9 +610,9 @@ class Ressource extends SolrSearchResult
     public function getSessions()
     {
         return $this->sessions;
-    } 
+    }
 
-        /**
+    /**
      * Add matieres
      *
      * @param \AppBundle\Entity\Matiere $matieres
@@ -622,12 +638,13 @@ class Ressource extends SolrSearchResult
     /**
      * Get matieres
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMatieres()
     {
-   return $this->matieres;
+        return $this->matieres;
     }
+
     /**
      * @return mixed
      */
@@ -644,23 +661,26 @@ class Ressource extends SolrSearchResult
         return $this->getDescription();
     }
 
-      /**
-       * Sets file.
-       *
-       * @param UploadedFile $file
-       */
-      public function setFile(UploadedFile $file = null)
-      {
-          $this->file = $file;
-      }
+    /**
+     * Set image
+     *
+     * @param \PW\QCMBundle\Entity\Image $image
+     * @return QCM
+     */
+    public function setFileEntity(\AppBundle\Entity\Image $image = null)
+    {
+        $this->fileEntity = $image;
 
-      /**
-       * Get file.
-       *
-       * @return UploadedFile
-       */
-      public function getFile()
-      {
-          return $this->file;
-      }
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \PW\QCMBundle\Entity\Image
+     */
+    public function getFileEntity()
+    {
+        return $this->fileEntity;
+    }
 }

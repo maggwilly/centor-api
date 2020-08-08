@@ -120,8 +120,13 @@
 <script type="text/javascript">
 $('form[name=form]').submit(function(event) {
    event.preventDefault();
-       $.ajax({ 
-            data: $(this).serialize(), 
+       $.ajax({
+           enctype: 'multipart/form-data',
+           processData: false,
+           contentType: false,
+           cache: false,
+           timeout: 1200000,
+            data: new FormData(this),
             type: $(this).attr('method'),
             url: window.location.href,//'http://localhost:8000/v1/question/1/new',
             success: function() {

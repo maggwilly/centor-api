@@ -18,7 +18,7 @@ class PartieType extends AbstractType
         $builder->add('titre','text',array('label'=>'Titre de la partie'))
                 ->add('objectif', 'textarea',array('label'=>'Brève description'))
         ->add('sources', 'textarea' ,array('label'=>'Description complete','attr'=>array('class'=>'ckeditor')))
-        ->add('cours', UrlType::class,array('label'=>'lien vers le cours','required'=>false))
+        ->add('fileEntity',   new ImageType(), array('label'=>'Document de cours','required'=>true))
         ->add('containMath', 'checkbox' ,array('label'=>'Contient des formules mathematiques ?','required'=>false))
         ->add('index')
         ->add('type', ChoiceType::class, array(

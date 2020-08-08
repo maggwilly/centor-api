@@ -1,5 +1,0 @@
-Pwm\AdminBundle\Entity\Ressource:
-  properties:
-    file:
-      - File:
-          maxSize: 6000000

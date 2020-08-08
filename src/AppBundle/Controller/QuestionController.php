@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\Question;
+use AppBundle\Event\FileCreationEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
@@ -68,9 +69,8 @@ class QuestionController extends Controller
             $question->setUser($this->getUser());
             $em->persist($question);
             $em->flush($question);
-            $event= new QuestionEvent($question);
-            $this->get('event_dispatcher')->dispatch('object.created', $event);
-             $this->addFlash('success', ' La nouvelle question a été enrégistrée, continuez avec la suivante !');
+            $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($question));
+            $this->addFlash('success', ' La nouvelle question a été enrégistrée, continuez avec la suivante !');
             return new Response('ok');//$this->redirectToRoute('question_new', array('id' => $partie->getId()));
         }elseif($form->isSubmitted())
                return new Response('error',500);
@@ -116,8 +116,7 @@ class QuestionController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
              $question->setValidated(false);
             $this->getDoctrine()->getManager()->flush();
-            $event= new QuestionEvent($question);
-            $this->get('event_dispatcher')->dispatch('object.created', $event);
+            $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($question));
              $this->addFlash('success', 'Modifications  enrégistrées avec succès.');
             return $this->redirectToRoute('question_show', array('id' => $question->getId()));
         }elseif($editForm->isSubmitted())

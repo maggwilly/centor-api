@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="partie")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PartieRepository")
  */
-class Partie
+class Partie implements FileObject
 {
     /**
      * @var int
@@ -115,8 +115,13 @@ class Partie
     /**
    * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Session", mappedBy="parties", cascade={"persist"})
    */
-    private $sessions; 
+    private $sessions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $fileEntity;
 
     /**
    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
@@ -197,10 +202,9 @@ class Partie
      */
     public function getCours()
     {
-        if($this->article!=null)
-         return $this->cours=$this->article->getwebLink();
-        return $this->cours;//
-
+        if($this->cours!=null)
+            return $this->cours;
+        return ($this->fileEntity!=null)?$this->fileEntity->getUrl():"";
     }
 
     /**
@@ -622,4 +626,45 @@ class Partie
     {
         return $this->containMath;
     }
+
+    /**
+     * Set imageUrl
+     *
+     * @param string $imageUrl
+     *
+     * @return Concours
+     */
+    public function setImageUrl($imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get imageUrl
+     *
+     * @return string
+     */
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFileEntity()
+    {
+        return $this->fileEntity;
+    }
+
+    /**
+     * @param mixed $fileEntity
+     */
+    public function setFileEntity($fileEntity)
+    {
+        $this->fileEntity = $fileEntity;
+    }
+
 }

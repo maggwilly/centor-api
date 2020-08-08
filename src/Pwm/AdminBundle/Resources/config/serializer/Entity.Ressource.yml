@@ -8,24 +8,24 @@ Pwm\AdminBundle\Entity\Ressource:
         detail1:
              groups: ['ressource', 'full']    
         detail2:
-             groups: ['ressource', 'full']  
-        detail3:
-             groups: ['ressource', 'full']  
+             groups: ['ressource', 'full']
         style:
              groups: ['ressource', 'full']    
         size:
-             groups: ['ressource', 'full']  
-        detail4:
-             groups: ['ressource', 'full']               
+             groups: ['ressource', 'full']
         nom:
              groups: ['matiere','ressource', 'full'] 
         label:
              groups: ['matiere','ressource', 'full']              
         url:
-             groups: ['full']   
+          access_type: public_method # defaults to property
+          accessor: # access_type must be set to public_method
+            getter: getUrl
+          groups: ['ressource', 'full']
         imageUrl:
-             groups: ['ressource', 'full']  
-        paymentUrl:
-             groups: ['ressource', 'full']                                                                                                 
+          access_type: public_method # defaults to property
+          accessor: # access_type must be set to public_method
+            getter: getImageUrl
+          groups: ['ressource', 'full']
         price:
              groups: ['matiere','full']

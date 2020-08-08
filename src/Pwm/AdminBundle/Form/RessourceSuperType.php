@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Form\ImageType;
 class RessourceSuperType extends AbstractType
 {
     /**
@@ -37,22 +38,14 @@ class RessourceSuperType extends AbstractType
                     'urgent'=>'urgent',
                     )
          ))
-        ->add('style','text', array(
-           'label' => 'Type de document (pdf/image/doc/excel etc.)',
-         ))
-        ->add('size','text', array(
-           'label' => 'Nombre de pages',
-         )) 
         ->add('price','integer', array(
           'label' => 'Prix de la ressource',
          ))       
-        ->add('file','file', array(
-          'label' => 'Fichier',
-         ))
+    ->add('fileEntity',   new ImageType(), array('label'=>'Document','required'=>true))
     ->add('matieres', EntityType::class,
                        array('class' => 'AppBundle:Matiere', 
-                           'choice_label' => 'getDisplayName', 
-                           'placeholder' => 'Aucune matière',
+                            'choice_label' => 'getDisplayName',
+                            'placeholder' => 'Aucune matière',
                             'empty_data'  => null,
                             'required' => false,
                             'label'=>'Selectionnez les matières',      

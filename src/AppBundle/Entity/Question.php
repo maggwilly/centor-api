@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="question")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuestionRepository")
  */
-class Question
+class Question implements FileObject
 {
     /**
      * @var int
@@ -145,7 +145,7 @@ class Question
      */
     private $imageEntity;
 
-        /**
+   /**
    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Explication")
    */
     private $explication;
@@ -234,9 +234,9 @@ class Question
      */
     public function getImage()
     {
-        if($this->imageEntity!=null)
-           return $this->image=$this->imageEntity->getWebPath();
-       return $this->image;
+        if($this->image!=null)
+            return $this->image;
+        return ($this->imageEntity!=null)?$this->imageEntity->getUrl():"";
     }
 
     /**
@@ -255,12 +255,10 @@ class Question
     /**
      * Get historique
      *
-     * @return string 
+     * @return string
      */
     public function getShowLink()
     {
-  if($this->showLink==null&&$this->id!=null)
-        return $this->showLink ='https://entrances.herokuapp.com/v1/question/'.$this->id.'/show/from/mobile';// url defaul to view question;
     return $this->showLink;
     }
 
@@ -501,7 +499,7 @@ class Question
      * @param \AppBundle\Entity\User $user
      * @return Question
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -524,7 +522,7 @@ class Question
      * @param \AppBundle\Entity\Partie $partie
      * @return Question
      */
-    public function setPartie(\AppBundle\Entity\Partie $partie = null)
+    public function setPartie(Partie $partie = null)
     {
         $this->partie = $partie;
 
@@ -572,7 +570,7 @@ class Question
      * @param \AppBundle\Entity\User $validateur
      * @return Question
      */
-    public function setValidateur(\AppBundle\Entity\User $validateur = null)
+    public function setValidateur(User $validateur = null)
     {
         $this->validateur = $validateur;
 
@@ -588,30 +586,28 @@ class Question
     {
         return $this->validateur;
     }
-    /**
-     * Set image
-     *
-     * @param \PW\QCMBundle\Entity\Image $image
-     * @return QCM
-     */
-    public function setImageEntity(\AppBundle\Entity\Image $image = null)
-    {
-        $this->imageEntity = $image;
-
-        return $this;
-    }
 
     /**
-     * Get image
-     *
-     * @return \PW\QCMBundle\Entity\Image 
+     * @return mixed
      */
     public function getImageEntity()
     {
         return $this->imageEntity;
     }
 
+    /**
+     * @param mixed $imageEntity
+     */
+    public function setImageEntity($imageEntity)
+    {
+        $this->imageEntity = $imageEntity;
+    }
 
+
+    public function getFileEntity()
+    {
+        return $this->imageEntity;
+    }
     /**
      * Set explication
      *
@@ -619,7 +615,7 @@ class Question
      *
      * @return Question
      */
-    public function setExplication(\AppBundle\Entity\Explication $explication = null)
+    public function setExplication(Explication $explication = null)
     {
         $this->explication = $explication;
 
@@ -635,4 +631,5 @@ class Question
     {
         return $this->explication;
     }
+
 }
