@@ -4,7 +4,9 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use SolrBundle\Entity\SolrSearchResult;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
+
 
 /**
  * Resultat
@@ -14,7 +16,7 @@ use FS\SolrBundle\Doctrine\Annotation as Solr;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ResultatRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Resultat extends SolrSearchResult
+class Resultat extends SolrSearchResult implements FileObject
 {
     /**
      * @var int
@@ -28,7 +30,7 @@ class Resultat extends SolrSearchResult
     /**
      * @var string
      * @Solr\Field(type="string")
-     * @ORM\Column(name="url", type="text")
+     * @ORM\Column(name="url", type="text",  nullable=true)
      */
     protected $url;
 
@@ -52,13 +54,19 @@ class Resultat extends SolrSearchResult
      */
     protected $date;
     /**
-     *@ORM\PostLoad()
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $fileEntity;
+
+    /**
+     * @ORM\PostLoad()
      */
     public function indexHandler()
     {
-        $this->description=$this->description;
-        $this->title=$this->description;
-        $this->resultType='Resultat';
+        $this->description = $this->description;
+        $this->title = $this->description;
+        $this->resultType = 'Resultat';
         return true;
     }
 
@@ -71,7 +79,6 @@ class Resultat extends SolrSearchResult
     {
         return $this->id;
     }
-
 
 
     /**
@@ -88,14 +95,12 @@ class Resultat extends SolrSearchResult
         return $this;
     }
 
-    /**
-     * Get url
-     *
-     * @return string
-     */
+
     public function getUrl()
     {
-        return $this->url;
+        if($this->url!=null)
+            return $this->url;
+        return ($this->fileEntity!=null)?$this->fileEntity->getUrl():"";
     }
 
     /**
@@ -145,6 +150,7 @@ class Resultat extends SolrSearchResult
     {
         return $this->date;
     }
+
     /**
      * Set imageUrl
      *
@@ -169,13 +175,14 @@ class Resultat extends SolrSearchResult
         return $this->imageUrl;
     }
 
-      /**
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->date=new \DateTime();
+        $this->date = new \DateTime();
     }
+
     /**
      * @return mixed
      */
@@ -200,5 +207,29 @@ class Resultat extends SolrSearchResult
     {
         return 'Resultat';
     }
+
+    /**
+     * Set image
+     *
+     * @param \PW\QCMBundle\Entity\Image $image
+     * @return QCM
+     */
+    public function setFileEntity(\AppBundle\Entity\Image $image = null)
+    {
+        $this->fileEntity = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \PW\QCMBundle\Entity\Image
+     */
+    public function getFileEntity()
+    {
+        return $this->fileEntity;
+    }
+
 }
 

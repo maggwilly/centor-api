@@ -37,15 +37,45 @@ class Image
      */
     private $alt;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="extension", type="string", length=255, nullable=true)
+     */
+    private $extension;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="upload_dir", type="string", length=255, nullable=true)
+     */
+    private $uploadDir;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="filename", type="string", length=255, nullable=true)
+     */
+    private $filename;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="thumnnail", type="string", length=255, nullable=true)
+     */
+    private $thumnnail;
+
+    private $thumnnailUrl;
+
     private $file;
 
     private $tempFilename;
 
-
+    private $baseDir;
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -68,7 +98,7 @@ class Image
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -91,7 +121,7 @@ class Image
     /**
      * Get alt
      *
-     * @return string 
+     * @return string
      */
     public function getAlt()
     {
@@ -103,82 +133,152 @@ class Image
         return $this->file;
     }
 
-    public function setFile($file)
+    /**
+     * @return string
+     */
+    public function getExtension(): string
     {
-     $this->file = $file;
-      if (null !== $this->url) {
-        $this->tempFilename = $this->url;
-        $this->url = null;
-         $this->alt = null;
-      }
-    }
-
-
-    public function preUpload(){
- 
-            if(null === $this->getFile()){
-                return;
-            }
-            $this->url = $this->getFile()->guessExtension();
-            $this->alt = $this->getFile()->getClientOriginalName();
-    }
-
-
-    public function upload(){
-
-       if(null === $this->getFile()){
-                return false;
-            }
-
-            if(null !== $this->tempFilename){           
-                $oldFile = $this->getUploadRootDir().'/'.$this->id.'.'.$this->tempFilename;
-
-                if(file_exists($oldFile)){
-                    unlink($oldFile);
-                }
-            }
-
-            $this->getFile()->move(
-                $this->getUploadRootDir(),
-                $this->id.'.'.$this->url
-                );
-    return true;
+        return $this->extension;
     }
 
     /**
-    * @ORM\PreRemove()
-    */
-    public function preRemoveUpload(){
-
-            $this->tempFilename = $this->getUploadRootDir().'/'.$this->id.'.'.$this->url;
+     * @param string $extension
+     */
+    public function setExtension(string $extension)
+    {
+        $this->extension = $extension;
     }
 
-public function getPath(){
-
-            return $this->getUploadRootDir().'/'.$this->id.'.'.$this->url;
+    public function setFile($file)
+    {
+        $this->file = $file;
+        if (null !== $this->extension) {
+            $this->tempFilename = $this->extension;
+            $this->extension = null;
+            $this->alt = null;
+        }
+         $this->preUpload();
     }
 
 
-    public function remove(){
+    public function preUpload()
+    {
+        if (null === $this->getFile()) {
+            return;
+        }
+        $this->extension = $this->getFile()->guessExtension();
+        $this->alt = $this->getFile()->getClientOriginalName();
+        $this->filename = $this->getFile()->getFileName();
+    }
 
-            if(file_exists($this->getPath())){
-                unlink($this->getPath());
+    /**
+     * @return string
+     */
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function setFilename(string $filename)
+    {
+        $this->filename = $filename;
+    }
+
+
+    public function upload($baseDir,$uploadDir, $fileName=null)
+    {
+        $this->baseDir=$baseDir;
+        $this->uploadDir=$uploadDir;
+        $this->filename=$fileName!=null?$fileName:$this->filename;
+        if (null === $this->getFile()) {
+            return false;
+        }
+        if (null !== $this->tempFilename) {
+             $oldFile =  $this->getUploadRootDir() . '/' . $this->filename ;
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
             }
+        }
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $this->filename
+        );
+        return true;
     }
 
-    public function getUploadDir(){
-
-            return 'uploads/question/images';
+    /**
+     * @ORM\PreRemove()
+     */
+    public function preRemoveUpload()
+    {
+        $this->tempFilename = $this->getUploadRootDir() . '/' . $this->filename;
     }
 
-    protected function getUploadRootDir(){
 
-            return __DIR__.'/../../../web/'.$this->getUploadDir();
+    public function remove($baseDir=__DIR__)
+    {    $this->baseDir=$baseDir;
+        if (file_exists($this->baseDir.$this->getWebPath())) {
+            unlink($this->baseDir."/" .$this->getWebPath());
+        }
     }
 
-    public function getWebPath(){
 
-            return $this->getUrl();//$this->getUploadDir().'/'.$this->getId().'.'.$this->getUrl();
+    protected function getUploadRootDir(): string
+    {
+        return $this->baseDir."/" . $this->getUploadDir();
+    }
+
+
+    public function getWebPath(): string
+    {
+        return $this->getUploadDir().$this->filename;
+    }
+
+    public function getThumbnailPath(): string
+    {
+        return $this->getUploadDir().$this->thumnnail;
+    }
+    /**
+     * @return string
+     */
+    public function getUploadDir(): string
+    {
+        return $this->uploadDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumnnail(): string
+    {
+        return $this->thumnnail;
+    }
+
+    /**
+     * @param string $thumnnail
+     */
+    public function setThumnnail(string $thumnnail)
+    {
+        $this->thumnnail = $thumnnail;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThumnnailUrl()
+    {
+        return $this->thumnnailUrl;
+    }
+
+    /**
+     * @param mixed $thumnnailUrl
+     */
+    public function setThumnnailUrl($thumnnailUrl)
+    {
+        $this->thumnnailUrl = $thumnnailUrl;
     }
 
 }

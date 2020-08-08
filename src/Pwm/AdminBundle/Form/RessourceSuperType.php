@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use AppBundle\Form\ImageType;
 class RessourceSuperType extends AbstractType
 {
     /**
@@ -29,9 +30,6 @@ class RessourceSuperType extends AbstractType
         ->add('detail2','text', array(
            'label' => 'Autre détail 2','required' =>false
          ))
-        ->add('detail3','text', array(
-           'label' => 'Autre détail 3','required' =>false
-         ))
         ->add('label','choice', array(
            'label' => 'Label','required' =>false,
            'choices'=>array(
@@ -40,26 +38,14 @@ class RessourceSuperType extends AbstractType
                     'urgent'=>'urgent',
                     )
          ))
-        ->add('style','text', array(
-           'label' => 'Type de document (pdf/image/doc/excel etc.)',
-         ))
-        ->add('size','text', array(
-           'label' => 'Nombre de pages',
-         )) 
         ->add('price','integer', array(
           'label' => 'Prix de la ressource',
          ))       
-        ->add('url', UrlType::class, array(
-          'label' => 'Lien de télechargement',
-         ))
-        ->add('imageUrl', UrlType::class, array(
-       'label' => 'Lien vers la photo',
-))
-
+    ->add('fileEntity',   new ImageType(), array('label'=>'Document','required'=>true))
     ->add('matieres', EntityType::class,
                        array('class' => 'AppBundle:Matiere', 
-                           'choice_label' => 'getDisplayName', 
-                           'placeholder' => 'Aucune matière',
+                            'choice_label' => 'getDisplayName',
+                            'placeholder' => 'Aucune matière',
                             'empty_data'  => null,
                             'required' => false,
                             'label'=>'Selectionnez les matières',      

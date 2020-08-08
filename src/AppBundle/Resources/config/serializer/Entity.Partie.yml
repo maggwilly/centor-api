@@ -6,7 +6,10 @@ AppBundle\Entity\Partie:
         titre:
              groups: ['partie', 'full']
         cours:
-             groups: ['partie', 'full']             
+          access_type: public_method # defaults to property
+          accessor: # access_type must be set to public_method
+            getter: getCours
+          groups: ['partie', 'full']
         prerequis:
              groups: ['partie', 'full']
         qcm:

@@ -11,7 +11,6 @@ admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
     prefix:   /v1
 
-
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
     prefix: /v1
@@ -20,6 +19,16 @@ app:
 user_homepage:
     path:     /
     defaults: { _controller: "AppBundle:App:index" }
+    methods:  GET
+
+download_file:
+    path:     /media/{id}/download-file
+    defaults: { _controller: "AppBundle:App:download" }
+    methods:  GET
+
+download_thumbnail:
+    path:     /media/{id}/download-thumbnail
+    defaults: { _controller: "AppBundle:App:thumbnail" }
     methods:  GET
 
 fos_user_security:

@@ -2,6 +2,7 @@
 
 namespace Pwm\AdminBundle\Controller;
 
+use AppBundle\Event\FileCreationEvent;
 use Pwm\AdminBundle\Entity\Ressource;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,6 +54,7 @@ class RessourceController extends Controller
                    }           
             $em->persist($ressource);
             $em->flush();
+            $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($ressource));
             if($ressource->getIsPublic())
                  $this->pushInGroup($ressource);
              else
@@ -118,7 +120,6 @@ class RessourceController extends Controller
               $this->addFlash('success', 'Envoyé à. '.count( $registrations).'  utilisateurs');
             $event=new NotificationEvent($registrations,$notification, $data);
             $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
-       // ,'url'=> $ressource->getUrl()
               if(!is_null($session)&&$addToChat){
                 
                  $date = new \DateTime();

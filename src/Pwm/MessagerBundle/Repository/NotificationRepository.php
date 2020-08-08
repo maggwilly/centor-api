@@ -10,16 +10,14 @@ namespace Pwm\MessagerBundle\Repository;
  */
 class NotificationRepository extends \Doctrine\ORM\EntityRepository
 {
-		  /**
-  *Nombre de synchro effectue par utilisateur 
-  */
+
   public function findList(){
   	     $startdate=new \DateTime();
          $qb = $this->createQueryBuilder('a')
           ->where('a.type is NULL')
           ->andWhere('a.date >:date')->setParameter('date',$startdate->modify('+ 30 day'))
           ->orWhere('a.type =:type')->setParameter('type','public');
-          return $qb->getQuery()->getResult();
+          return $qb->getQuery()->setMaxResults(10)->getResult();
   }
 
 
