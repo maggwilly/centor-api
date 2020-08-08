@@ -44,7 +44,7 @@ services:
         - nginx-proxy
         - posgresql-ntw
         - solr-ntw
-    command: sh -c "composer install --no-interaction --prefer-source && chown -R www-data:www-data app/cache && chown -R www-data:www-data app/logs && chown -R 1000:10000 /opt/data/c-centor && /sbin/entrypoint.sh"
+    command: sh -c "composer install --no-interaction --prefer-source && chown -R www-data:www-data app/cache && chown -R www-data:www-data app/logs  && /sbin/entrypoint.sh"
 
 
 networks:
