@@ -23,7 +23,8 @@ class DoctrineEventListener implements EventSubscriber
     public function postLoad(LifecycleEventArgs $args) {
         $entity = $args->getEntity();
         if ($entity instanceof Image) {
-            $entity->setUrl($this->router->generate('download_file', array('id'=>$entity ->getId()), UrlGeneratorInterface::ABSOLUTE_URL));
+            if(is_null($entity->getUrl()))
+               $entity->setUrl($this->router->generate('download_file', array('id'=>$entity ->getId()), UrlGeneratorInterface::ABSOLUTE_URL));
             $entity->setThumnnailUrl($this->router->generate('download_thumbnail', array('id'=>$entity ->getId()), UrlGeneratorInterface::ABSOLUTE_URL));
         }
     }
