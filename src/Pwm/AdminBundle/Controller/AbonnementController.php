@@ -23,15 +23,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class AbonnementController extends Controller
 {
 
-    private   $authorization='Bearer 9xBFBcOar5G5ACWWL0gmLFR0dtXt';
-    private  $merchant_key='027d30fb';
-    private  $currency='XAF';
-    private  $id_prefix='CMD.CM.';
-    private  $return_url='http://help.centor.org/return.html';
-    private  $cancel_url='http://help.centor.org/cancel.html';
- 
-   private  $base_url='https://concours.centor.org/v1/formated/commende/';
-
   /**
    * @Security("is_granted('ROLE_DELEGUE')")
   */
@@ -80,7 +71,7 @@ class AbonnementController extends Controller
 
     public function goToPaiementAction(Request $request,Commande $commande)
     {
-      if( $commande->getStatus()==='SUCCESS')
+      if( $commande->getStatus()==='PAID')
             return $this->redirect('http://help.centor.org/return.html');
         $res=$this->get('payment_service')->getPayementUrl($commande);
         if(array_key_exists('payment_url', $res))
@@ -95,7 +86,7 @@ class AbonnementController extends Controller
     public function startCommandeAction(Request $request,Info $info, $product=null,$package)
     {
     $em = $this->getDoctrine()->getManager();
-    $commande= new Commande($info);
+            $commande= new Commande($info);
          if($package=='ressource')
             $commande=$this->loadCommandeForRessource($info, $product);
          else
@@ -158,11 +149,11 @@ class AbonnementController extends Controller
      */
     public function confirmCommandeAction(Request $request)
     {    $em = $this->getDoctrine()->getManager();
-        $data=json_decode($this->get("request")->getContent(),true);
-         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['order_id']);
+         $data=json_decode($this->get("request")->getContent(),true);
+         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
          $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
          $form->submit($data,false);
-        if ($form->isValid()&&$commande->getStatus()=='SUCCESS') {
+        if ($form->isValid()&&$commande->getStatus()=='PAID') {
             if (is_null($commande->getRessource())) {
              $abonnement=$em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
              if($abonnement==null){
@@ -185,7 +176,6 @@ class AbonnementController extends Controller
         }
         return $form;
     }
-
 
 
     /**

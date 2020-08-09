@@ -2,6 +2,7 @@
 
 namespace Pwm\AdminBundle\Entity;
 
+use AppBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -49,8 +50,8 @@ class Abonnement
     private $method;
 
     /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
-   */
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     */
     private $user;
 
     /**
@@ -75,7 +76,7 @@ class Abonnement
     private $status;
 
 
-      /**
+    /**
      * @var string
      *
      * @ORM\Column(name="studentId", type="string", length=255, nullable=true)
@@ -89,67 +90,66 @@ class Abonnement
      */
     private $tel_paid_number;
 
-       /**
+    /**
      * @var string
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
-     private $email;
+    private $email;
 
 
     /**
-   * @ORM\ManyToOne(targetEntity="Info" ,inversedBy="abonnements")
-    * @ORM\JoinColumn(name="uid",referencedColumnName="uid" )
-   */
+     * @ORM\ManyToOne(targetEntity="Info" ,inversedBy="abonnements")
+     * @ORM\JoinColumn(name="uid",referencedColumnName="uid" )
+     */
     private $info;
 
 
-  /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session" ,inversedBy="abonnements")
-   */
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session" ,inversedBy="abonnements")
+     */
     private $session;
 
 
-
-     /**
+    /**
      * Constructor
      */
-    public function __construct(\Pwm\AdminBundle\Entity\Commande $commande)
+    public function __construct(Commande $commande)
     {
-       $this->status=$commande->getStatus();
-        $this->plan=$commande->getPackage();
-        $this->price=$commande->getAmount();
-        $this->info=$commande->getInfo();
-        $this->session=$commande->getSession();
-        $this->method='OM';
-        $this->date=new \DateTime();
-         $this->startDate=new \DateTime();
+        $this->status = $commande->getStatus();
+        $this->plan = $commande->getPackage();
+        $this->price = $commande->getAmount();
+        $this->info = $commande->getInfo();
+        $this->session = $commande->getSession();
+        $this->date = new \DateTime();
+        $this->startDate = new \DateTime();
     }
 
 
-     /**
-    * @ORM\PrePersist()
-    * @ORM\PreUpdate()
-    */
-    public function PrePersist(){
-          $this->endDate=new \DateTime();
-          if(!is_null($this->session))
-           switch ($this->plan) {
-               case 'starter':
-                 $this->endDate->modify('+'.$this->session->getPrice()->getStarterDelay().' day');
-                   break;
-               case 'standard':
-                     $this->endDate->modify('+'.$this->session->getPrice()->getStandardDelay().' day');
-                   break;               
-               default:
-                   $this->endDate->modify('+'.$this->session->getPrice()->getPremiumDelay().' day');
-                   break;
-           }
-           else
-             $this->endDate->modify('+12 month');
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function PrePersist()
+    {
+        $this->endDate = new \DateTime();
+        if (!is_null($this->session))
+            switch ($this->plan) {
+                case 'starter':
+                    $this->endDate->modify('+' . $this->session->getPrice()->getStarterDelay() . ' day');
+                    break;
+                case 'standard':
+                    $this->endDate->modify('+' . $this->session->getPrice()->getStandardDelay() . ' day');
+                    break;
+                default:
+                    $this->endDate->modify('+' . $this->session->getPrice()->getPremiumDelay() . ' day');
+                    break;
+            }
+        else
+            $this->endDate->modify('+12 month');
     }
 
 
-        /**
+    /**
      * Set date
      *
      * @param \DateTime $date
@@ -165,29 +165,30 @@ class Abonnement
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
         return $this->date;
     }
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-        /**
+    /**
      * Set user
      *
      * @param \Pwm\AdminBundle\Entity\User $user
      * @return Question
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -197,7 +198,7 @@ class Abonnement
     /**
      * Get user
      *
-     * @return \Pwm\AdminBundle\Entity\User 
+     * @return \Pwm\AdminBundle\Entity\User
      */
     public function getUser()
     {
@@ -218,7 +219,7 @@ class Abonnement
 
     /**
      * Get endDate
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndDate()
     {
@@ -241,12 +242,13 @@ class Abonnement
     /**
      * Get startDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartDate()
     {
         return $this->startDate;
     }
+
     /**
      * Set email
      *
@@ -270,6 +272,7 @@ class Abonnement
     {
         return $this->email;
     }
+
     /**
      * Set method
      *
@@ -286,7 +289,7 @@ class Abonnement
     /**
      * Get method
      *
-     * @return string 
+     * @return string
      */
     public function getMethod()
     {
@@ -310,7 +313,7 @@ class Abonnement
     /**
      * Get plan
      *
-     * @return string 
+     * @return string
      */
     public function getPlan()
     {
@@ -333,7 +336,7 @@ class Abonnement
     /**
      * Get price
      *
-     * @return integer 
+     * @return integer
      */
     public function getPrice()
     {
@@ -356,13 +359,12 @@ class Abonnement
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
         return $this->status;
     }
-
 
 
     /**
@@ -374,14 +376,14 @@ class Abonnement
     public function setStudentId($studentId)
     {
         $this->studentId = $studentId;
-         $this->uid =$studentId;
+        $this->uid = $studentId;
         return $this;
     }
 
     /**
      * Get studentId
      *
-     * @return string 
+     * @return string
      */
     public function getStudentId()
     {
@@ -438,8 +440,6 @@ class Abonnement
     }
 
 
-
-
     /**
      * Set session
      *
@@ -465,7 +465,6 @@ class Abonnement
     }
 
 
-
     /**
      * Set info
      *
@@ -489,5 +488,5 @@ class Abonnement
     {
         return $this->info;
     }
-  
+
 }
