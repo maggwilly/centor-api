@@ -111,7 +111,7 @@ class Analyse
      */
     public function __construct(Info $studentId=null, Session $session = null, Matiere $matiere=null, Partie $partie=null)
     {
-        $this->uid =$studentId;
+        $this->studentId =$studentId;
         $this->partie=$partie;
          $this->matiere=$matiere;
         $this->session=$session;
