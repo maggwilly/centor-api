@@ -19,7 +19,7 @@ class AnalyseRepository extends \Doctrine\ORM\EntityRepository
   */
   public function findOneOrNull($studentId, $session, Matiere $matiere=null, Partie $partie=null){
          $qb = $this->createQueryBuilder('a')
-         ->where('a.uid=:studentId')->setParameter('studentId',$studentId)
+         ->where('a.studentId=:studentId')->setParameter('studentId',$studentId)
             ->andWhere('a.session=:session')->setParameter('session',$session);
          if($matiere!=null)
            $qb ->andWhere('a.matiere=:matiere')->setParameter('matiere',$matiere);
@@ -35,7 +35,7 @@ class AnalyseRepository extends \Doctrine\ORM\EntityRepository
 
     public function findOllFor(Info $studentId, Session $session, Matiere $matiere=null){
          $qb = $this->createQueryBuilder('a')
-         ->where('a.uid=:studentId')->setParameter('studentId',$studentId)
+         ->where('a.studentId=:studentId')->setParameter('studentId',$studentId)
             ->andWhere('a.session=:session')->setParameter('session',$session)->andWhere('a.matiere is not null');
          if($matiere!=null)
            $qb ->andWhere('a.matiere=:matiere')->setParameter('matiere',$matiere)->andWhere('a.partie is not null');
