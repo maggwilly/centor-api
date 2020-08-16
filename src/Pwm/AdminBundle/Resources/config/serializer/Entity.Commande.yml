@@ -11,6 +11,8 @@ Pwm\AdminBundle\Entity\Commande:
              groups: ['commande', 'full']
         amount:
              groups: ['commande', 'full']
+        abonnement:
+          groups: ['commande', 'full']
         date:
              groups: ['commande', 'full']
              expose: true

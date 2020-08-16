@@ -142,13 +142,13 @@ class InfoController extends Controller
             if (!$form->isValid())
                  return $form;
                 if($registration!=null) 
-                $registration->setInfo($info);
-                  $em->persist($info);  
-                   $em->flush();   
+                 $registration->setInfo($info);
+                 $em->persist($info);
+                 $em->flush();
                  $event= new InfoEvent($info);
                  $this->get('event_dispatcher')->dispatch('user.created', $event);           
               }
-            if($registration!=null){
+              if($registration!=null){
                 $registration->setInfo($info);
                   $em->flush();
                  $url="https://trainings-fa73e.firebaseio.com/users/".$info->getUid()."/registrationsId/.json";

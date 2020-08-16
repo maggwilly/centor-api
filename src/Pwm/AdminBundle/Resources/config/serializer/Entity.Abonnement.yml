@@ -2,7 +2,7 @@ Pwm\AdminBundle\Entity\Abonnement:
     exclusion_policy: none
     properties:
         id:
-            groups: ['abonnement', 'full']
+            groups: ['abonnement', 'full', 'commande']
         studentId:
              groups: ['abonnement', 'full']
         session:
@@ -12,7 +12,7 @@ Pwm\AdminBundle\Entity\Abonnement:
         plan:
              groups: ['abonnement', 'full']
         status:
-             groups: ['abonnement', 'full']             
+             groups: ['abonnement', 'full', 'commande']
         price:
              groups: ['abonnement', 'full']
         startDate:
