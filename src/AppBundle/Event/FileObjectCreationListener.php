@@ -44,13 +44,13 @@ class FileObjectCreationListener
                 $filename = 'question_' . $fileObject->getId() .'.'. $fileEntity->getExtension();
             } elseif ($fileObject instanceof Ressource) {
                 $upladdir = 'documents/';
-                $filename = str_replace(' ', '_', $fileObject->getNom()) .'.'. $fileEntity->getExtension();
+               $filename = $this->cleanString($fileObject->getNom()) .'.'. $fileEntity->getExtension();
             } elseif ($fileObject instanceof Resultat) {
                 $upladdir = 'arretes/';
-                $filename = str_replace(' ', '_', $fileObject->getDescription()) .'.'. $fileEntity->getExtension();
+                $filename = $this->cleanString($fileObject->getDescription()) .'.'. $fileEntity->getExtension();
             }elseif ($fileObject instanceof Partie) {
                 $upladdir = 'cours/';
-                $filename = str_replace(' ', '_', $fileObject->getTitre()) .'.'. $fileEntity->getExtension();
+               $filename = $this->cleanString($fileObject->getTitre()) .'.'. $fileEntity->getExtension();
             }
             if ($fileEntity->upload($this->base_data_dir,$upladdir, $filename)) {
                 if($fileEntity->getExtension()=='pdf')
@@ -59,6 +59,20 @@ class FileObjectCreationListener
             }
         }
     }
+
+function cleanString($string)
+{
+  // allow only letters
+  $res = preg_replace("/[^a-zA-Z]/", "", $string);
+  // trim what's left to 8 chars
+  $res = substr($res, 0, 25);
+  // make lowercase
+  $res = strtolower($res);
+  $res = str_replace(' ', '_', $res);
+   $res =$res.'_'.uniqid();
+
+  return $res;
+}
 
     public function createThumbnail($upladdir, $filename){
         $filenameImg=$filename.'.jpg';
