@@ -24,8 +24,6 @@ services:
       - "8983:8983"
     volumes:
        - ./solr/data:/var/solr/data
-    networks:
-      - solr-ntw
 
   centor-api:
     build: .
@@ -33,9 +31,10 @@ services:
     depends_on:
       - posgresql
     ports:
-      - 8000:80
+      - 80:80
     volumes:
       - .:/var/www/app
+      - ../data/c-centor:/opt/data/c-centor
       - ./policy.xml:/etc/ImageMagick-6/policy.xml
     environment:
       SYMFONY_ENV: prod
@@ -45,7 +44,7 @@ services:
         - nginx-proxy
         - posgresql-ntw
         - solr-ntw
-    command: sh -c "composer install --no-interaction --prefer-source && chown -R www-data:www-data app/cache && chown -R www-data:www-data app/logs  && /sbin/entrypoint.sh"
+    command: sh -c "composer install --no-interaction --prefer-source && chown -R www-data:www-data app/cache && chown -R www-data:www-data app/logs && chown -R www-data:www-data /opt/data/c-centor && /sbin/entrypoint.sh"
 
 
 networks:
