@@ -23,8 +23,8 @@
         <tbody>
         {% for resultat in resultats %}
             <tr>
-                <td><a href="{{ resultat.url }}">
-                    {{ resultat.description }}
+                <td>{{ resultat.description }}
+                <a href="{{ resultat.url }}">
                     <p>{{ resultat.url }}</p>
                     </a>
                 </td>

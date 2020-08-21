@@ -78,7 +78,7 @@ class AppController extends Controller
             $file_with_path = $this->container->getParameter ( 'base_data_dir' ) . "/" .$file->getThumbnailPath();
             $response = new BinaryFileResponse ( $file_with_path );
             $response->headers->set ( 'Content-Type', 'image/jpeg' );
-            $response->setContentDisposition (ResponseHeaderBag::DISPOSITION_ATTACHMENT, $file->getThumnnail());
+            $response->setContentDisposition (ResponseHeaderBag::DISPOSITION_INLINE, $file->getThumnnail());
             return $response;
         } catch ( Exception $e ) {
             $array = array (
