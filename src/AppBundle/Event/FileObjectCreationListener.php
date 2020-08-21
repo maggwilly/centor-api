@@ -62,13 +62,13 @@ class FileObjectCreationListener
 
 function cleanString($string)
 {
+  $res = str_replace(' ', '_', $res);
   // allow only letters
   $res = preg_replace("/[^a-zA-Z]/", "", $string);
   // trim what's left to 8 chars
   $res = substr($res, 0, 25);
   // make lowercase
   $res = strtolower($res);
-  $res = str_replace(' ', '_', $res);
    $res =$res.'_'.uniqid();
 
   return $res;
