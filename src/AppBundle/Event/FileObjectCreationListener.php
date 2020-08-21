@@ -53,7 +53,6 @@ class FileObjectCreationListener
                 $filename = str_replace(' ', '_', $fileObject->getTitre()) .'.'. $fileEntity->getExtension();
             }
             if ($fileEntity->upload($this->base_data_dir,$upladdir, $filename)) {
-                $fileEntity->setUrl($fileEntity->getWebPath());
                 if($fileEntity->getExtension()=='pdf')
                    $fileEntity->setThumnnail($this->createThumbnail($upladdir, $filename));
                 $this->_em->flush();

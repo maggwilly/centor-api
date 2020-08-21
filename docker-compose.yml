@@ -46,7 +46,6 @@ services:
         - solr-ntw
     command: sh -c "composer install --no-interaction --prefer-source && chown -R www-data:www-data app/cache && chown -R www-data:www-data app/logs && chown -R www-data:www-data /opt/data/c-centor && /sbin/entrypoint.sh"
 
-
 networks:
   nginx-proxy:
     external: true

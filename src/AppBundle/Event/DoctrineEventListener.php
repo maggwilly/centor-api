@@ -25,7 +25,7 @@ class DoctrineEventListener implements EventSubscriber
         if ($entity instanceof Image) {
             if(is_null($entity->getUrl()))
                $entity->setUrl($this->router->generate('download_file', array('id'=>$entity ->getId()), UrlGeneratorInterface::ABSOLUTE_URL));
-            $entity->setThumnnailUrl($this->router->generate('download_thumbnail', array('id'=>$entity ->getId()), UrlGeneratorInterface::ABSOLUTE_URL));
+             $entity->setThumnnailUrl($this->router->generate('download_thumbnail', array('id'=>$entity ->getId()), UrlGeneratorInterface::ABSOLUTE_URL));
         }
     }
 }
