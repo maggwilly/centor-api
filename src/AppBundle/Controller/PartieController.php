@@ -48,9 +48,17 @@ class PartieController extends Controller
          $info = $em->getRepository('AdminBundle:Info')->findOneByUid($request->query->get('uid'));
          $mat = $em->getRepository('AppBundle:Matiere')->findOneById($request->query->get('matiere'));
          $parties=$matiere->getUnites();//->getParties();
+         $abonnement=$em->getRepository('AdminBundle:Abonnement')->findMeOnThis( $info, $session);
        foreach ($parties as $key => $partie) {
-             $partie->setIsAvalable(!empty($em->getRepository('AppBundle:Partie')->findAvalability($partie->getId(),$session->getId())));
-            // $partie->setIsAvalable(true);
+             //$partie->setIsAvalable(!empty($em->getRepository('AppBundle:Partie')->findAvalability($partie->getId(),$session->getId())));
+             if($abonnement->getPrice()==0&&$key<=1){
+                  $partie->setIsAvalable(true);
+               }elseif ($abonnement->getPrice()>0){
+                  $partie->setIsAvalable(true);
+                 } else {
+                     $partie->setIsAvalable(false);
+                 }
+
              $partie->setAnalyse($em->getRepository('AdminBundle:Analyse')->findOneOrNull( $info,$session,$mat,$partie)); 
          };
         return  $parties;
