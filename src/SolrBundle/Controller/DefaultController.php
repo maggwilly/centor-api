@@ -24,7 +24,7 @@ class DefaultController extends Controller
         $entities = array(
             'Concours' => 'AppBundle:Session',
             'Ecole' => 'AppBundle:Concours',
-            'Resultat' => 'AppBundle:Resultat',
+            'Arrêté' => 'AppBundle:Resultat',
             'Annonce' => 'MessagerBundle:Notification',
             'Document' => 'AdminBundle:Ressource'
         );
