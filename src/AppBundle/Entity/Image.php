@@ -226,25 +226,25 @@ class Image
     }
 
 
-    protected function getUploadRootDir(): string
+    protected function getUploadRootDir()
     {
         return $this->baseDir."/" . $this->getUploadDir();
     }
 
 
-    public function getWebPath(): string
+    public function getWebPath()
     {
         return $this->getUploadDir().$this->filename;
     }
 
-    public function getThumbnailPath(): string
+    public function getThumbnailPath()
     {
         return $this->getUploadDir().$this->thumnnail;
     }
     /**
      * @return string
      */
-    public function getUploadDir(): string
+    public function getUploadDir()
     {
         return $this->uploadDir;
     }
@@ -252,7 +252,7 @@ class Image
     /**
      * @return string
      */
-    public function getThumnnail(): string
+    public function getThumnnail()
     {
         return $this->thumnnail;
     }
