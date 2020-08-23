@@ -66,7 +66,7 @@ class Resultat extends SolrSearchResult implements FileObject
     {
         $this->description = $this->description;
         $this->title = $this->description;
-        $this->resultType = 'Resultat';
+        $this->resultType = 'Arrêté';
         return true;
     }
 
