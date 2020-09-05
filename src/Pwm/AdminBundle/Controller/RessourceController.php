@@ -102,7 +102,7 @@ class RessourceController extends Controller
     {   
              $notification = new Notification('public',false,true);
              $notification
-             ->setTitre($ressource->getIsPublic()?'Nouveau document':'Nouveau document ~'.$session->getNomConcours())
+             ->setTitre('Nouveau document ')
              ->setSousTitre($ressource->getNom().' '.$ressource->getDescription())
              ->setText($ressource->getNom().' '.$ressource->getDescription());
              $notification->setUser($this->getUser());
