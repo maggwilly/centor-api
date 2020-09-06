@@ -17,11 +17,6 @@ class CreateListener
     protected $_em;
     protected $twig;
     protected $fcm;
-    const HEADERS = array(
-        "Authorization: key=AAAAJiQu4xo:APA91bH63R7-CeJ7jEgGtb2TNVkCx0TDWAYbu32mO1_4baLtrrFidNrbNy98Qngb6G67efbuJ8BpInpJiCeoTp-p5mt2706P2hXbXqrTXOWlaJFTDHza2QVWSlwsbF27eBhD2PZVJKuu",
-        "content-type: application/json"
-    );
-    const FCM_URL = "https://fcm.googleapis.com/fcm/send";
 
     public function __construct(CloudinaryWrapper $cloudinaryWrapper, EntityManager $_em, \Twig_Environment $templating, FMCManager $fcm)
     {
@@ -60,7 +55,7 @@ class CreateListener
         $result = $this->firebaseSend($registrationIds, $notification, $data);
         $this->controlFake($result, $registrations, $notification);
         if ($info != null) {
-            $url = "https://trainings-fa73e.firebaseio.com/users/" . $info->getUid() . "/registrationsId/.json";
+            $url = "https://centor-concours.firebaseio.com/users/" . $info->getUid() . "/registrationsId/.json";
             $data = array($event->getRegistration()->getRegistrationId() => true);
             $this->fcm->sendOrGetData($url, $data, 'PATCH');
         }
@@ -102,7 +97,7 @@ class CreateListener
                 $data = array('page' => 'notification', 'id' => $notification->getId());
                 $result = $this->firebaseSend($this->sendTo($registrations), $notification, $data);
                 $this->controlFake($result, $registrations, $notification);
-                $url = "https://trainings-fa73e.firebaseio.com/session/" . $commande->getSession()->getId() . "/members/.json";
+                $url = "https://centor-concours.firebaseio.com/groupes/" . $commande->getSession()->getId() . "/members/.json";
                 $data = array($info->getUid() => array('uid' => $info->getUid(), 'displayName' => $info->getDisplayName(), 'photoURL' => $info->getPhotoURL()));
                 $this->fcm->sendOrGetData($url, $data, 'PATCH');
             } elseif ($commande->getRessource() != null) {
@@ -113,6 +108,7 @@ class CreateListener
                     ->setText($body)
                     ->setSendDate(new \DateTime())
                     ->setIncludeMail(true)
+                    ->setImageEntity($commande->getRessource()->getFileEntity())
                     ->setSendNow(true);
                 $this->_em->persist($notification);
                 $this->_em->flush();
@@ -140,12 +136,10 @@ class CreateListener
             $notif = clone $notification;
             $notif->setText($body)->setIncludeMail(true);
             foreach ($info->getRegistrations() as $registration) {
-                if (!$registration->getIsFake()) {
                     $tokens[] = $registration->getRegistrationId();
                     $sending = new Sending($registration, $notif);
                     $this->_em->persist($notif);
                     $this->_em->persist($sending);
-                }
             }
             if (($key % $batchSize) === 0) {
                 $this->_em->flush();
@@ -168,7 +162,7 @@ class CreateListener
         if (empty($registrations))
             return $registrationIds;
         foreach ($registrations as $registration) {
-            if (!$registration->getIsFake())
+           // if (!$registration->getIsFake())
                 $registrationIds[] = $registration->getRegistrationId();
         }
         return $registrationIds;
@@ -177,12 +171,13 @@ class CreateListener
 
     public function firebaseSend($registrationIds, Notification $notification, $data = array())
     {
-        $data = array('registration_ids' => array_values($registrationIds),
+        $data = array(
+            'registration_ids' => array_values($registrationIds),
             'notification' => array(
                 'title' => $notification->getTitre(),
                 'body' => $notification->getSousTitre(),
                 'badge' => 1,
-                "icon" => "ic_notify",
+                'image' =>is_null($notification->getImageEntity())?'':$notification->getImageEntity()->getUrl(),
                 'sound' => "default",
                 'tag' => 'message' . $notification->getId()),
             'data' => $data
@@ -215,7 +210,6 @@ class CreateListener
             $this->controlFake($result, $registrations, $notification);
             $this->_em->flush();
         }
-
     }
 
 

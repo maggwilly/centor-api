@@ -4,16 +4,13 @@ namespace AppBundle\Service;
 class FMCManager
 {
 
-const HEADERS=array(
-    "Authorization: key=AAAAJiQu4xo:APA91bH63R7-CeJ7jEgGtb2TNVkCx0TDWAYbu32mO1_4baLtrrFidNrbNy98Qngb6G67efbuJ8BpInpJiCeoTp-p5mt2706P2hXbXqrTXOWlaJFTDHza2QVWSlwsbF27eBhD2PZVJKuu",
+ const HEADERS=array(
+    "Authorization: key=AAAASmMMRcQ:APA91bH5tLRAx_5qHJu3tPB7VUtHN6QaocQoMfn5-cD7wVPaD59PIZ66aLzwKkM1iMoSfUqR1tD6HQHPQWmzH9Hp5EzNmOZA7S_32oLwppqXleDSfwflGbklwTYrQZ3kel4Xo5FZGJZ4",
       "content-type: application/json"
    );
 const FCM_URL = "https://fcm.googleapis.com/fcm/send";
 
-public function __construct()
-{
-
-}
+public function __construct(){}
 
   public function sendMessage($data, $json_decode=true)
     {
@@ -61,6 +58,4 @@ public function __construct()
         $response = json_decode($json_response, true);
         return $json_decode?$response:$json_response;
     }
-  
-
 }

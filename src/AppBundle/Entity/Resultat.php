@@ -165,6 +165,7 @@ class Resultat extends SolrSearchResult implements FileObject
         return $this;
     }
 
+
     /**
      * Get imageUrl
      *
@@ -172,9 +173,10 @@ class Resultat extends SolrSearchResult implements FileObject
      */
     public function getImageUrl()
     {
-        return $this->imageUrl;
+        if($this->imageUrl!=null)
+            return $this->imageUrl;
+        return ($this->fileEntity!=null)?$this->fileEntity->getThumnnailUrl():"";
     }
-
     /**
      * Constructor
      */

@@ -73,12 +73,13 @@ class ResultatController extends Controller
                 $em = $this->getDoctrine()->getManager();
                $notification = new Notification('public',false,true);
                $notification->setTitre($resultat->getDescription())
-               ->setSousTitre($resultat->getDescription()." dispobible en téléchargement ")
-               ->setText($resultat->getDescription()." Sont disponibles ");
-                $notification->setUser($this->getUser())
+                ->setSousTitre($resultat->getDescription()." dispobible en téléchargement ")
+                ->setText($resultat->getDescription()." Sont disponibles ")
+                ->setUser($this->getUser())
+                ->setImageEntity($resultat->getFileEntity())
                  ->setIncludeMail(false);
                  $registrations = $em->getRepository('MessagerBundle:Registration')->findAll();
-                 $data=array('page'=>'resultat' );
+                 $data=array('page'=>'resultat');
                  $event=new NotificationEvent($registrations,$notification, $data);
                  $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
                 }
