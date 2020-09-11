@@ -243,7 +243,7 @@ class RessourceController extends Controller
      * @param Session $session
      * @return array
      */
-    public function pushNotificationEvent(Ressource $ressource, Session $session): array
+    public function pushNotificationEvent(Ressource $ressource, Session $session=null): array
     {
         $notification = new Notification('public', false, true);
         $notification
