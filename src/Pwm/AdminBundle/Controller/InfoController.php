@@ -29,7 +29,7 @@ class InfoController extends Controller
         foreach ($infos as $key => $info) {
             foreach ($info->getRegistrations() as $key => $registration) {
                  if(!$registration->getIsFake()){
-                  $url="https://trainings-fa73e.firebaseio.com/users/".$info->getUid()."/registrationsId/.json";
+                  $url="https://centor-concours.firebaseio.com/users/".$info->getUid()."/registrationsId/.json";
                   $data = array($registration->getRegistrationId() => true);
                   $fmc_response= $this->get('fmc_manager')->sendOrGetData($url,$data,'PATCH');           
               }
@@ -130,7 +130,7 @@ class InfoController extends Controller
      */
     public function showJsonAction(Request $request,$uid){
          $em = $this->getDoctrine()->getManager();
-         $url= "https://trainings-fa73e.firebaseio.com/users/".$uid.".json";
+         $url= "https://centor-concours.firebaseio.com/users/".$uid.".json";
          $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET');        
          $info = $em->getRepository('AdminBundle:Info')->findOneByUid($uid);
          $registrationId=$request->query->get('registrationId');
@@ -151,9 +151,9 @@ class InfoController extends Controller
               if($registration!=null){
                 $registration->setInfo($info);
                   $em->flush();
-                 $url="https://trainings-fa73e.firebaseio.com/users/".$info->getUid()."/registrationsId/.json";
+                 $url="https://centor-concours.firebaseio.com/users/".$info->getUid()."/registrationsId/.json";
                  $data = array($registration->getRegistrationId() => true);
-                  $fmc_response= $this->get('fmc_manager')->sendOrGetData($url,$data,'PATCH');           
+                 $this->get('fmc_manager')->sendOrGetData($url,$data,'PATCH');
               } 
          
         return $info;

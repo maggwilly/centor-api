@@ -52,7 +52,7 @@ class CreateListener
         $notification->setSousTitre("Entrez de plein pieds dans un univers d'opportunités qui vous surprendra à coup sûr...");
         $registrationIds = $this->sendTo($registrations);
         $data = array('page' => 'notification', 'id' => $notification->getId());
-        $result = $this->firebaseSend($registrationIds, $notification, $data);
+        $result = $this->sendToTokens($registrationIds, $notification, $data);
         $this->controlFake($result, $registrations, $notification);
         if ($info != null) {
             $url = "https://centor-concours.firebaseio.com/users/" . $info->getUid() . "/registrationsId/.json";
@@ -72,7 +72,7 @@ class CreateListener
         $this->_em->flush();
         $registrationIds = $this->sendTo($registrations);
         $data = array('page' => 'notification', 'id' => $notification->getId());
-        $result = $this->firebaseSend($registrationIds, $notification, $data);
+        $result = $this->sendToTokens($registrationIds, $notification, $data);
         $this->controlFake($result, $registrations, $notification);
     }
 
@@ -95,7 +95,7 @@ class CreateListener
                 $this->_em->flush();
                 $registrations = $info->getRegistrations();
                 $data = array('page' => 'notification', 'id' => $notification->getId());
-                $result = $this->firebaseSend($this->sendTo($registrations), $notification, $data);
+                $result = $this->sendToTokens($this->sendTo($registrations), $notification, $data);
                 $this->controlFake($result, $registrations, $notification);
                 $url = "https://centor-concours.firebaseio.com/groupes/" . $commande->getSession()->getId() . "/members/.json";
                 $data = array($info->getUid() => array('uid' => $info->getUid(), 'displayName' => $info->getDisplayName(), 'photoURL' => $info->getPhotoURL()));
@@ -114,7 +114,7 @@ class CreateListener
                 $this->_em->flush();
                 $registrations = $info->getRegistrations();
                 $data = array('page' => 'notification', 'id' => $notification->getId());
-                $result = $this->firebaseSend($this->sendTo($registrations), $notification, $data);
+                $result = $this->sendToTokens($this->sendTo($registrations), $notification, $data);
                 $this->controlFake($result, $registrations, $notification);
             }
         }
@@ -147,7 +147,7 @@ class CreateListener
         }
         $this->_em->flush();
         $this->_em->clear();
-        $result = $this->firebaseSend($tokens, $notification);
+        $result = $this->sendToTokens($tokens, $notification);
         //   $this->controlFake($result,$info->getRegistrations(),$notification);
     }
 
@@ -162,16 +162,16 @@ class CreateListener
         if (empty($registrations))
             return $registrationIds;
         foreach ($registrations as $registration) {
-           // if (!$registration->getIsFake())
                 $registrationIds[] = $registration->getRegistrationId();
         }
         return $registrationIds;
     }
 
 
-    public function firebaseSend($registrationIds, Notification $notification, $data = array())
+    public function sendToTokens($registrationIds, Notification $notification, $data = array())
     {
         $data = array(
+            'priority'=>'high',
             'registration_ids' => array_values($registrationIds),
             'notification' => array(
                 'title' => $notification->getTitre(),
@@ -179,13 +179,48 @@ class CreateListener
                 'badge' => 1,
                 'image' =>is_null($notification->getImageEntity())?'':$notification->getImageEntity()->getUrl(),
                 'sound' => "default",
+                'click_action' => 'FCM_PLUGIN_ACTIVITY',
                 'tag' => 'message' . $notification->getId()),
             'data' => $data
         );
         return $this->fcm->sendMessage($data);
     }
 
+    public function sendToTopic($topic, Notification $notification, $data = array())
+    {
+        $data = array(
+            'priority'=>'high',
+            'to' => '/topics/'.$topic,
+            'notification' => array(
+                'title' => $notification->getTitre(),
+                'body' => $notification->getSousTitre(),
+                'badge' => 1,
+                'image' =>is_null($notification->getImageEntity())?'':$notification->getImageEntity()->getUrl(),
+                'sound' => "default",
+                'click_action' => 'FCM_PLUGIN_ACTIVITY',
+                'tag' => 'message' . $notification->getId()),
+            'data' => $data
+        );
+        return $this->fcm->sendMessage($data);
+    }
 
+    public function sendToAll(Notification $notification, $data = array())
+    {
+        $data = array(
+            'priority'=>'high',
+            'restricted_package_name'=>'com.centor.mobile.app',
+            'notification' => array(
+                'title' => $notification->getTitre(),
+                'body' => $notification->getSousTitre(),
+                'badge' => 1,
+                'image' =>is_null($notification->getImageEntity())?'':$notification->getImageEntity()->getUrl(),
+                'sound' => "default",
+                'click_action' => 'FCM_PLUGIN_ACTIVITY',
+                'tag' => 'message' . $notification->getId()),
+            'data' => $data
+        );
+        return $this->fcm->sendMessage($data);
+    }
     public function onMessageEnd(ResultEvent $event)
     {
         $result = $event->getFCMResult();
@@ -203,13 +238,12 @@ class CreateListener
         $notification = $event->getNotification()
             ->setSendDate(new \DateTime())
             ->setSendNow(true);
-        $registrationsGroups = array_chunk($registrations, 950);
-        foreach ($registrationsGroups as $key => $registrations) {
-            $tokens = $this->sendTo($registrations);
-            $result = $this->firebaseSend($tokens, $notification, $data);
-            $this->controlFake($result, $registrations, $notification);
-            $this->_em->flush();
-        }
+       foreach ($registrations as $registration){
+           $sending = new Sending($registration, $notification);
+           $this->_em->persist($sending);
+       }
+        $this->_em->flush();
+        $this->sendPushNotification($event, $notification, $data, $registrations);
     }
 
 
@@ -235,4 +269,28 @@ class CreateListener
         $this->_em->flush();
     }
 
+    /**
+     * @param NotificationEvent $event
+     * @param Notification $notification
+     * @param array $data
+     * @param $registrations
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function sendPushNotification(NotificationEvent $event, Notification $notification, array $data, $registrations)
+    {
+        if (!is_null($event->getTopic())) {
+            $this->sendToTopic($event->getTopic(), $notification, $data);
+            return;
+        } elseif (empty($registrations)) {
+            $this->sendToAll($notification, $data);
+            return;
+        }
+        $registrationsGroups = array_chunk($registrations, 950);
+        foreach ($registrationsGroups as $key => $registrations) {
+            $tokens = $this->sendTo($registrations);
+            $result = $this->sendToTokens($tokens, $notification, $data);
+            $this->controlFake($result, $registrations, $notification);
+            $this->_em->flush();
+        }
+    }
 }
