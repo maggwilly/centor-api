@@ -29,7 +29,6 @@ class RessourceController extends Controller
      */
     public function indexAction(Session $session = null)
     {
-        $ressources = array();
         $em = $this->getDoctrine()->getManager();
         if (is_null($session))
             $ressources = $em->getRepository('AdminBundle:Ressource')->findAll();

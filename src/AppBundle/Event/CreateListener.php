@@ -171,7 +171,6 @@ class CreateListener
     public function sendToTokens($registrationIds, Notification $notification, $data = array())
     {
         $data = array(
-            'priority'=>'high',
             'registration_ids' => array_values($registrationIds),
             'notification' => array(
                 'title' => $notification->getTitre(),
@@ -189,7 +188,6 @@ class CreateListener
     public function sendToTopic($topic, Notification $notification, $data = array())
     {
         $data = array(
-            'priority'=>'high',
             'to' => '/topics/'.$topic,
             'notification' => array(
                 'title' => $notification->getTitre(),
@@ -207,8 +205,7 @@ class CreateListener
     public function sendToAll(Notification $notification, $data = array())
     {
         $data = array(
-            'priority'=>'high',
-            'restricted_package_name'=>'com.centor.mobile.app',
+            'to' => '/topics/centor-public',
             'notification' => array(
                 'title' => $notification->getTitre(),
                 'body' => $notification->getSousTitre(),
@@ -238,6 +235,7 @@ class CreateListener
         $notification = $event->getNotification()
             ->setSendDate(new \DateTime())
             ->setSendNow(true);
+         $this->_em->persist($notification);
        foreach ($registrations as $registration){
            $sending = new Sending($registration, $notification);
            $this->_em->persist($sending);
