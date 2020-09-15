@@ -49,18 +49,27 @@ class RessourceController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            foreach ($ressource->getSessions() as $session) {
+                $ressource->removeSession($session);
+                $ressource->addSession($session);
+                $this->pushInGroup($ressource, $session);
+                $this->pushNotificationEvent($ressource, $session);
+            }
             foreach ($ressource->getMatieres() as $matiere) {
                 foreach ($matiere->getProgramme()->getSessions() as $session) {
                     $ressource->removeSession($session);
                     $ressource->addSession($session);
+                    $this->pushInGroup($ressource, $session);
+                    $this->pushNotificationEvent($ressource, $session);
                 }
             }
             $em->persist($ressource);
             $em->flush();
             $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($ressource));
-            $this->pushNotificationEvent($ressource, $session);
             if(!is_null($session)){
                 $this->pushInGroup($ressource, $session);
+                $this->pushNotificationEvent($ressource, $session);
                 return $this->redirectToRoute('ressource_show', array('id' => $ressource->getId(), 'session' => $session->getId()));
             }
             return $this->redirectToRoute('ressource_show', array('id' => $ressource->getId()));
