@@ -52,6 +52,15 @@ class RessourceSuperType extends AbstractType
                             'multiple'=>true,
                             'expanded'=>false,                  
                             'attr'=>array('data-rel'=>'chosen')))
+            ->add('sessions', EntityType::class,array('class' => 'AppBundle:Session',
+                'choice_label' => 'nomConcours',
+                'placeholder' => 'Toute les sessions',
+                'empty_data'  => null,
+                'required' => false,
+                'label'=>'Selectionnez les concours',
+                'multiple'=>true,
+                'expanded'=>false,
+                'attr'=>array('data-rel'=>'chosen')))
         ;
     }
     

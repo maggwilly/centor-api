@@ -2,6 +2,7 @@
 
 namespace Pwm\AdminBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -41,7 +42,17 @@ class RessourceType extends AbstractType
         ->add('price','integer', array(
           'label' => 'Prix de la ressource',
          ))
-    ->add('fileEntity',   new ImageType(), array('label'=>'Document','required'=>true));
+    ->add('fileEntity',   new ImageType(), array('label'=>'Document','required'=>true))
+     ->add('matieres', EntityType::class,
+                array('class' => 'AppBundle:Matiere',
+                    'choice_label' => 'getDisplayName',
+                    'placeholder' => 'Aucune matière',
+                    'empty_data'  => null,
+                    'required' => false,
+                    'label'=>'Selectionnez les matières',
+                    'multiple'=>true,
+                    'expanded'=>false,
+                    'attr'=>array('data-rel'=>'chosen')));
     }
     
     /**
