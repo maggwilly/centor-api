@@ -34,7 +34,7 @@ class Notification
     /**
      * @var string
      * @Solr\Field(type="string")
-     * @ORM\Column(name="text", type="text")
+     * @ORM\Column(name="text", type="text", nullable=true)
      */
     private $text;
 
@@ -42,7 +42,7 @@ class Notification
     /**
      * @var string
      * @Solr\Field(type="string")
-     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true, options={"default" : "private"})
      */
     private $type;
 

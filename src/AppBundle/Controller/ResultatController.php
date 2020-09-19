@@ -76,7 +76,7 @@ class ResultatController extends Controller
                 ->setSousTitre($resultat->getDescription()." dispobible en téléchargement ")
                 ->setText($resultat->getDescription()." Sont disponibles ")
                 ->setUser($this->getUser())
-                ->setImageEntity($resultat->getFileEntity())
+                ->setImageEntity($resultat->getFileEntity())->setType("public")
                  ->setIncludeMail(false);
                  $registrations = $em->getRepository('MessagerBundle:Registration')->findAll();
                  $data=array('page'=>'resultat');

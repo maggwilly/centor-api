@@ -258,7 +258,7 @@ class RessourceController extends Controller
             ->setTitre('Nouveau document ')
             ->setSousTitre($ressource->getNom() . ' ' . $ressource->getDescription())
             ->setText($ressource->getNom() . ' ' . $ressource->getDescription())
-            ->setUser($this->getUser())
+            ->setUser($this->getUser())->setType("public")
             ->setImageEntity($ressource->getFileEntity());
         $data = array('page' => 'document', 'id' => $ressource->getId(), 'session' => $ressource->getId());
         if (!is_null($session)) {
