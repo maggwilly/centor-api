@@ -64,7 +64,7 @@ function cleanString($string)
 {
   $res = str_replace(' ', '_',  $string);
   // allow only letters
-  $res = preg_replace("/[^a-zA-Z]/", '',$res);
+  $res = preg_replace("/[^a-zA-Z0-9_-]+/", '_',$res);
   // trim what's left to 8 chars
   $res = substr($res, 0, 25);
    $res =$res.'_'.uniqid();

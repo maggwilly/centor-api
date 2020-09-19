@@ -116,7 +116,7 @@ class AbonnementController extends Controller
             if(is_null($commande)){
                $commande= new Commande($info, $session);
                $commande->setDate(new \DateTime())
-               ->setSession($session)->setPackage($package);;
+               ->setSession($session);
                $em->persist($commande);
            }
            $price= new Price();
@@ -127,7 +127,8 @@ class AbonnementController extends Controller
              }
            else
              $price = $em->getRepository('AdminBundle:Price')->find(8);
-           $commande->setAmount($this->getForSessonCommande($price,$package));
+             $commande->setAmount($this->getForSessonCommande($price,$package))
+             ->setPackage($package);
         return $commande;
       }
 

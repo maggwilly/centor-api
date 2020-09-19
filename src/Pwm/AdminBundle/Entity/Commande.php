@@ -2,6 +2,7 @@
 
 namespace Pwm\AdminBundle\Entity;
 
+use AppBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -106,7 +107,7 @@ class Commande
         /**
      * Constructor
      */
-    public function __construct(Info $info=null, \AppBundle\Entity\Session $session=null, $package=null, $amount=null, \Pwm\AdminBundle\Entity\Ressource $ressource = null)
+    public function __construct(Info $info=null, Session $session=null, $package=null, $amount=null, Ressource $ressource = null)
     {
         $this->date =new \DateTime();  
          $this->info = $info; 
@@ -233,11 +234,11 @@ class Commande
     /**
      * Set session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param Session $session
      *
      * @return Commande
      */
-    public function setSession(\AppBundle\Entity\Session $session = null)
+    public function setSession(Session $session = null)
     {
         $this->session = $session;
 
@@ -247,7 +248,7 @@ class Commande
     /**
      * Get session
      *
-     * @return \AppBundle\Entity\Session
+     * @return Session
      */
     public function getSession()
     {
@@ -405,7 +406,7 @@ class Commande
      *
      * @return Commande
      */
-    public function setRessource(\Pwm\AdminBundle\Entity\Ressource $ressource = null)
+    public function setRessource(Ressource $ressource = null)
     {
         $this->ressource = $ressource;
 
