@@ -49,7 +49,7 @@ class Notification
     /**
      * @var string
      * @Solr\Field(type="string")
-     * @ORM\Column(name="tag", type="string", length=255, options={"default" : "public"})
+     * @ORM\Column(name="tag", type="string", length=255, options={"default" : "private"})
      */
     private $tag; 
 
