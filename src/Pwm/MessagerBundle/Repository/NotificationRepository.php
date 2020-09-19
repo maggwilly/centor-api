@@ -16,7 +16,7 @@ class NotificationRepository extends \Doctrine\ORM\EntityRepository
          $qb = $this->createQueryBuilder('a')
           ->where('a.type is NULL')
           ->andWhere('a.date >:date')->setParameter('date',$startdate->modify('+ 30 day'))
-          ->orWhere('a.type =:type')->setParameter('type','public');
+          ->andWhere('a.type =:type')->setParameter('type','public');
           return $qb->getQuery()->setMaxResults(10)->getResult();
   }
 
