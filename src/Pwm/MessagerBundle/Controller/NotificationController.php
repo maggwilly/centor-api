@@ -253,7 +253,7 @@ class NotificationController extends Controller
         $groupe = $notification->getGroupe();
         $data = array(
             'page' => 'notification',
-            'id' => $notification->getId()
+            'notification_id' => $notification->getId()
         );
         if ($groupe != null) {
             switch ($groupe->getTag()) {
