@@ -22,8 +22,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class AbonnementController extends Controller
 {
+    const ZERO_PRICE_ID = 9;
 
-  /**
+    /**
    * @Security("is_granted('ROLE_DELEGUE')")
   */
     public function indexAction()
@@ -126,7 +127,7 @@ class AbonnementController extends Controller
               $session->addInfo($info);
              }
            else
-             $price = $em->getRepository('AdminBundle:Price')->find(8);
+             $price = $em->getRepository('AdminBundle:Price')->find(self::ZERO_PRICE_ID);
              $commande->setAmount($this->getForSessonCommande($price,$package))
              ->setPackage($package);
         return $commande;
