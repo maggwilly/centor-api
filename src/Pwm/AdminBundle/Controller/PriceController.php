@@ -14,6 +14,7 @@ use FOS\RestBundle\View\View;
  */
 class PriceController extends Controller
 {
+    const ZERO_PRICE_ID = 9;
   /**
    * @Security("is_granted('ROLE_PRICER')")
   */
@@ -73,7 +74,7 @@ class PriceController extends Controller
     {
     if($price==null){
      $em = $this->getDoctrine()->getManager();
-     $price = $em->getRepository('AdminBundle:Price')->find(8);
+     $price = $em->getRepository('AdminBundle:Price')->find(self::ZERO_PRICE_ID);
         return $price;
     }
       return $price;
