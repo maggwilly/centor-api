@@ -2,6 +2,7 @@
 
 namespace AppBundle\Event;
 
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\EventDispatcher\Event;
 use Misteio\CloudinaryBundle\Wrapper\CloudinaryWrapper;
 use Pwm\MessagerBundle\Entity\Notification;
@@ -136,10 +137,10 @@ class CreateListener
             $notif = clone $notification;
             $notif->setText($body)->setIncludeMail(true);
             foreach ($info->getRegistrations() as $registration) {
-                    $tokens[] = $registration->getRegistrationId();
-                    $sending = new Sending($registration, $notif);
-                    $this->_em->persist($notif);
-                    $this->_em->persist($sending);
+                $tokens[] = $registration->getRegistrationId();
+                $sending = new Sending($registration, $notif);
+                $this->_em->persist($notif);
+                $this->_em->persist($sending);
             }
             if (($key % $batchSize) === 0) {
                 $this->_em->flush();
@@ -162,7 +163,7 @@ class CreateListener
         if (empty($registrations))
             return $registrationIds;
         foreach ($registrations as $registration) {
-                $registrationIds[] = $registration->getRegistrationId();
+            $registrationIds[] = $registration->getRegistrationId();
         }
         return $registrationIds;
     }
@@ -176,7 +177,7 @@ class CreateListener
                 'title' => $notification->getTitre(),
                 'body' => $notification->getSousTitre(),
                 'badge' => 1,
-                'image' =>is_null($notification->getImageEntity())?'':$notification->getImageEntity()->getUrl(),
+                'image' => is_null($notification->getImageEntity()) ? '' : $notification->getImageEntity()->getUrl(),
                 'sound' => "default",
                 'click_action' => 'FCM_PLUGIN_ACTIVITY',
                 'tag' => 'message' . $notification->getId()),
@@ -188,12 +189,12 @@ class CreateListener
     public function sendToTopic($topic, Notification $notification, $data = array())
     {
         $data = array(
-            'to' => '/topics/'.$topic,
+            'to' => '/topics/' . $topic,
             'notification' => array(
                 'title' => $notification->getTitre(),
                 'body' => $notification->getSousTitre(),
                 'badge' => 1,
-                'image' =>is_null($notification->getImageEntity())?'':$notification->getImageEntity()->getUrl(),
+                'image' => is_null($notification->getImageEntity()) ? '' : $notification->getImageEntity()->getUrl(),
                 'sound' => "default",
                 'click_action' => 'FCM_PLUGIN_ACTIVITY',
                 'tag' => 'message' . $notification->getId()),
@@ -210,7 +211,7 @@ class CreateListener
                 'title' => $notification->getTitre(),
                 'body' => $notification->getSousTitre(),
                 'badge' => 1,
-                'image' =>is_null($notification->getImageEntity())?'':$notification->getImageEntity()->getUrl(),
+                'image' => is_null($notification->getImageEntity()) ? '' : $notification->getImageEntity()->getUrl(),
                 'sound' => "default",
                 'click_action' => 'FCM_PLUGIN_ACTIVITY',
                 'tag' => 'message' . $notification->getId()),
@@ -218,6 +219,7 @@ class CreateListener
         );
         return $this->fcm->sendMessage($data);
     }
+
     public function onMessageEnd(ResultEvent $event)
     {
         $result = $event->getFCMResult();
@@ -230,18 +232,18 @@ class CreateListener
 
     public function onSheduleToSend(NotificationEvent $event)
     {
-        $registrations = $event->getDescs();
-        $data = $event->getData();
-        $notification = $event->getNotification()
-            ->setSendDate(new \DateTime())
-            ->setSendNow(true);
-         $this->_em->persist($notification);
-       foreach ($registrations as $registration){
-           $sending = new Sending($registration, $notification);
-           $this->_em->persist($sending);
-       }
-        $this->_em->flush();
-        $this->sendPushNotification($event, $notification, $data, $registrations);
+        try {
+            $notification = $event->getNotification()
+                ->setSendDate(new \DateTime())
+                ->setSendNow(true);
+            $this->_em->persist($notification);
+            foreach ($event->getDescs() as $registration) {
+                $sending = new Sending($registration, $notification);
+                $this->_em->persist($sending);
+            }
+            $this->_em->flush();
+            $this->sendPushNotification($event, $notification, $event->getData());
+        } catch (OptimisticLockException $e) {}
     }
 
 
@@ -274,16 +276,16 @@ class CreateListener
      * @param $registrations
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function sendPushNotification(NotificationEvent $event, Notification $notification, array $data, $registrations)
+    public function sendPushNotification(NotificationEvent $event, Notification $notification, array $data)
     {
         if (!is_null($event->getTopic())) {
             $this->sendToTopic($event->getTopic(), $notification, $data);
             return;
-        } elseif (empty($registrations)) {
+        } elseif (empty($event->getDescs())) {
             $this->sendToAll($notification, $data);
             return;
         }
-        $registrationsGroups = array_chunk($registrations, 950);
+        $registrationsGroups = array_chunk($event->getDescs(), 950);
         foreach ($registrationsGroups as $key => $registrations) {
             $tokens = $this->sendTo($registrations);
             $result = $this->sendToTokens($tokens, $notification, $data);

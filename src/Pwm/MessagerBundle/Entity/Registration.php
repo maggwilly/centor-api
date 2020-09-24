@@ -3,6 +3,7 @@
 namespace Pwm\MessagerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pwm\AdminBundle\Entity\Info;
 
 /**
  * Registration
@@ -62,6 +63,7 @@ class Registration
    * @ORM\JoinColumn(referencedColumnName="uid")
    */
      private  $info;
+
 
          /**
      * @var bool
@@ -159,11 +161,11 @@ class Registration
     /**
      * Set info
      *
-     * @param \Pwm\AdminBundle\Entity\Info $info
+     * @param Info $info
      *
      * @return Registration
      */
-    public function setInfo(\Pwm\AdminBundle\Entity\Info $info = null)
+    public function setInfo(Info $info = null)
     {
         $this->info = $info;
 
@@ -173,7 +175,7 @@ class Registration
     /**
      * Get info
      *
-     * @return \Pwm\AdminBundle\Entity\Info
+     * @return Info
      */
     public function getInfo()
     {

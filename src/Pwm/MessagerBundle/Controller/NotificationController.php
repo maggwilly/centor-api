@@ -172,10 +172,9 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $sendings = $em->getRepository('MessagerBundle:Sending')->findNotRead($notification);
         $registrationIds = array_unique(array_column($sendings, 'registrationId'));
-        $registrations = $em->getRepository('MessagerBundle:Registration')
-            ->findByRegistrationIds($registrationIds);
+        $registrations = $em->getRepository('MessagerBundle:Registration')->findByRegistrationIds($registrationIds);
         if (!is_null($notification)) {
-            $data = array('page' => 'notification', 'id' => $notification->getId());
+            $data = array('page' => 'notification', 'notification_id' => $notification->getId());
             $notification->setIncludeMail(false);
             $em->flush();
             $event = new NotificationEvent($registrations, $notification, $data);
@@ -217,86 +216,42 @@ class NotificationController extends Controller
     /**
      * @Security("is_granted('ROLE_MESSAGER')")
      */
-    public function sendTooAction(Notification $notification)
+    public function sendAction(Notification $notification)
     {
         $em = $this->getDoctrine()->getManager();
-        $sendings = $em->getRepository('MessagerBundle:Sending')->findSendDest($notification);
-        $registrationIds = array_unique(array_column($sendings, 'registrationId'));
-        // to correct
-        $registrations = $em->getRepository('MessagerBundle:Registration')->findNotSendDesc($registrationIds);
+        $groupe=$notification->getGroupe();
+        $registrations=array();
+        $topic="centor-public";
+         if(is_null($groupe)){
+            $registrations = $em->getRepository('MessagerBundle:Registration')->findAll();
+         }elseif(!is_null($groupe->getSession())){
+             $topic="centor-group-".$groupe->getSession()->getId();
+           $infos= $groupe->getSession()->getInfos();
+             foreach ($infos as $info) {
+                 foreach ( $info->getRegistrations() as $registration) {
+                     if(!$registration->getIsFake())
+                         $registrations[]=$registration;
+             }
+           }
+         }else{
+             $infos= $groupe->getInfos();
+             foreach ($infos as $info) {
+                 foreach ( $info->getRegistrations() as $registration) {
+                     if(!$registration->getIsFake())
+                         $registrations[]=$registration;
+                 }
+             }
+         }
         $data = array('page' => 'notification', 'notification_id' => $notification->getId());
-        $notification->setIncludeMail(true);
-        $em->flush();
         $event = new NotificationEvent($registrations, $notification, $data);
+        $event->setTopic($topic);
+        $em->flush();
         $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
         $this->addFlash('success', 'Envoyé à . ' . count($registrations) . ' contacts');
         return $this->redirectToRoute('notification_show', array('id' => $notification->getId()));
     }
 
 
-    public function sendAction(Request $request, Notification $notification)
-    {
-        $sendForm = $this->createSendForm($notification);
-        $sendForm->handleRequest($request);
-        if ($sendForm->isSubmitted() && $sendForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            return $this->send($notification);
-        }
-    }
-
-
-    public function send(Notification $notification)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $registrations = array();
-        $groupe = $notification->getGroupe();
-        $data = array(
-            'page' => 'notification',
-            'notification_id' => $notification->getId()
-        );
-        if ($groupe != null) {
-            switch ($groupe->getTag()) {
-                case 'is.registred.not.singup':
-                    $registrations = $em->getRepository('MessagerBundle:Registration')->findNotsingup();
-                    break;
-                case 'loaded.too.long.time':
-                    $registrations = $em->getRepository('MessagerBundle:Registration')->findTooLongTimeLogin();
-                    break;
-                case 'singup.subscribed.starter':
-                    $destinations = $em->getRepository('AdminBundle:Info')->findSubscribersByBundle('starter');
-                    $registrations = $this->findRegistrations($destinations);
-                    break;
-                case 'singup.subscribed.standard':
-                    $destinations = $em->getRepository('AdminBundle:Info')->findSubscribersByBundle('standard');
-                    $registrations = $this->findRegistrations($destinations);
-                    break;
-                case 'singup.subscribed.expired':
-                    $destinations = $em->getRepository('AdminBundle:Info')->findSubscribersExpired();
-                    $registrations = $this->findRegistrations($destinations);
-                    break;
-
-                case 'singup.not.profil.filled':
-                    $destinations = $em->getRepository('AdminBundle:Info')->findNotProfilFilled();
-                    $registrations = $this->findRegistrations($destinations);
-                    break;
-                default:
-                    if ($groupe->getSession() != null) {
-                        $destinations = $groupe->getSession()->getInfos();
-                        $registrations = $this->findRegistrations($destinations);
-                        $event = new NotificationEvent($registrations, $notification, $data);
-                        $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
-
-                        $this->addFlash('success', 'Message enrégistré et programmé pour publication.');
-                        return $this->redirectToRoute('notification_show', array('id' => $notification->getId()));
-                    }
-            }
-        } else
-            $registrations = $em->getRepository('MessagerBundle:Registration')->findAll();
-        $event = new NotificationEvent($registrations, $notification, $data);
-        $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
-        $this->addFlash('success', 'Message enrégistré et programmé pour publication.');
-        return $this->redirectToRoute('notification_show', array('id' => $notification->getId()));
-    }
 
 
     public function findRegistrations($destinations)

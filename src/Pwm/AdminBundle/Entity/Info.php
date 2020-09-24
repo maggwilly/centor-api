@@ -106,7 +106,10 @@ class Info
      */
     private $enableNotifications;
 
-
+    /**
+     * @ORM\ManyToMany(targetEntity="Pwm\AdminBundle\Entity\Groupe", mappedBy="infos",  cascade={"persist","remove"})
+     */
+    private $groupes;
     /**
    * @ORM\OneToMany(targetEntity="Pwm\MessagerBundle\Entity\Registration", mappedBy="info", cascade={"persist","remove"})
    */
@@ -391,11 +394,11 @@ class Info
     /**
      * Add registration
      *
-     * @param \Pwm\MessagerBundle\Entity\Registration $registration
+     * @param Registration $registration
      *
      * @return Info
      */
-    public function addRegistration(\Pwm\MessagerBundle\Entity\Registration $registration)
+    public function addRegistration(Registration $registration)
     {
         $this->registrations[] = $registration;
         $registration->setInfo(  $this);
@@ -406,9 +409,9 @@ class Info
     /**
      * Remove registration
      *
-     * @param \Pwm\MessagerBundle\Entity\Registration $registration
+     * @param Registration $registration
      */
-    public function removeRegistration(\Pwm\MessagerBundle\Entity\Registration $registration)
+    public function removeRegistration(Registration $registration)
     {
         $this->registrations->removeElement($registration);
     }
@@ -497,11 +500,11 @@ class Info
    /**
      * Add abonnement
      *
-     * @param \Pwm\AdminBundle\Entity\Abonnement $abonnement
+     * @param Abonnement $abonnement
      *
      * @return Session
      */
-    public function addAbonnement(\Pwm\AdminBundle\Entity\Abonnement $abonnement)
+    public function addAbonnement(Abonnement $abonnement)
     {
         $this->abonnements[] = $abonnement;
 
@@ -509,11 +512,27 @@ class Info
     }
 
     /**
+     * @return mixed
+     */
+    public function getGroupes()
+    {
+        return $this->groupes;
+    }
+
+    /**
+     * @param mixed $groupes
+     */
+    public function setGroupes($groupes)
+    {
+        $this->groupes = $groupes;
+    }
+
+    /**
      * Remove abonnement
      *
-     * @param \Pwm\AdminBundle\Entity\Abonnement $abonnement
+     * @param Abonnement $abonnement
      */
-    public function removeAbonnement(\Pwm\AdminBundle\Entity\Abonnement $abonnement)
+    public function removeAbonnement(Abonnement $abonnement)
     {
         $this->abonnements->removeElement($abonnement);
     }
@@ -532,11 +551,11 @@ class Info
     /**
      * Set ambassador
      *
-     * @param \Pwm\AdminBundle\Entity\Ambassador $ambassador
+     * @param Ambassador $ambassador
      *
      * @return Info
      */
-    public function setAmbassador(\Pwm\AdminBundle\Entity\Ambassador $ambassador = null)
+    public function setAmbassador(Ambassador $ambassador = null)
     {
         $this->ambassador = $ambassador;
 
@@ -546,7 +565,7 @@ class Info
     /**
      * Get ambassador
      *
-     * @return \Pwm\AdminBundle\Entity\Ambassador
+     * @return Ambassador
      */
     public function getAmbassador()
     {

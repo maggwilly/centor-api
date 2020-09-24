@@ -2,7 +2,9 @@
 
 namespace Pwm\AdminBundle\Entity;
 
+use AppBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
+use Pwm\MessagerBundle\Entity\Registration;
 
 /**
  * Groupe
@@ -40,6 +42,14 @@ class Groupe
    */
     private $session;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Pwm\AdminBundle\Entity\Info", inversedBy="groupes",  cascade={"persist","remove"})
+     * @ORM\JoinTable(name="groupe_info",
+     *      joinColumns={@ORM\JoinColumn(name="groupe_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="info_id", referencedColumnName="uid")}
+     * )
+     */
+    private $infos;
 
         /**
      * @var string
@@ -51,7 +61,7 @@ class Groupe
     /**
      * Constructor
      */
-    public function __construct($nom, \AppBundle\Entity\Session $session = null,$tag='public')
+    public function __construct($nom, Session $session = null,$tag='public')
     {
         $this->date =new \DateTime();
         $this->nom =$nom;
@@ -120,11 +130,11 @@ class Groupe
     /**
      * Set session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param Session $session
      *
      * @return Notification
      */
-    public function setSession(\AppBundle\Entity\Session $session = null)
+    public function setSession(Session $session = null)
     {
         $this->session = $session;
 
@@ -134,14 +144,13 @@ class Groupe
     /**
      * Get session
      *
-     * @return \AppBundle\Entity\Session
+     * @return Session
      */
     public function getSession()
     {
         return $this->session;
-    } 
+    }
 
-    
 
     /**
      * Set titre
@@ -155,6 +164,22 @@ class Groupe
         $this->tag = $titre;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInfos()
+    {
+        return $this->infos;
+    }
+
+    /**
+     * @param mixed $infos
+     */
+    public function setInfos($infos)
+    {
+        $this->infos = $infos;
     }
 
     /**

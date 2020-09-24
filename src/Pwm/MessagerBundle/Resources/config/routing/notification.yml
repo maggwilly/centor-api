@@ -23,12 +23,6 @@ notification_resent_fron_cron:
     path:     /resent/from/cron/job/{id}
     defaults: { _controller: "MessagerBundle:Notification:resentFroCronJob","id":0  }
     methods:  [GET, POST]
- 
-
-notification_sent_too:
-    path:     /sent/too/{id}
-    defaults: { _controller: "MessagerBundle:Notification:sendToo" }
-    methods:  [GET, POST]
 
 
 notification_rate:

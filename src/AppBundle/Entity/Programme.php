@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,7 +80,7 @@ class Programme
     public function __construct($session=null)
     {
     $this->nom=!is_null($session)?$session->getNomConcours():'Nouveau programme';
-    $this->matieres = new \Doctrine\Common\Collections\ArrayCollection();
+    $this->matieres = new ArrayCollection();
     $this->date=new \DateTime();
     }
 
