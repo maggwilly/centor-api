@@ -172,7 +172,8 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $sendings = $em->getRepository('MessagerBundle:Sending')->findNotRead($notification);
         $registrationIds = array_unique(array_column($sendings, 'registrationId'));
-        $registrations = $em->getRepository('MessagerBundle:Registration')->findByRegistrationIds($registrationIds);
+        $registrations = $em->getRepository('MessagerBundle:Registration')
+            ->findByRegistrationIds($registrationIds);
         if (!is_null($notification)) {
             $data = array('page' => 'notification', 'id' => $notification->getId());
             $notification->setIncludeMail(false);
@@ -184,8 +185,7 @@ class NotificationController extends Controller
         }
 
         $notification = new Notification();
-        $notification->setTitre('Messages non lus')
-            ->setSousTitre("Vous avez de nombreux messages non consultés. Si vous aspirez à un concours, vous devez être attentif à toutes les annonces. ");
+        $notification->setTitre('Messages non lus')->setSousTitre("Vous avez de nombreux messages non consultés. Si vous aspirez à un concours, vous devez être attentif à toutes les annonces. ");
         $notification->setIncludeMail(false);
         $data = array('page' => 'rappel');
         $event = new NotificationEvent($registrations, $notification, $data);
@@ -205,9 +205,8 @@ class NotificationController extends Controller
         $notification
             ->setTitre('Messages non lus')
             ->setSousTitre("Vous avez de nombreux messages non consultés. Si vous aspirez à un concours, vous devez être attentif à toutes les annonces. ");
-        $notification->setIncludeMail(false)
-            ->setText($notification->getSousTitre())->setType("private");
-        $data = array('page' => 'rappel');
+        $notification->setIncludeMail(false)->setText($notification->getSousTitre())->setType("private");
+        $data = array('page' => 'notification', 'notification_id' => $notification->getId());
         $event = new NotificationEvent($registrations, $notification, $data);
         $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
         $this->addFlash('success', 'Rappel envoyé à . ' . count($registrations) . ' contacts');
@@ -225,7 +224,7 @@ class NotificationController extends Controller
         $registrationIds = array_unique(array_column($sendings, 'registrationId'));
         // to correct
         $registrations = $em->getRepository('MessagerBundle:Registration')->findNotSendDesc($registrationIds);
-        $data = array('page' => 'notification', 'id' => $notification->getId());
+        $data = array('page' => 'notification', 'notification_id' => $notification->getId());
         $notification->setIncludeMail(true);
         $em->flush();
         $event = new NotificationEvent($registrations, $notification, $data);

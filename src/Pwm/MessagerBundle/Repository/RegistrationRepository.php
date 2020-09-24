@@ -49,22 +49,21 @@ class RegistrationRepository extends \Doctrine\ORM\EntityRepository
   */
   public function findByRegistrationIds($registrationIds=array()){
          $qb = $this->createQueryBuilder('a')
-         -> where('a.registrationId IN (:registrationIds)')->setParameter('registrationIds', $registrationIds)
-         ->andWhere('a.isFake is NULL');
+         -> where('a.registrationId IN (:registrationIds)')
+             ->setParameter('registrationIds', $registrationIds);
           return $qb->getQuery()->getResult();
   }
 
 
   public function findNotReadsDesc(Notification $notification=null){
-         $qb = $this->createQueryBuilder('r')->join('sending')
-         ->where('r.isFake is NULL'); 
+         $qb = $this->createQueryBuilder('r')->join('sending');
           return $qb->getQuery()->getResult();
   }
 
    public function findNotSendDesc($registrationIds=array()){
          $qb = $this->createQueryBuilder('r')
-        -> where('r.registrationId not IN (:registrationIds)')->setParameter('registrationIds', $registrationIds)
-        ->andWhere('r.isFake is NULL'); 
+        -> where('r.registrationId not IN (:registrationIds)')
+             ->setParameter('registrationIds', $registrationIds);
           return $qb->getQuery()->getResult();
   } 
 }
