@@ -174,11 +174,12 @@ class SessionController extends Controller
              $notification = new Notification('public',false,true);
              $notification
              ->setTitre($session->getNomConcours())
-             ->setSousTitre('Concours disponible'.$session->getNomConcours())
+             ->setSousTitre('Concours disponible '.$session->getNomConcours())
              ->setText("Un Nouveau concours est disponible. Verifiez s'il correspond à votre profil".$session->getNomConcours())
              ->setUser($this->getUser());
               $em->persist($notification);
               $em->flush();
+                $this->get('solr.client')->addDocument($session);
                return $this->redirectToRoute('notification_edit', array('id' =>  $notification->getId()));
             }
              $em->flush();
@@ -219,8 +220,8 @@ class SessionController extends Controller
                  $session->setGroupe(new Groupe($session->getNomConcours(),$session));
                   $em->flush();
              }
-         $this->get("session")->set('current_session_id', $session->getId());  
-                 $url="https://trainings-fa73e.firebaseio.com/session/".$session->getId()."/.json";
+             $this->get("session")->set('current_session_id', $session->getId());
+                 $url="https://centor-concours.firebaseio.com/groupes/".$session->getId()."/.json";
                  $data = array(
                 'info'=>array('groupName' => $session->getNomConcours()),
                 'owner'=>$this->getUser()->getId()
@@ -286,16 +287,11 @@ class SessionController extends Controller
              $notification->setUser($this->getUser());
               $em->persist($notification);
               $em->flush();
+                $this->get('solr.client')->addDocument($session);
                $this->addFlash('success', 'Modifications  enrégistrées avec succès.');
                return $this->redirectToRoute('notification_edit', array('id' =>  $notification->getId()));
             }
               $em->flush();
-               $url="https://trainings-fa73e.firebaseio.com/session/".$session->getId()."/.json";
-                 $data = array(
-                'info'=>array('groupName' => $session->getNomConcours()),
-                'owner'=>$this->getUser()->getId()
-              );
-             $this->get('fmc_manager')->sendOrGetData($url,$data,'PATCH');
 
              return $this->redirectToRoute('session_show', array('id' => $session->getId()));
         }elseif($editForm->isSubmitted())

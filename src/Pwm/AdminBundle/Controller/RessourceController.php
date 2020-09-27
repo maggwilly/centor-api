@@ -68,6 +68,7 @@ class RessourceController extends Controller
             }
             $em->persist($ressource);
             $em->flush();
+             $this->get('solr.client')->addDocument($ressource);
             $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($ressource));
             if(!is_null($session)){
                 $this->pushInGroup($ressource, $session);
@@ -185,6 +186,7 @@ class RessourceController extends Controller
                 $this->pushNotificationEvent($ressource);
             }
             $em->flush();
+            $this->get('solr.client')->addDocument($ressource);
             $this->addFlash('success', 'Modifications  enrégistrées avec succès.');
             return $this->redirectToRoute('ressource_edit', array('id' => $ressource->getId()));
         } elseif ($editForm->isSubmitted())
@@ -207,6 +209,7 @@ class RessourceController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($ressource);
             $em->flush();
+            $this->get('solr.client')->removeDocument($ressource);
             $this->addFlash('success', 'Supprimé.');
         }
         return $this->redirectToRoute('ressource_index');

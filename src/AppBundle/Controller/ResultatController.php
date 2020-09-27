@@ -58,6 +58,7 @@ class ResultatController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($resultat);
             $em->flush();
+            $this->get('solr.client')->addDocument($resultat);
             $this->get('event_dispatcher')->dispatch('file.object.created', new FileCreationEvent($resultat));
             $this->dispatchNotificationEvent($resultat);
             $this->addFlash('success', 'Enrégistrement effectué');
@@ -145,6 +146,7 @@ class ResultatController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($resultat);
             $em->flush();
+            $this->get('solr.client')->removeDocument($resultat);
             $this->addFlash('success', 'Supprimé.');
         }
 
