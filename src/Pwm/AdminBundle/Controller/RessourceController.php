@@ -235,7 +235,7 @@ class RessourceController extends Controller
         return array(
             'message' => array(
                 'ressource' => array(
-                    'id' => $ressource->getId(),
+                    'ressource_id' => $ressource->getId(),
                     'price' => '',
                     'thubmnail' => $ressource->getImageUrl(),
                     'nom' => $ressource->getNom(),
