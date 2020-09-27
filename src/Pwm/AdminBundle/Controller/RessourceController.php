@@ -260,7 +260,7 @@ class RessourceController extends Controller
             ->setText($ressource->getNom() . ' ' . $ressource->getDescription())
             ->setUser($this->getUser())->setType("public")
             ->setImageEntity($ressource->getFileEntity());
-        $data = array('page' => 'document', 'id' => $ressource->getId(), 'session' => $ressource->getId());
+        $data = array('page' => 'document', 'ressource_id' => $ressource->getId(), 'session' => $ressource->getId());
         if (!is_null($session)) {
             $destinations = $session->getInfos();
             $registrations = $this->findRegistrations($destinations);
