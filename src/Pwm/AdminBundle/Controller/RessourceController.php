@@ -177,15 +177,13 @@ class RessourceController extends Controller
                     $ressource->addSession($session);
                 }
             }
-            $this->getDoctrine()->getManager()->flush();
-            if ($ressource->getIsPublic())
-                $this->pushInGroup($ressource);
-            else
-                foreach ($ressource->getSessions() as $key => $session) {
+            foreach ($ressource->getSessions() as $key => $session) {
+                    $this->pushNotificationEvent($ressource, $session);
                     $this->pushInGroup($ressource, $session, false);
                 }
             if (empty($ressource->getSessions())&&empty($ressource->getMatieres())){
                 $ressource->setIsPublic(true);
+                $this->pushNotificationEvent($ressource);
             }
             $em->flush();
             $this->addFlash('success', 'Modifications  enrégistrées avec succès.');
