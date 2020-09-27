@@ -242,7 +242,7 @@ class NotificationController extends Controller
                  }
              }
          }
-        $data = array('page' => 'notification', 'notification_id' => $notification->getId());
+        $data = array('page' => 'notification', 'id' => $notification->getId());
         $event = new NotificationEvent($registrations, $notification, $data);
         $event->setTopic($topic);
         $em->flush();

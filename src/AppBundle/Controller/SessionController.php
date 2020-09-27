@@ -351,7 +351,7 @@ class SessionController extends Controller
             $session->setOwner($formData['user']);
             $em->flush();
             $url="https://trainings-fa73e.firebaseio.com/ownership/".$session->getOwner()."/".$session->getId()."/.json";
-            $data = array('groupName' =>$session->getNomConcours());
+            $data = array('groupdisplayname' =>$session->getNomConcours());
             $this->get('fmc_manager')->sendOrGetData($url,$data,'PATCH'); 
             $this->addFlash('success', 'Attribution de responsabilité ');
             return $this->redirectToRoute('session_attr', array('id' => $session->getId()));    
@@ -388,7 +388,7 @@ class SessionController extends Controller
                   'type' => "simplemsg"
                  )
                 );
-            $url="https://trainings-fa73e.firebaseio.com/session/".$session->getId()."/documents.json";
+            $url="https://centor-concours.firebaseio.com/groupes/".$session->getId()."/documents.json";
             $this->get('fmc_manager')->sendOrGetData($url, $msg,'POST',false);
              $this->addFlash('success', 'groupe whatsapp envoyé ');
             return $this->redirectToRoute('session_whatsapp', array('id' => $session->getId()));    
