@@ -49,7 +49,6 @@ class RessourceController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
             foreach ($ressource->getSessions() as $session) {
                 $ressource->removeSession($session);
                 $ressource->addSession($session);
@@ -63,6 +62,10 @@ class RessourceController extends Controller
                     $this->pushInGroup($ressource, $session);
                     $this->pushNotificationEvent($ressource, $session);
                 }
+            }
+            if (empty($ressource->getSessions())&&empty($ressource->getMatieres())){
+                $this->pushNotificationEvent($ressource);
+                $ressource->setIsPublic(true);
             }
             $em->persist($ressource);
             $em->flush();
@@ -161,6 +164,7 @@ class RessourceController extends Controller
      */
     public function editAction(Request $request, Ressource $ressource, Session $session = null)
     {
+        $em = $this->getDoctrine()->getManager();
         $deleteForm = $this->createDeleteForm($ressource);
         $editForm = is_null($session) ? $this->createForm('Pwm\AdminBundle\Form\RessourceSuperType', $ressource) : $this->createForm('Pwm\AdminBundle\Form\RessourceType', $ressource);
         $editForm->handleRequest($request);
@@ -178,6 +182,10 @@ class RessourceController extends Controller
                 foreach ($ressource->getSessions() as $key => $session) {
                     $this->pushInGroup($ressource, $session, false);
                 }
+            if (empty($ressource->getSessions())&&empty($ressource->getMatieres())){
+                $ressource->setIsPublic(true);
+            }
+            $em->flush();
             $this->addFlash('success', 'Modifications  enrégistrées avec succès.');
             return $this->redirectToRoute('ressource_edit', array('id' => $ressource->getId()));
         } elseif ($editForm->isSubmitted())
@@ -208,7 +216,6 @@ class RessourceController extends Controller
     /**
      * Creates a form to delete a ressource entity.
      * @param Ressource $ressource The ressource entity
-     *
      * @return \Symfony\Component\Form\Form The form
      */
     private function createDeleteForm(Ressource $ressource)
@@ -260,7 +267,7 @@ class RessourceController extends Controller
             ->setText($ressource->getNom() . ' ' . $ressource->getDescription())
             ->setUser($this->getUser())->setType("public")
             ->setImageEntity($ressource->getFileEntity());
-        $data = array('page' => 'document', 'ressource_id' => $ressource->getId(), 'session' => $ressource->getId());
+        $data = array('page' => 'document', 'ressource_id' => $ressource->getId());
         if (!is_null($session)) {
             $destinations = $session->getInfos();
             $registrations = $this->findRegistrations($destinations);
@@ -270,6 +277,7 @@ class RessourceController extends Controller
         } else {
             $registrations = $this->getDoctrine()->getManager()->getRepository('MessagerBundle:Registration')->findAll();
             $event = new NotificationEvent($registrations, $notification, $data);
+            $event->setTopic('centor-public');
             $this->get('event_dispatcher')->dispatch('notification.shedule.to.send', $event);
         }
         return array($notification, $data, $registrations, $event);
