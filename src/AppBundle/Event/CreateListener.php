@@ -149,7 +149,6 @@ class CreateListener
         $this->_em->flush();
         $this->_em->clear();
         $result = $this->sendToTokens($tokens, $notification);
-        //   $this->controlFake($result,$info->getRegistrations(),$notification);
     }
 
 

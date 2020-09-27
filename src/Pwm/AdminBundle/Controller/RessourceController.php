@@ -65,7 +65,6 @@ class RessourceController extends Controller
             }
             if (empty($ressource->getSessions())&&empty($ressource->getMatieres())){
                 $this->pushNotificationEvent($ressource);
-                $ressource->setIsPublic(true);
             }
             $em->persist($ressource);
             $em->flush();
@@ -167,6 +166,7 @@ class RessourceController extends Controller
     public function editAction(Request $request, Ressource $ressource, Session $session = null)
     {
         $em = $this->getDoctrine()->getManager();
+        $em->refresh($ressource);
         $deleteForm = $this->createDeleteForm($ressource);
         $editForm = is_null($session) ? $this->createForm('Pwm\AdminBundle\Form\RessourceSuperType', $ressource) : $this->createForm('Pwm\AdminBundle\Form\RessourceType', $ressource);
         $editForm->handleRequest($request);
@@ -182,7 +182,6 @@ class RessourceController extends Controller
                     $this->pushInGroup($ressource, $session, false);
                 }
             if (empty($ressource->getSessions())&&empty($ressource->getMatieres())){
-                $ressource->setIsPublic(true);
                 $this->pushNotificationEvent($ressource);
             }
             $em->flush();
@@ -262,9 +261,9 @@ class RessourceController extends Controller
     {
         $notification = new Notification('public', false, true);
         $notification
-            ->setTitre('Nouveau document ')
-            ->setSousTitre($ressource->getNom() . ' ' . $ressource->getDescription())
-            ->setText($ressource->getNom() . ' ' . $ressource->getDescription())
+            ->setTitre($ressource->getNom())
+            ->setSousTitre( $ressource->getDescription())
+            ->setText( $ressource->getDescription())
             ->setUser($this->getUser())->setType("public")
             ->setImageEntity($ressource->getFileEntity());
         $data = array('page' => 'document', 'ressource_id' => $ressource->getId());

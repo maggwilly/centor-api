@@ -3,6 +3,7 @@
 namespace Pwm\AdminBundle\Entity;
 
 use AppBundle\Entity\FileObject;
+use AppBundle\Entity\Session;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
@@ -183,10 +184,7 @@ class Ressource extends SolrSearchResult implements FileObject
      */
     public function PrePersist()
     {
-
-
-        $this->setIsPublic(empty($this->sessions));
-
+        $this->setIsPublic(empty($this->sessions)&&empty($this->matieres));
     }
 
 
@@ -413,11 +411,11 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Set session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param Session $session
      *
      * @return Ressource
      */
-    public function setSession(\AppBundle\Entity\Session $session = null)
+    public function setSession(Session $session = null)
     {
         $this->session = $session;
 
@@ -427,7 +425,7 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Get session
      *
-     * @return \AppBundle\Entity\Session
+     * @return Session
      */
     public function getSession()
     {
@@ -582,11 +580,11 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Add session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param Session $session
      *
      * @return Partie
      */
-    public function addSession(\AppBundle\Entity\Session $session)
+    public function addSession(Session $session)
     {
         $this->sessions[] = $session;
         return $this;
@@ -595,9 +593,9 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Remove session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param Session $session
      */
-    public function removeSession(\AppBundle\Entity\Session $session)
+    public function removeSession(Session $session)
     {
         $this->sessions->removeElement($session);
     }
