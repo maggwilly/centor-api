@@ -90,8 +90,10 @@ class RessourceController extends Controller
     {
         if(!is_null($session)){
             $this->pushInGroup($ressource, $session);
+            $this->pushNotificationEvent($ressource, $session);
             return $this->redirectToRoute('ressource_show', array('id' => $ressource->getId(), 'session' => $session->getId()));
         }
+        $this->pushNotificationEvent($ressource);
         return $this->redirectToRoute('ressource_show', array('id' => $ressource->getId()));
     }
 
