@@ -46,5 +46,3 @@ networks:
     external: true
   posgresql-ntw:
     driver: bridge
-  solr-ntw:
-    driver: bridge
