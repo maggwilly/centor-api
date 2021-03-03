@@ -11,6 +11,7 @@
 /bin/
 # ignore all markdown files (md) beside all README*.md other than README-secret.md
 *.md
+composer.lock
 !README*.md
 README-secret.md
 .git
