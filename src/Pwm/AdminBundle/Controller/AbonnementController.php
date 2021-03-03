@@ -58,33 +58,12 @@ class AbonnementController extends Controller
     }
 
     
-    /**
-     * Lists all Produit entities.
-     *@Rest\View()
-     */
-    public function tokenAction()
-    {
-    $res=$this->get('payment_service')->getToken();
-
-  return  $res;
-}
-
-
-    public function goToPaiementAction(Request $request,Commande $commande)
-    {
-      if( $commande->getStatus()==='PAID')
-            return $this->redirect('http://help.centor.org/return.html');
-        $res=$this->get('payment_service')->getPayementUrl($commande);
-        if(array_key_exists('payment_url', $res))
-            return $this->redirect($res['payment_url']);
-      return  new Response('Une erreur se produit. Prevenez un administrateur svp');
-}
 
     /**
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"commande"})
      */
-    public function startCommandeAction(Request $request,Info $info, $product=null,$package)
+    public function startCommandeAction(Request $request,Info $info, $product=null, $package)
     {
     $em = $this->getDoctrine()->getManager();
             $commande= new Commande($info);
@@ -100,13 +79,15 @@ class AbonnementController extends Controller
          $em = $this->getDoctrine()->getManager();
          $ressource = $em->getRepository('AdminBundle:Ressource')->find($produit);
           $commande=$em->getRepository('AdminBundle:Commande')->findOneByUserRessource($info,$ressource);
-            if(is_null($commande)){
+            if(is_null($commande)|| ! is_null($commande->getStatus())){
                $commande= new Commande($info);
                $commande->setDate(new \DateTime())
-               ->setRessource($ressource);
-               $em->persist($commande);
+                   ->setRessource($ressource)
+                   ->setOrderId($this->generateOrderId());
+                  $em->persist($commande);
            } if(!is_null($ressource))
-               $commande->setAmount($ressource->getPrice());
+               $commande->setAmount($ressource->getPrice())
+                   ->setOrderId($this->generateOrderId());
         return $commande;
       }
 
@@ -114,13 +95,13 @@ class AbonnementController extends Controller
           $em = $this->getDoctrine()->getManager();
           $session = $em->getRepository('AppBundle:Session')->find($produit);
           $commande=$em->getRepository('AdminBundle:Commande')->findOneByUserSession($info,$session);
-            if(is_null($commande)){
+            if(is_null($commande)  || ! is_null($commande->getStatus())){
                $commande= new Commande($info, $session);
                $commande->setDate(new \DateTime())
-               ->setSession($session);
+                   ->setSession($session)
+                   ->setOrderId($this->generateOrderId());
                $em->persist($commande);
            }
-           $price= new Price();
           if(!is_null($session)){
              $price= $session->getPrice();
               $session->removeInfo($info);
@@ -129,7 +110,8 @@ class AbonnementController extends Controller
            else
              $price = $em->getRepository('AdminBundle:Price')->find(self::ZERO_PRICE_ID);
              $commande->setAmount($this->getForSessonCommande($price,$package))
-             ->setPackage($package);
+                 ->setPackage($package)
+                 ->setOrderId($this->generateOrderId());
         return $commande;
       }
 
@@ -316,5 +298,13 @@ class AbonnementController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateOrderId(): string
+    {
+        return 'CT' . uniqid() . 'CD';
     }
 }

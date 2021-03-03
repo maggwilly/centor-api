@@ -3,11 +3,6 @@ abonnement_index_json:
     defaults: { _controller: "AdminBundle:Abonnement:indexJson"}
     methods:  GET
 
-get_token_json:
-    path:     /commende/token
-    defaults: { _controller: "AdminBundle:Abonnement:token"}
-    methods:  [GET,POST] 
-
 commende_start_json:
     path:     /commende/{info}/{product}/{package}/json
     defaults: { _controller: "AdminBundle:Abonnement:startCommande","product":0}

@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="commande")
  * @ORM\Entity(repositoryClass="Pwm\AdminBundle\Repository\CommandeRepository")
-  * @ORM\HasLifecycleCallbacks
  */
 class Commande
 {
@@ -115,14 +114,7 @@ class Commande
             $this->package =$package; 
               $this->amount =$amount; 
                $this->currency ='XAF';
-                 $this->order_id =$this->PrePersist();
                    $this->ressource =$ressource;
-    }
-     /**
-    * @ORM\PrePersist()
-    */
-    public function PrePersist(){
-     $this->order_id='CT'.uniqid().'CD';
     }
 
     public function getId()
