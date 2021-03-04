@@ -82,7 +82,7 @@ class CreateListener
     {
         $commande = $event->getCommande();
         $info = $commande->getInfo();
-        if ($commande->getStatus() == 'SUCCESS') {
+        if ($commande->getStatus() == 'PAID') {
             $notification = new Notification('private');
             if ($commande->getSession() != null) {
                 $body = $this->twig->render('MessagerBundle:notification:confirmation_abonnement.html.twig', array('commande' => $commande));

@@ -17,6 +17,8 @@ use FOS\RestBundle\View\View;
 use AppBundle\Entity\Session;
 use AppBundle\Event\CommandeEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
 /**
  * Abonnement controller.
  *
@@ -87,7 +89,7 @@ class AbonnementController extends Controller
                    ->setOrderId($this->generateOrderId());
                   $em->persist($commande);
            } if(!is_null($ressource))
-               $commande->setAmount($ressource->getPrice())
+               $commande->setAmount($ressource->getPrice())->setDate(new \DateTime())
                    ->setOrderId($this->generateOrderId());
         return $commande;
       }
@@ -100,6 +102,7 @@ class AbonnementController extends Controller
                $commande= new Commande($info, $session);
                $commande->setDate(new \DateTime())
                    ->setSession($session)
+                   ->setPackage($package)
                    ->setOrderId($this->generateOrderId());
                $em->persist($commande);
            }
@@ -112,6 +115,7 @@ class AbonnementController extends Controller
              $price = $em->getRepository('AdminBundle:Price')->find(self::ZERO_PRICE_ID);
              $commande->setAmount($this->getForSessonCommande($price,$package))
                  ->setPackage($package)
+                 ->setDate(new \DateTime())
                  ->setOrderId($this->generateOrderId());
         return $commande;
       }
@@ -135,15 +139,19 @@ class AbonnementController extends Controller
     public function confirmCommandeAction(Request $request)
     {    $em = $this->getDoctrine()->getManager();
          $data=json_decode($this->get("request")->getContent(),true);
-         if (!array_key_exists('orderid',$data))
-            return new JsonResponse("Invalid expected data", 400);
-         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
+         if (!array_key_exists('orderid',$data) || !array_key_exists('status',$data))
+           throw new BadRequestHttpException('Invalid expected data', null, 400);
+           $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
+         if(is_null($commande))
+             throw new BadRequestHttpException('Order not found', null, 404);
          $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
          $form->submit($data,false);
-        if ($form->isValid()&&$commande->getStatus()=='PAID') {
+        if ($form->isValid()) {
+            $commande->setStatus('PAID');
+            $em->flush();
             if (is_null($commande->getRessource())) {
              $abonnement=$em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
-             if($abonnement==null){
+             if(is_null($abonnement)){
                  $abonnement=new Abonnement($commande); 
                  if(!is_null($commande->getSession())){
                    $commande->getSession()->removeInfo($commande->getInfo());
