@@ -148,7 +148,7 @@ class AbonnementController extends Controller
         $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
         $form->submit($data, false);
         if ($form->isValid()) {
-            $commande->setStatus('PAID');
+            $commande->setStatus($data['status']);
             $em->flush();
             if (!is_null($commande->getSession())) {
                 $abonnement = $em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
