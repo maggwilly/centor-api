@@ -134,7 +134,7 @@ class AbonnementController extends Controller
     public function confirmCommandeAction(Request $request)
     {    $em = $this->getDoctrine()->getManager();
          $data=json_decode($this->get("request")->getContent(),true);
-         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
+         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['order_id']);
          $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
          $form->submit($data,false);
         if ($form->isValid()&&$commande->getStatus()=='PAID') {
