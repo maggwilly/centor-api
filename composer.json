@@ -33,7 +33,8 @@
         "rebangm/silex-guzzlehttp-provider": "^1.2",
         "floriansemm/solr-bundle": "v1.6.6.1",
         "spatie/pdf-to-image": "^1.8",
-         "ext-curl": "*"
+         "ext-curl": "*",
+         "ext-json": "*"
     },
     "provide": {
          "ext-imagick": "*"

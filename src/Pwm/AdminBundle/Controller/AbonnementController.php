@@ -9,6 +9,7 @@ use Pwm\AdminBundle\Entity\Commande;
 use Pwm\AdminBundle\Entity\Price;
 use Pwm\MessagerBundle\Controller\NotificationController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
@@ -134,7 +135,9 @@ class AbonnementController extends Controller
     public function confirmCommandeAction(Request $request)
     {    $em = $this->getDoctrine()->getManager();
          $data=json_decode($this->get("request")->getContent(),true);
-         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['order_id']);
+         if (!array_key_exists('orderid',$data))
+            return new JsonResponse("Invalid expected data", 400);
+         $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
          $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
          $form->submit($data,false);
         if ($form->isValid()&&$commande->getStatus()=='PAID') {
@@ -156,9 +159,8 @@ class AbonnementController extends Controller
               $em->flush();
               $event= new CommandeEvent($commande);
               $this->get('event_dispatcher')->dispatch('commande.confirmed', $event);
-            return $commande;
         }
-        return $form;
+       return new JsonResponse("Thanks", 200);
     }
 
 
