@@ -140,9 +140,9 @@ class RessourceController extends Controller
         $uid = $request->query->get('uid');
         $em = $this->getDoctrine()->getManager();
         $commande = $em->getRepository('AdminBundle:Commande')->findOneByUserRessource($uid, $ressource);
-        if ($commande != null && $commande->getStatus() === 'PAID')
+        if ($commande != null && ($commande->getStatus() === 'PAID' || $commande->getStatus() === 'SUCCESS'))
             return $ressource->setPrice(0);
-        return array('uid'=>$uid, 'ressource'=>$ressource, 'commande'=>$commande);
+        return $ressource;
     }
 
     /**
