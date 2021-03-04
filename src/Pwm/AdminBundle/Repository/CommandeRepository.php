@@ -14,14 +14,21 @@ class CommandeRepository extends \Doctrine\ORM\EntityRepository
 {
  public function findOneByUserRessource($info,Ressource $ressource){
  $qb =$this->createQueryBuilder('a')
-       ->where('a.info=:info')->setParameter('info', $info)
-       ->andWhere('a.ressource=:ressource') ->setParameter('ressource', $ressource);
+         ->where('a.info=:info')
+         ->setParameter('info', $info)
+         ->andWhere('a.ressource=:ressource')
+         ->andWhere('a.status=:status')
+         ->setParameter('status', 'PAID')
+         ->setParameter('ressource', $ressource)
+         ->orderBy('a.date', 'desc');
         return  $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
  }	
 
   public function findOneByUserSession(Info $info,Session $session=null){
  $qb =$this->createQueryBuilder('a')
-       ->where('a.info=:info') ->setParameter('info', $info)->andWhere('a.status is NULL');
+       ->where('a.info=:info')
+        ->setParameter('info', $info)
+        ->andWhere('a.status is NULL');
         return   $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
  }
 
