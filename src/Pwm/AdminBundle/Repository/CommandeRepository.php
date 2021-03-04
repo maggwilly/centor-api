@@ -12,7 +12,7 @@ use AppBundle\Entity\Session;
  */
 class CommandeRepository extends \Doctrine\ORM\EntityRepository
 {
- public function findOneByUserRessource(Info $info,Ressource $ressource){
+ public function findOneByUserRessource($info,Ressource $ressource){
  $qb =$this->createQueryBuilder('a')
        ->where('a.info=:info') ->setParameter('info', $info)
        ->andWhere('a.ressource=:ressource') ->setParameter('ressource', $ressource);
