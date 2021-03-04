@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class AbonnementController extends Controller
 {
-    const ZERO_PRICE_ID = 9;
+    const ZERO_PRICE_ID = 0;
 
     /**
    * @Security("is_granted('ROLE_DELEGUE')")
@@ -66,7 +66,7 @@ class AbonnementController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"commande"})
      */
-    public function startCommandeAction(Request $request,Info $info, $product=null, $package)
+    public function startCommandeAction(Request $request,Info $info, $product=self::ZERO_PRICE_ID, $package)
     {
          if($package=='ressource')
             $commande=$this->loadCommandeForRessource($info, $product);
@@ -104,19 +104,14 @@ class AbonnementController extends Controller
                    ->setOrderId($this->generateOrderId());
                $em->persist($commande);
            }
-          if(!is_null($session)){
-             $price= $session->getPrice();
               $session->removeInfo($info);
               $session->addInfo($info);
-             }
-           else
-             $price = $em->getRepository('AdminBundle:Price')->find(self::ZERO_PRICE_ID);
-             $commande->setAmount($this->getForSessonCommande($price,$package))
+             $commande->setAmount($this->getForSessonCommande($session->getPrice(),$package))
                  ->setPackage($package)
                  ->setDate(new \DateTime())
                  ->setSession($session)
                  ->setOrderId($this->generateOrderId());
-          $em->flush();
+                 $em->flush();
         return $commande;
       }
 
