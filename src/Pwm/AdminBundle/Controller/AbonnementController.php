@@ -66,12 +66,14 @@ class AbonnementController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"commande"})
      */
-    public function startCommandeAction(Request $request,Info $info, $product=self::ZERO_PRICE_ID, $package)
+    public function startCommandeAction(Request $request,Info $info, $product, $package)
     {
          if($package=='ressource')
             $commande=$this->loadCommandeForRessource($info, $product);
-         else
+         else{
+             $product=$product!=0?$product:self::ZERO_PRICE_ID;
              $commande=$this->loadCommandeForSesson($info, $product,$package);
+         }
         return $commande;
     }
 
