@@ -68,13 +68,10 @@ class AbonnementController extends Controller
      */
     public function startCommandeAction(Request $request,Info $info, $product=null, $package)
     {
-    $em = $this->getDoctrine()->getManager();
-            $commande= new Commande($info);
          if($package=='ressource')
             $commande=$this->loadCommandeForRessource($info, $product);
          else
              $commande=$this->loadCommandeForSesson($info, $product,$package);
-          $em->flush();
         return $commande;
     }
 
@@ -91,6 +88,7 @@ class AbonnementController extends Controller
            } if(!is_null($ressource))
                $commande->setAmount($ressource->getPrice())->setDate(new \DateTime())
                    ->setOrderId($this->generateOrderId());
+        $em->flush();
         return $commande;
       }
 
@@ -117,6 +115,7 @@ class AbonnementController extends Controller
                  ->setPackage($package)
                  ->setDate(new \DateTime())
                  ->setOrderId($this->generateOrderId());
+          $em->flush();
         return $commande;
       }
 
@@ -134,41 +133,42 @@ class AbonnementController extends Controller
 
     /**
      * Lists all Produit entities.
-     *@Rest\View(serializerGroups={"commande"})
+     * @Rest\View(serializerGroups={"commande"})
      */
     public function confirmCommandeAction(Request $request)
-    {    $em = $this->getDoctrine()->getManager();
-         $data=json_decode($this->get("request")->getContent(),true);
-         if (!array_key_exists('orderid',$data) || !array_key_exists('status',$data))
-           throw new BadRequestHttpException('Invalid expected data', null, 400);
-           $commande=$em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
-         if(is_null($commande))
-             throw new BadRequestHttpException('Order not found', null, 404);
-         $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
-         $form->submit($data,false);
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($this->get("request")->getContent(), true);
+        if (!array_key_exists('orderid', $data) || !array_key_exists('status', $data))
+            throw new BadRequestHttpException('Invalid expected data', null, 400);
+        $commande = $em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
+        if (is_null($commande))
+            throw new BadRequestHttpException('Order not found', null, 404);
+        $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
+        $form->submit($data, false);
         if ($form->isValid()) {
             $commande->setStatus('PAID');
             $em->flush();
             if (is_null($commande->getRessource())) {
-             $abonnement=$em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
-             if(is_null($abonnement)){
-                 $abonnement=new Abonnement($commande); 
-                 if(!is_null($commande->getSession())){
-                   $commande->getSession()->removeInfo($commande->getInfo());
-                   $commande->getSession()->addInfo($commande->getInfo());
-                   $commande->getSession()->setNombreInscrit($commande->getSession()->getNombreInscrit()+1);
-                  }              
-                 $em->persist($abonnement);
+                $abonnement = $em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
+                if (is_null($abonnement)) {
+                    $abonnement = new Abonnement($commande);
+                    if (!is_null($commande->getSession())) {
+                        $commande->getSession()->removeInfo($commande->getInfo());
+                        $commande->getSession()->addInfo($commande->getInfo());
+                        $commande->getSession()->setNombreInscrit($commande->getSession()->getNombreInscrit() + 1);
+                    }
+                    $em->persist($abonnement);
                 }
-              $abonnement->setPlan($commande->getPackage());
-              $abonnement->setPrice($commande->getAmount());
-              $commande->setAbonnement($abonnement); 
-              }
-              $em->flush();
-              $event= new CommandeEvent($commande);
-              $this->get('event_dispatcher')->dispatch('commande.confirmed', $event);
+                $abonnement->setPlan($commande->getPackage());
+                $abonnement->setPrice($commande->getAmount());
+                $commande->setAbonnement($abonnement);
+            }
+            $em->flush();
+            $event = new CommandeEvent($commande);
+            $this->get('event_dispatcher')->dispatch('commande.confirmed', $event);
         }
-       return new JsonResponse("Thanks", 200);
+        return new JsonResponse("Thanks", 200);
     }
 
 
