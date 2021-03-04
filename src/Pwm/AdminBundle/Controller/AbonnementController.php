@@ -114,6 +114,7 @@ class AbonnementController extends Controller
              $commande->setAmount($this->getForSessonCommande($price,$package))
                  ->setPackage($package)
                  ->setDate(new \DateTime())
+                 ->setSession($session)
                  ->setOrderId($this->generateOrderId());
           $em->flush();
         return $commande;
@@ -149,16 +150,14 @@ class AbonnementController extends Controller
         if ($form->isValid()) {
             $commande->setStatus('PAID');
             $em->flush();
-            if (is_null($commande->getRessource())) {
+            if (!is_null($commande->getSession())) {
                 $abonnement = $em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
                 if (is_null($abonnement)) {
-                    $abonnement = new Abonnement($commande);
-                    if (!is_null($commande->getSession())) {
+                       $abonnement = new Abonnement($commande);
                         $commande->getSession()->removeInfo($commande->getInfo());
                         $commande->getSession()->addInfo($commande->getInfo());
                         $commande->getSession()->setNombreInscrit($commande->getSession()->getNombreInscrit() + 1);
-                    }
-                    $em->persist($abonnement);
+                       $em->persist($abonnement);
                 }
                 $abonnement->setPlan($commande->getPackage());
                 $abonnement->setPrice($commande->getAmount());
