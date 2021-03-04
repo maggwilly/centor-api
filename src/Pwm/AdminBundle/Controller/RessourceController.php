@@ -138,7 +138,6 @@ class RessourceController extends Controller
     public function showJsonAction(Request $request, Ressource $ressource)
     {
         $uid = $request->query->get('uid');
-        dump($request->query->get('uid'));
         $em = $this->getDoctrine()->getManager();
         $commande = $em->getRepository('AdminBundle:Commande')->findOneByUserRessource( $uid, $ressource);
         if ($commande != null && $commande->getStatus() === 'PAID')
