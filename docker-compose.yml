@@ -27,7 +27,7 @@ services:
       - 8000:80
     volumes:
       - .:/var/www/app
-      - ../data/c-centor:/opt/data/c-centor
+      - ../data/c-centor:/var/www/app/data
       - ./policy.xml:/etc/ImageMagick-6/policy.xml
     environment:
       SYMFONY_ENV: prod
