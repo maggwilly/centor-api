@@ -1,8 +1,8 @@
 <?php
 
 namespace AppBundle\Repository;
-use Pwm\AdminBundle\Entity\Info;
-use AppBundle\Entity\Session;
+use Pwm\AdminBundle\Entity\UserAccount;
+use AppBundle\Entity\SessionConcours;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Concours;
 /**
@@ -74,7 +74,7 @@ class SessionRepository extends \Doctrine\ORM\EntityRepository
      return $query->getResult();
 } 
 
-  public function findForUser(Info $user){
+  public function findForUser(UserAccount $user){
     $qb = $this->createQueryBuilder('c')->where('c.archived=:archived and c.dateLancement is not NULL')->setParameter('archived',false)
     ->andWhere('c.niveau=:niveau')->setParameter('niveau', $user->getNiveau())
     ->andWhere('c.serie LIKE :serie or c.serie is  NULL')->setParameter('serie', '%"'.$user->getSerie().'"%')

@@ -31,7 +31,7 @@ class PriceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pwm\AdminBundle\Entity\Price'
+            'data_class' => 'Pwm\AdminBundle\Entity\Tarifaire'
         ));
     }
 

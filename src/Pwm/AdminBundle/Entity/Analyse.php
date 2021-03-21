@@ -3,7 +3,7 @@
 namespace Pwm\AdminBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use AppBundle\Entity\Session ;
+use AppBundle\Entity\SessionConcours ;
 use AppBundle\Entity\Matiere ;
 use AppBundle\Entity\Partie ;
 /**
@@ -85,7 +85,7 @@ class Analyse
 
 
      /**
-      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session",inversedBy="analyses")
+      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SessionConcours",inversedBy="analyses")
      */
     private $session;
 
@@ -101,7 +101,7 @@ class Analyse
 
 
     /**
-   * @ORM\ManyToOne(targetEntity="Info" )
+   * @ORM\ManyToOne(targetEntity="UserAccount" )
     * @ORM\JoinColumn(name="uid",referencedColumnName="uid")
    */
     private $studentId;
@@ -109,7 +109,7 @@ class Analyse
      /**
      * Constructor
      */
-    public function __construct(Info $studentId=null, Session $session = null, Matiere $matiere=null, Partie $partie=null)
+    public function __construct(UserAccount $studentId=null, SessionConcours $session = null, Matiere $matiere=null, Partie $partie=null)
     {
         $this->studentId =$studentId;
         $this->partie=$partie;
@@ -205,7 +205,7 @@ class Analyse
      *
      * @return Analyse
      */
-    public function setStudentId(\Pwm\AdminBundle\Entity\Info $studentId = null)
+    public function setStudentId(\Pwm\AdminBundle\Entity\UserAccount $studentId = null)
     {
         $this->studentId = $studentId;
 
@@ -488,11 +488,11 @@ class Analyse
     /**
      * Set session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      *
      * @return Analyse
      */
-    public function setSession(\AppBundle\Entity\Session $session = null)
+    public function setSession(\AppBundle\Entity\SessionConcours $session = null)
     {
         $this->session = $session;
 
@@ -502,7 +502,7 @@ class Analyse
     /**
      * Get session
      *
-     * @return \AppBundle\Entity\Session
+     * @return \AppBundle\Entity\SessionConcours
      */
     public function getSession()
     {

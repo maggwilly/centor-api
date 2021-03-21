@@ -5,7 +5,7 @@ homepage:
 
 user_homepage:
     path:     /
-    defaults: { _controller: "AppBundle:Programme:index" }
+    defaults: { _controller: "AppBundle:ProgrammePrepa:index" }
     methods:  GET
 
 app_user:

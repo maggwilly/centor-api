@@ -10,7 +10,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 
 // alias pour toutes les annotations
 use FOS\RestBundle\View\View;
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use Pwm\AdminBundle\Entity\Commande;
 use AppBundle\Event\ResultEvent;
 use Pwm\MessagerBundle\Entity\Notification;
@@ -27,7 +27,7 @@ class RessourceController extends Controller
     /**
      * @Security("is_granted('ROLE_SUPERVISEUR')")
      */
-    public function indexAction(Session $session = null)
+    public function indexAction(SessionConcours $session = null)
     {
         $em = $this->getDoctrine()->getManager();
         if (is_null($session))
@@ -42,7 +42,7 @@ class RessourceController extends Controller
     /**
      * @Security("is_granted('ROLE_SUPERVISEUR')")
      */
-    public function newAction(Request $request, Session $session = null)
+    public function newAction(Request $request, SessionConcours $session = null)
     {
         $ressource = new Ressource();
         $form = is_null($session) ? $this->createForm('Pwm\AdminBundle\Form\RessourceSuperType', $ressource) : $this->createForm('Pwm\AdminBundle\Form\RessourceType', $ressource);
@@ -86,7 +86,7 @@ class RessourceController extends Controller
     /**
      * @Security("is_granted('ROLE_SUPERVISEUR')")
      */
-    public function pushInGroupAction(Ressource $ressource, Session $session = null)
+    public function pushInGroupAction(Ressource $ressource, SessionConcours $session = null)
     {
         if(!is_null($session)){
             $this->pushInGroup($ressource, $session);
@@ -111,7 +111,7 @@ class RessourceController extends Controller
 
     }
 
-    public function pushInGroup(Ressource $ressource, Session $session)
+    public function pushInGroup(Ressource $ressource, SessionConcours $session)
     {
             $msg = $this->getDocument($ressource);
             $url = "https://centor-concours.firebaseio.com/groupes/" . $session->getId() . "/documents.json";
@@ -123,7 +123,7 @@ class RessourceController extends Controller
      * Lists all Produit entities.
      * @Rest\View(serializerGroups={"ressource"})
      */
-    public function indexJsonAction(Session $session)
+    public function indexJsonAction(SessionConcours $session)
     {
         $em = $this->getDoctrine()->getManager();
         $sessions = $em->getRepository('AdminBundle:Ressource')->findRessources($session);
@@ -148,7 +148,7 @@ class RessourceController extends Controller
     /**
      * Finds and displays a ressource entity.
      */
-    public function showAction(Ressource $ressource, Session $session = null)
+    public function showAction(Ressource $ressource, SessionConcours $session = null)
     {
         $deleteForm = $this->createDeleteForm($ressource);
         return $this->render('ressource/show.html.twig', array(
@@ -161,7 +161,7 @@ class RessourceController extends Controller
     /**
      * @Security("is_granted('ROLE_SUPERVISEUR')")
      */
-    public function editAction(Request $request, Ressource $ressource, Session $session = null)
+    public function editAction(Request $request, Ressource $ressource, SessionConcours $session = null)
     {
         $em = $this->getDoctrine()->getManager();
         $em->refresh($ressource);
@@ -254,10 +254,10 @@ class RessourceController extends Controller
 
     /**
      * @param Ressource $ressource
-     * @param Session $session
+     * @param SessionConcours $session
      * @return array
      */
-    public function pushNotificationEvent(Ressource $ressource, Session $session=null): array
+    public function pushNotificationEvent(Ressource $ressource, SessionConcours $session=null): array
     {
         $notification = new Notification('public', false, true);
         $notification

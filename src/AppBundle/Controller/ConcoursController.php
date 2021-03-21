@@ -33,7 +33,7 @@ class ConcoursController extends Controller
     public function newFromProgrmmeAction(Request $request)
     {
       $em = $this->getDoctrine()->getManager();
-      $programmes = $em->getRepository('AppBundle:Programme')->findAll();
+      $programmes = $em->getRepository('AppBundle:ProgrammePrepa')->findAll();
       foreach ( $programmes as  $programme) {
           $concour = new Concours($programme);
            $em->persist($concour);

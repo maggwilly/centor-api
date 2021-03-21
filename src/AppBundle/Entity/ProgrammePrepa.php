@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="concours")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProgrammeRepository")
  */
-class Programme
+class ProgrammePrepa
 {
     /**
      * @var int
@@ -37,7 +37,7 @@ class Programme
     private $date;
 
    /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Programme" )
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ProgrammePrepa" )
    */
     private $auMoinsdeMemeQue;
 
@@ -71,7 +71,7 @@ class Programme
     private $matieres;
 
     /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Session",mappedBy="preparation", cascade={"persist","remove"})*/
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\SessionConcours",mappedBy="preparation", cascade={"persist","remove"})*/
     private $sessions; 
 
     /**
@@ -140,7 +140,7 @@ class Programme
      * @param string $ecole
      * @return Concours
      */
-    public function setAuMoinsdeMemeQue(\AppBundle\Entity\Programme $programme= null)
+    public function setAuMoinsdeMemeQue(\AppBundle\Entity\ProgrammePrepa $programme= null)
     {
         $this->auMoinsdeMemeQue = $programme;
 
@@ -249,11 +249,11 @@ class Programme
  /**
      * Add session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      *
      * @return Partie
      */
-    public function addSession(\AppBundle\Entity\Session $session)
+    public function addSession(\AppBundle\Entity\SessionConcours $session)
     {
         $this->sessions[] = $session;
 
@@ -263,9 +263,9 @@ class Programme
     /**
      * Remove session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      */
-    public function removeSession(\AppBundle\Entity\Session $session)
+    public function removeSession(\AppBundle\Entity\SessionConcours $session)
     {
         $this->sessions->removeElement($session);
     }
@@ -298,7 +298,7 @@ class Programme
      *
      * @param integer $price
      *
-     * @return Programme
+     * @return ProgrammePrepa
      */
     public function setPrice($price)
     {
@@ -322,7 +322,7 @@ class Programme
      *
      * @param \DateTime $date
      *
-     * @return Programme
+     * @return ProgrammePrepa
      */
     public function setDate($date)
     {

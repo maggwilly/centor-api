@@ -2,7 +2,7 @@
 
 namespace Pwm\AdminBundle\Entity;
 
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -76,7 +76,7 @@ class Commande
     private $package;
 
       /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session" )
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SessionConcours" )
    */
     private $session;
 
@@ -98,7 +98,7 @@ class Commande
     private $abonnement;
 
       /**
-   * @ORM\ManyToOne(targetEntity="Info" )
+   * @ORM\ManyToOne(targetEntity="UserAccount" )
     * @ORM\JoinColumn(referencedColumnName="uid")
    */
     private $info;
@@ -106,7 +106,7 @@ class Commande
         /**
      * Constructor
      */
-    public function __construct(Info $info=null, Session $session=null, $package=null, $amount=null, Ressource $ressource = null)
+    public function __construct(UserAccount $info=null, SessionConcours $session=null, $package=null, $amount=null, Ressource $ressource = null)
     {
         $this->date =new \DateTime();  
          $this->info = $info; 
@@ -226,11 +226,11 @@ class Commande
     /**
      * Set session
      *
-     * @param Session $session
+     * @param SessionConcours $session
      *
      * @return Commande
      */
-    public function setSession(Session $session = null)
+    public function setSession(SessionConcours $session = null)
     {
         $this->session = $session;
 
@@ -240,7 +240,7 @@ class Commande
     /**
      * Get session
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function getSession()
     {
@@ -250,11 +250,11 @@ class Commande
     /**
      * Set info
      *
-     * @param \Pwm\AdminBundle\Entity\Info $info
+     * @param \Pwm\AdminBundle\Entity\UserAccount $info
      *
      * @return Commande
      */
-    public function setInfo(\Pwm\AdminBundle\Entity\Info $info = null)
+    public function setInfo(\Pwm\AdminBundle\Entity\UserAccount $info = null)
     {
         $this->info = $info;
 
@@ -264,7 +264,7 @@ class Commande
     /**
      * Get info
      *
-     * @return \Pwm\AdminBundle\Entity\Info
+     * @return \Pwm\AdminBundle\Entity\UserAccount
      */
     public function getInfo()
     {

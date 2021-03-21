@@ -2,8 +2,8 @@
 
 namespace Pwm\AdminBundle\Repository;
 use Pwm\AdminBundle\Entity\Ressource;
-use Pwm\AdminBundle\Entity\Info;
-use AppBundle\Entity\Session;
+use Pwm\AdminBundle\Entity\UserAccount;
+use AppBundle\Entity\SessionConcours;
 /**
  * CommandeRepository
  *
@@ -24,7 +24,7 @@ class CommandeRepository extends \Doctrine\ORM\EntityRepository
         return  $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
  }	
 
-  public function findOneByUserSession(Info $info,Session $session=null){
+  public function findOneByUserSession(UserAccount $info, SessionConcours $session=null){
  $qb =$this->createQueryBuilder('a')
        ->where('a.info=:info')
         ->setParameter('info', $info)

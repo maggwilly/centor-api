@@ -2,7 +2,7 @@
 
 namespace Pwm\AdminBundle\Controller;
 
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,10 +12,10 @@ use AppBundle\Event\InfoEvent;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 /**
- * Info controller.
+ * UserAccount controller.
  *
  */
-class InfoController extends Controller
+class UserAccountController extends Controller
 {
     /**
      * Lists all info entities.
@@ -25,7 +25,7 @@ class InfoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $infos = $em->getRepository('AdminBundle:Info')->findAll();
+        $infos = $em->getRepository('AdminBundle:UserAccount')->findAll();
         foreach ($infos as $key => $info) {
             foreach ($info->getRegistrations() as $key => $registration) {
                  if(!$registration->getIsFake()){
@@ -48,9 +48,9 @@ class InfoController extends Controller
      */
     public function editPictureAction(Request $request,  $email)
     {  $em = $this->getDoctrine()->getManager();
-        $info = $em->getRepository('AdminBundle:Info')->findOneByUid($email);
+        $info = $em->getRepository('AdminBundle:UserAccount')->findOneByUid($email);
           if($info==null){
-          $info = new Info($email);
+          $info = new UserAccount($email);
            $em->persist($info);
             $em->flush();
           }
@@ -77,7 +77,7 @@ class InfoController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"info"})
      */
-    public function editJsonAction(Request $request, Info $info)
+    public function editJsonAction(Request $request, UserAccount $info)
     {
         $form = $this->createForm('Pwm\AdminBundle\Form\InfoType', $info);
          $form->submit($request->request->all(),false);
@@ -96,9 +96,9 @@ class InfoController extends Controller
     public function newJsonAction(Request $request, $uid)
     {
         $em = $this->getDoctrine()->getManager();
-         $info = $em->getRepository('AdminBundle:Info')->findOneByUid($uid);
+         $info = $em->getRepository('AdminBundle:UserAccount')->findOneByUid($uid);
         if(is_null($info)){
-            $info = new Info($uid);
+            $info = new UserAccount($uid);
             $form = $this->createForm('Pwm\AdminBundle\Form\InfoType',$info);
             $form->submit($request->request->all(),false);
             if (!$form->isValid())
@@ -118,7 +118,7 @@ class InfoController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"ambassador"})
      */
-    public function getAmbassadorJsonAction( Info $info){
+    public function getAmbassadorJsonAction(UserAccount $info){
 
         return  $info->getAmbassador();
     }
@@ -132,11 +132,11 @@ class InfoController extends Controller
          $em = $this->getDoctrine()->getManager();
          $url= "https://centor-concours.firebaseio.com/users/".$uid.".json";
          $res = $this->get('fmc_manager')->sendOrGetData($url,null,'GET');        
-         $info = $em->getRepository('AdminBundle:Info')->findOneByUid($uid);
+         $info = $em->getRepository('AdminBundle:UserAccount')->findOneByUid($uid);
          $registrationId=$request->query->get('registrationId');
          $registration = $em->getRepository('MessagerBundle:Registration')->findOneByRegistrationId($registrationId);
            if(is_null($info)){
-            $info = new Info($uid);
+            $info = new UserAccount($uid);
             $form = $this->createForm('Pwm\AdminBundle\Form\InfoType',$info);
             $form->submit($res,false);
             if (!$form->isValid())
@@ -162,7 +162,7 @@ class InfoController extends Controller
      * Finds and displays a info entity.
      *
      */
-    public function editAction(Request $request,Info $info)
+    public function editAction(Request $request, UserAccount $info)
     {
         $em = $this->getDoctrine()->getManager();
         $editForm = $this->createFormBuilder($info)
@@ -223,7 +223,7 @@ class InfoController extends Controller
      * Finds and displays a info entity.
      *
      */
-    public function showAction(Info $info)
+    public function showAction(UserAccount $info)
     {
         $deleteForm = $this->createDeleteForm($info);
         return $this->render('AdminBundle:info:show.html.twig', array(
@@ -237,7 +237,7 @@ class InfoController extends Controller
      * Deletes a info entity.
      *
      */
-    public function deleteAction(Request $request, Info $info)
+    public function deleteAction(Request $request, UserAccount $info)
     {
         $form = $this->createDeleteForm($info);
         $form->handleRequest($request);
@@ -253,11 +253,11 @@ class InfoController extends Controller
     /**
      * Creates a form to delete a info entity.
      *
-     * @param Info $info The info entity
+     * @param UserAccount $info The info entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Info $info)
+    private function createDeleteForm(UserAccount $info)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('info_delete', array('id' => $info->getEmail())))

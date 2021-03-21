@@ -1,7 +1,7 @@
 <?php
 
 namespace Pwm\AdminBundle\Repository;
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 
 /**
  * RessourceRepository
@@ -11,7 +11,7 @@ use AppBundle\Entity\Session;
  */
 class RessourceRepository extends \Doctrine\ORM\EntityRepository
 {
-     public function findNewRessources(Session $session){
+     public function findNewRessources(SessionConcours $session){
        $now=new \DateTime();
        $now->modify('-20 day');
        $qb = $this->createQueryBuilder('r')->leftJoin('r.sessions','s')
@@ -23,7 +23,7 @@ class RessourceRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
   }
 
-      public function findRessources(Session $session){
+      public function findRessources(SessionConcours $session){
          $qb = $this->createQueryBuilder('r')->leftJoin('r.sessions','s')
          ->where('s.id=:session')
          ->orWhere('r.isPublic=:ispublic')

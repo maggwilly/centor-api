@@ -1,4 +1,4 @@
-Pwm\AdminBundle\Entity\Price:
+Pwm\AdminBundle\Entity\Tarifaire:
     exclusion_policy: none
     properties:
         starter:

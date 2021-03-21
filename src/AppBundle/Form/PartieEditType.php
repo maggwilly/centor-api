@@ -16,7 +16,7 @@ class PartieEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder ->add('sessions', EntityType::class,
-                       array('class' => 'AppBundle:Session', 
+                       array('class' => 'AppBundle:SessionConcours',
                            'choice_label' => 'nomConcours', 
                            'placeholder' => 'Toute les sessions',
                             'empty_data'  => null,

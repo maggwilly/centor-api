@@ -3,8 +3,8 @@
 namespace Pwm\AdminBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use AppBundle\Entity\Session;
-use Pwm\AdminBundle\Entity\Info;
+use AppBundle\Entity\SessionConcours;
+use Pwm\AdminBundle\Entity\UserAccount;
 use Pwm\AdminBundle\Entity\Ressource;
 /**
  * AbonnementRepository
@@ -17,7 +17,7 @@ class AbonnementRepository extends EntityRepository
 	 /**
   *Nombre de synchro effectue par utilisateur 
   */
-  public function findForMe(Info $info){
+  public function findForMe(UserAccount $info){
          $qb = $this->createQueryBuilder('a')->join('a.session', 's')
          ->where('a.info=:info')->setParameter('info',$info)
          ->andWhere('s.archived=:archived')->setParameter('archived',false); 
@@ -27,7 +27,7 @@ class AbonnementRepository extends EntityRepository
      /**
   *Nombre de synchro effectue par utilisateur 
   */
-  public function findHasPremium(Info $info){
+  public function findHasPremium(UserAccount $info){
          $qb = $this->createQueryBuilder('a')
          ->where('a.info=:info')->setParameter('info',$info)
           ->andWhere('a.plan=:standard or a.plan=:premium')
@@ -39,7 +39,7 @@ class AbonnementRepository extends EntityRepository
 	 /**
   *Nombre de synchro effectue par utilisateur 
   */
-  public function findMeOnThis(Info $info,Session $session=null){
+  public function findMeOnThis(UserAccount $info, SessionConcours $session=null){
          $qb = $this->createQueryBuilder('a')
          ->where('a.info=:info')->setParameter('info',$info);
         if (!is_null($session)) 

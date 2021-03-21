@@ -46,7 +46,7 @@ class InfoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
      $resolver->setDefaults(array(
-            'data_class' => 'Pwm\AdminBundle\Entity\Info',
+            'data_class' => 'Pwm\AdminBundle\Entity\UserAccount',
             'csrf_protection' => false,
             'allow_extra_fields' => true
         ));

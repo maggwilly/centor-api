@@ -1,4 +1,4 @@
-Pwm\AdminBundle\Entity\Info:
+Pwm\AdminBundle\Entity\UserAccount:
     exclusion_policy: none
     properties:
         uid:

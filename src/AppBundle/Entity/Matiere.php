@@ -73,7 +73,7 @@ class Matiere
 
 
    /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Programme" ,inversedBy="matieres")
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ProgrammePrepa" ,inversedBy="matieres")
    */
     private $programme;
 
@@ -300,10 +300,10 @@ class Matiere
     /**
      * Set concours
      *
-     * @param \AppBundle\Entity\Programme $concours
+     * @param \AppBundle\Entity\ProgrammePrepa $concours
      * @return Matiere
      */
-    public function setProgramme(\AppBundle\Entity\Programme $concours = null)
+    public function setProgramme(\AppBundle\Entity\ProgrammePrepa $concours = null)
     {
         $this->programme = $concours;
 
@@ -313,7 +313,7 @@ class Matiere
     /**
      * Get concours
      *
-     * @return \AppBundle\Entity\Programme 
+     * @return \AppBundle\Entity\ProgrammePrepa
      */
     public function getProgramme()
     {
@@ -440,7 +440,7 @@ class Matiere
      *
      * @param \Pwm\AdminBundle\Entity\Ressource $ressource
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function addRessource(\Pwm\AdminBundle\Entity\Ressource $ressource)
     {

@@ -5,21 +5,21 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Pwm\AdminBundle\Entity\Abonnement;
 use Pwm\AdminBundle\Entity\Groupe;
-use Pwm\AdminBundle\Entity\Info;
-use Pwm\AdminBundle\Entity\Price;
+use Pwm\AdminBundle\Entity\UserAccount;
+use Pwm\AdminBundle\Entity\Tarifaire;
 use Pwm\AdminBundle\Entity\Ressource;
 use Pwm\MessagerBundle\Entity\Notification;
 use SolrBundle\Entity\SolrSearchResult;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
 /**
- * Session
+ * SessionConcours
  * @Solr\Document()
  * @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="session")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SessionRepository")
   * @ORM\HasLifecycleCallbacks
  */
-class Session extends SolrSearchResult
+class SessionConcours extends SolrSearchResult
 {
     /**
      * @var int
@@ -143,7 +143,7 @@ class Session extends SolrSearchResult
      */
     protected $date;
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Programme",inversedBy="sessions")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ProgrammePrepa",inversedBy="sessions")
      */
     private $preparation;
 
@@ -154,14 +154,14 @@ class Session extends SolrSearchResult
 
 
       /**
-   * @ORM\ManyToMany(targetEntity="Pwm\AdminBundle\Entity\Info",  cascade={"persist"})
+   * @ORM\ManyToMany(targetEntity="Pwm\AdminBundle\Entity\UserAccount",  cascade={"persist"})
    * @ORM\JoinTable(joinColumns={ @ORM\JoinColumn(name="session_id",referencedColumnName="id")},
                     inverseJoinColumns={ @ORM\JoinColumn(name="info_uid",referencedColumnName="uid")})
    */
     private $infos;  
 
      /**
-     * @ORM\ManyToOne(targetEntity="Pwm\AdminBundle\Entity\Price", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Pwm\AdminBundle\Entity\Tarifaire", cascade={"persist", "remove"})
      */
     private $price;
 
@@ -223,7 +223,7 @@ class Session extends SolrSearchResult
   /**
      * Constructor
      */
-    public function __construct(Concours $concours, Programme $programme=null)
+    public function __construct(Concours $concours, ProgrammePrepa $programme=null)
     {
      $date=new \DateTime();
      $this->date=$date;
@@ -272,7 +272,7 @@ class Session extends SolrSearchResult
      *
      * @param integer $nombrePlace
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setNombrePlace($nombrePlace)
     {
@@ -329,7 +329,7 @@ class Session extends SolrSearchResult
      *
      * @param integer $nombreInscrit
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setShouldAlert($shouldAlert)
     {
@@ -342,7 +342,7 @@ class Session extends SolrSearchResult
      *
      * @param integer $nombreInscrit
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setNombreInscrit($nombreInscrit)
     {
@@ -366,7 +366,7 @@ class Session extends SolrSearchResult
      *
      * @param \DateTime $dateConcours
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setDateConcours($dateConcours)
     {
@@ -390,7 +390,7 @@ class Session extends SolrSearchResult
      *
      * @param \DateTime $dateDossier
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setDateDossier($dateDossier)
     {
@@ -414,7 +414,7 @@ class Session extends SolrSearchResult
      *
      * @param string $nom
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setNom($nom)
     {
@@ -439,7 +439,7 @@ class Session extends SolrSearchResult
      *
      * @param string $abreviation
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setAbreviation($abreviation)
     {
@@ -465,9 +465,9 @@ class Session extends SolrSearchResult
      *
      * @param integer $price
      *
-     * @return Session
+     * @return SessionConcours
      */
-    public function setPrice(Price $price)
+    public function setPrice(Tarifaire $price)
     {
         $this->price = $price;
 
@@ -489,7 +489,7 @@ class Session extends SolrSearchResult
      *
      * @param \DateTime $dateLancement
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setDateLancement($dateLancement)
     {
@@ -513,7 +513,7 @@ class Session extends SolrSearchResult
      *
      * @param Concours $concours
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setConcours(Concours $concours = null)
     {
@@ -541,7 +541,7 @@ class Session extends SolrSearchResult
      *
      * @param string $nomConcours
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setNomConcours($nomConcours)
     {
@@ -566,7 +566,7 @@ class Session extends SolrSearchResult
      *
      * @param integer $annee
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setAnnee($annee)
     {
@@ -590,7 +590,7 @@ class Session extends SolrSearchResult
      *
      * @param string $type
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setType($type)
     {
@@ -614,7 +614,7 @@ class Session extends SolrSearchResult
      *
      * @param boolean $archived
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setArchived($archived)
     {
@@ -638,7 +638,7 @@ class Session extends SolrSearchResult
      *
      * @param \DateTime $date
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setDate($date)
     {
@@ -660,11 +660,11 @@ class Session extends SolrSearchResult
     /**
      * Set preparation
      *
-     * @param Programme $preparation
+     * @param ProgrammePrepa $preparation
      *
-     * @return Session
+     * @return SessionConcours
      */
-    public function setPreparation(Programme $preparation = null)
+    public function setPreparation(ProgrammePrepa $preparation = null)
     {
         $this->preparation = $preparation;
 
@@ -674,7 +674,7 @@ class Session extends SolrSearchResult
     /**
      * Get preparation
      *
-     * @return Programme
+     * @return ProgrammePrepa
      */
     public function getPreparation()
     {
@@ -686,7 +686,7 @@ class Session extends SolrSearchResult
      *
      * @param Abonnement $abonnement
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function addAbonnement(Abonnement $abonnement)
     {
@@ -718,11 +718,11 @@ class Session extends SolrSearchResult
     /**
      * Add info
      *
-     * @param Info $info
+     * @param UserAccount $info
      *
-     * @return Session
+     * @return SessionConcours
      */
-    public function addInfo(Info $info)
+    public function addInfo(UserAccount $info)
     {
         $this->infos[] = $info;
 
@@ -732,9 +732,9 @@ class Session extends SolrSearchResult
     /**
      * Remove info
      *
-     * @param Info $info
+     * @param UserAccount $info
      */
-    public function removeInfo(Info $info)
+    public function removeInfo(UserAccount $info)
     {
         foreach ($this->infos as $key => $value) {
             if($info->getUid()==$value->getUid())
@@ -757,7 +757,7 @@ class Session extends SolrSearchResult
      *
      * @param string $serie
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setSerie($serie)
     {
@@ -781,7 +781,7 @@ class Session extends SolrSearchResult
      *
      * @param string $niveau
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setNiveau($niveau)
     {
@@ -807,7 +807,7 @@ class Session extends SolrSearchResult
      *
      * @param \DateTime $dateMax
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setDateMax($dateMax)
     {
@@ -833,7 +833,7 @@ class Session extends SolrSearchResult
      *
      * @param Objectif $lien
      *
-     * @return Programme
+     * @return ProgrammePrepa
      */
     public function addLien(Objectif $lien)
     {
@@ -858,7 +858,7 @@ class Session extends SolrSearchResult
      *
      * @param Objectif $lien
      *
-     * @return Programme
+     * @return ProgrammePrepa
      */
     public function addPartie(Partie $lien)
     {
@@ -919,7 +919,7 @@ class Session extends SolrSearchResult
      *
      * @param string $discussionName
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setDiscussionName($discussionName)
     {
@@ -941,9 +941,9 @@ class Session extends SolrSearchResult
     /**
      * Set owner
      *
-     * @param Info $owner
+     * @param UserAccount $owner
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setOwner($owner = null)
     {
@@ -955,7 +955,7 @@ class Session extends SolrSearchResult
     /**
      * Get owner
      *
-     * @return Info
+     * @return UserAccount
      */
     public function getOwner()
     {
@@ -967,7 +967,7 @@ class Session extends SolrSearchResult
      *
      * @param Partie $party
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function addParty(Partie $party)
     {
@@ -1001,7 +1001,7 @@ class Session extends SolrSearchResult
      *
      * @param boolean $newressource
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setNewressource($newressource)
     {
@@ -1025,7 +1025,7 @@ class Session extends SolrSearchResult
      *
      * @param Ressource $ressource
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function addRessource(Ressource $ressource)
     {

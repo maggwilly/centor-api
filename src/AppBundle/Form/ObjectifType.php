@@ -19,7 +19,7 @@ class ObjectifType extends AbstractType
         ->add('titre')
         ->add('description', UrlType::class, array(
             'label' => 'Lien direct',)) 
-        ->add('sessions', EntityType::class,array('class' => 'AppBundle:Session', 
+        ->add('sessions', EntityType::class,array('class' => 'AppBundle:SessionConcours',
                            'choice_label' => 'nomConcours', 
                            'placeholder' => 'Toute les sessions',
                             'empty_data'  => null,

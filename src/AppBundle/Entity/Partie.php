@@ -113,7 +113,7 @@ class Partie implements FileObject
     private $article;
 
     /**
-   * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Session", mappedBy="parties", cascade={"persist"})
+   * @ORM\ManyToMany(targetEntity="AppBundle\Entity\SessionConcours", mappedBy="parties", cascade={"persist"})
    */
     private $sessions;
 
@@ -257,7 +257,7 @@ class Partie implements FileObject
      *
      * @param string $type
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setType($type)
     {
@@ -281,7 +281,7 @@ class Partie implements FileObject
      *
      * @param string $type
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setSources($type)
     {
@@ -500,11 +500,11 @@ class Partie implements FileObject
     /**
      * Add session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      *
      * @return Partie
      */
-    public function addSession(\AppBundle\Entity\Session $session)
+    public function addSession(\AppBundle\Entity\SessionConcours $session)
     {
         $this->sessions[] = $session;
 
@@ -514,9 +514,9 @@ class Partie implements FileObject
     /**
      * Remove session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      */
-    public function removeSession(\AppBundle\Entity\Session $session)
+    public function removeSession(\AppBundle\Entity\SessionConcours $session)
     {
         $this->sessions->removeElement($session);
     }

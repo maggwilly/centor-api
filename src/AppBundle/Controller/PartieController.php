@@ -44,8 +44,8 @@ class PartieController extends Controller
          if(is_null($matiere))
               return array();
         $em = $this->getDoctrine()->getManager();
-         $session=$em->getRepository('AppBundle:Session')->findOneById($request->query->get('session'));
-         $info = $em->getRepository('AdminBundle:Info')->findOneByUid($request->query->get('uid'));
+         $session=$em->getRepository('AppBundle:SessionConcours')->findOneById($request->query->get('session'));
+         $info = $em->getRepository('AdminBundle:UserAccount')->findOneByUid($request->query->get('uid'));
          $mat = $em->getRepository('AppBundle:Matiere')->findOneById($request->query->get('matiere'));
          $parties=$matiere->getUnites();//->getParties();
          $abonnement=$em->getRepository('AdminBundle:Abonnement')->findMeOnThis( $info, $session);

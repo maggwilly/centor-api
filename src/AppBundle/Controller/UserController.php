@@ -45,7 +45,7 @@ class UserController extends Controller
     public function inviteFillProfilAction()
     {
         $em = $this->container->get('doctrine.orm.entity_manager');
-        $destinations=$em->getRepository('AdminBundle:Info')->findNotProfilFilled();
+        $destinations=$em->getRepository('AdminBundle:UserAccount')->findNotProfilFilled();
         $this->addFlash('success', 'Invitation envoyée à . '.count($destinations).' utilisateurs');
         $event= new InfoEvent(null);
         $this->get('event_dispatcher')->dispatch('fill.profil.invited', $event);         

@@ -180,7 +180,7 @@ class User extends BaseUser
 
 
     /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Session", mappedBy="user")
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\SessionConcours", mappedBy="user")
    * @ORM\OrderBy({ "id" = "ASC"})
    */
     private $sessions;
@@ -448,11 +448,11 @@ class User extends BaseUser
      /**
      * Add session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      *
      * @return Concours
      */
-    public function addSession(\AppBundle\Entity\Session $session)
+    public function addSession(\AppBundle\Entity\SessionConcours $session)
     {
        $session->setUser($this);
         $this->sessions[] = $session;
@@ -463,9 +463,9 @@ class User extends BaseUser
     /**
      * Remove session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      */
-    public function removeSession(\AppBundle\Entity\Session $session)
+    public function removeSession(\AppBundle\Entity\SessionConcours $session)
     {
         $this->sessions->removeElement($session);
     }

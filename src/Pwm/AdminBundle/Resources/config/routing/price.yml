@@ -1,24 +1,24 @@
 price_index:
     path:     /
-    defaults: { _controller: "AdminBundle:Price:index" }
+    defaults: { _controller: "AdminBundle:Tarifaire:index" }
     methods:  GET
 
 price_show:
     path:     /{id}/show
-    defaults: { _controller: "AdminBundle:Price:show" }
+    defaults: { _controller: "AdminBundle:Tarifaire:show" }
     methods:  GET
 
 price_new:
     path:     /new
-    defaults: { _controller: "AdminBundle:Price:new" }
+    defaults: { _controller: "AdminBundle:Tarifaire:new" }
     methods:  [GET, POST]
 
 price_edit:
     path:     /{id}/edit
-    defaults: { _controller: "AdminBundle:Price:edit" }
+    defaults: { _controller: "AdminBundle:Tarifaire:edit" }
     methods:  [GET, POST]
 
 price_delete:
     path:     /{id}/delete
-    defaults: { _controller: "AdminBundle:Price:delete" }
+    defaults: { _controller: "AdminBundle:Tarifaire:delete" }
     methods:  DELETE

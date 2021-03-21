@@ -3,7 +3,7 @@
 namespace Pwm\AdminBundle\Entity;
 
 use AppBundle\Entity\FileObject;
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
@@ -119,12 +119,12 @@ class Ressource extends SolrSearchResult implements FileObject
     private $imageUrl;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session" )
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SessionConcours" )
      */
     private $session;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Session",inversedBy="ressources", cascade={"persist","remove"})
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\SessionConcours",inversedBy="ressources", cascade={"persist","remove"})
      */
     private $sessions;
 
@@ -411,11 +411,11 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Set session
      *
-     * @param Session $session
+     * @param SessionConcours $session
      *
      * @return Ressource
      */
-    public function setSession(Session $session = null)
+    public function setSession(SessionConcours $session = null)
     {
         $this->session = $session;
 
@@ -425,7 +425,7 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Get session
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function getSession()
     {
@@ -580,11 +580,11 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Add session
      *
-     * @param Session $session
+     * @param SessionConcours $session
      *
      * @return Partie
      */
-    public function addSession(Session $session)
+    public function addSession(SessionConcours $session)
     {
         $this->sessions[] = $session;
         return $this;
@@ -593,9 +593,9 @@ class Ressource extends SolrSearchResult implements FileObject
     /**
      * Remove session
      *
-     * @param Session $session
+     * @param SessionConcours $session
      */
-    public function removeSession(Session $session)
+    public function removeSession(SessionConcours $session)
     {
         $this->sessions->removeElement($session);
     }

@@ -5,12 +5,12 @@ namespace Pwm\AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Price
+ * Tarifaire
  *
  * @ORM\Table(name="price")
  * @ORM\Entity(repositoryClass="Pwm\AdminBundle\Repository\PriceRepository")
  */
-class Price
+class Tarifaire
 {
     /**
      * @var int
@@ -106,7 +106,7 @@ class Price
      *
      * @param string $nom
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setNom($nom)
     {
@@ -141,7 +141,7 @@ class Price
      *
      * @param integer $starter
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setStarter($starter)
     {
@@ -165,7 +165,7 @@ class Price
      *
      * @param integer $standard
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setStandard($standard)
     {
@@ -189,7 +189,7 @@ class Price
      *
      * @param integer $premium
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setPremium($premium)
     {
@@ -213,7 +213,7 @@ class Price
      *
      * @param integer $starterDelay
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setStarterDelay($starterDelay)
     {
@@ -237,7 +237,7 @@ class Price
      *
      * @param integer $standardDelay
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setStandardDelay($standardDelay)
     {
@@ -261,7 +261,7 @@ class Price
      *
      * @param integer $premiumDelay
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setPremiumDelay($premiumDelay)
     {
@@ -285,7 +285,7 @@ class Price
      *
      * @param string $starterDesc
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setStarterDesc($starterDesc)
     {
@@ -309,7 +309,7 @@ class Price
      *
      * @param string $standardDesc
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setStandardDesc($standardDesc)
     {
@@ -333,7 +333,7 @@ class Price
      *
      * @param string $premiumDesc
      *
-     * @return Price
+     * @return Tarifaire
      */
     public function setPremiumDesc($premiumDesc)
     {

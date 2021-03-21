@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Abonnement
  *
- * @ORM\Table(name="abonnement_")
+ * @ORM\Table(name="abonnement")
  * @ORM\Entity(repositoryClass="Pwm\AdminBundle\Repository\AbonnementRepository")
  * @ORM\HasLifecycleCallbacks
  */
@@ -98,14 +98,14 @@ class Abonnement
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Info" ,inversedBy="abonnements")
+     * @ORM\ManyToOne(targetEntity="UserAccount" ,inversedBy="abonnements")
      * @ORM\JoinColumn(name="uid",referencedColumnName="uid" )
      */
     private $info;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session" ,inversedBy="abonnements")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SessionConcours" ,inversedBy="abonnements")
      */
     private $session;
 
@@ -254,7 +254,7 @@ class Abonnement
      *
      * @param string $email
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setEmail($email)
     {
@@ -443,11 +443,11 @@ class Abonnement
     /**
      * Set session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      *
      * @return Abonnement
      */
-    public function setSession(\AppBundle\Entity\Session $session = null)
+    public function setSession(\AppBundle\Entity\SessionConcours $session = null)
     {
         $this->session = $session;
 
@@ -457,7 +457,7 @@ class Abonnement
     /**
      * Get session
      *
-     * @return \AppBundle\Entity\Session
+     * @return \AppBundle\Entity\SessionConcours
      */
     public function getSession()
     {
@@ -468,11 +468,11 @@ class Abonnement
     /**
      * Set info
      *
-     * @param \Pwm\AdminBundle\Entity\Info $info
+     * @param \Pwm\AdminBundle\Entity\UserAccount $info
      *
      * @return Abonnement
      */
-    public function setInfo(\Pwm\AdminBundle\Entity\Info $info = null)
+    public function setInfo(\Pwm\AdminBundle\Entity\UserAccount $info = null)
     {
         $this->info = $info;
 
@@ -482,7 +482,7 @@ class Abonnement
     /**
      * Get info
      *
-     * @return \Pwm\AdminBundle\Entity\Info
+     * @return \Pwm\AdminBundle\Entity\UserAccount
      */
     public function getInfo()
     {

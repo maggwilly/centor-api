@@ -1,33 +1,33 @@
 session_index:
     path:     /{id}/{all}/list
-    defaults: { _controller: "AppBundle:Session:index","id":0 ,"all":0 }
+    defaults: { _controller: "AppBundle:SessionConcours:index","id":0 ,"all":0 }
     methods:  GET
     
 
 session_show:
     path:     /{id}/show
-    defaults: { _controller: "AppBundle:Session:show" }
+    defaults: { _controller: "AppBundle:SessionConcours:show" }
     methods:  GET
 
 session_new:
     path:     /{id}/new
-    defaults: { _controller: "AppBundle:Session:new" }
+    defaults: { _controller: "AppBundle:SessionConcours:new" }
     methods:  [GET, POST]
     
 session_attr:
     path:     /{id}/attr
-    defaults: { _controller: "AppBundle:Session:attr" }
+    defaults: { _controller: "AppBundle:SessionConcours:attr" }
     methods:  [GET, POST]
 
 session_whatsapp:
     path:     /{id}/whatsapp
-    defaults: { _controller: "AppBundle:Session:whatsapp" }
+    defaults: { _controller: "AppBundle:SessionConcours:whatsapp" }
     methods:  [GET, POST]
 
 
 session_edit:
     path:     /{id}/edit
-    defaults: { _controller: "AppBundle:Session:edit" }
+    defaults: { _controller: "AppBundle:SessionConcours:edit" }
     methods:  [GET, POST]
 
 session_analyse:
@@ -39,15 +39,15 @@ session_analyse:
 
 session_decrire:
     path:     /{id}/decrire
-    defaults: { _controller: "AppBundle:Session:decrire" }
+    defaults: { _controller: "AppBundle:SessionConcours:decrire" }
     methods:  [GET, POST]
 
 session_delete:
     path:     /{id}/delete
-    defaults: { _controller: "AppBundle:Session:delete" }
+    defaults: { _controller: "AppBundle:SessionConcours:delete" }
     methods:  DELETE
 
 session_show_from_mobile:
     path:     /{id}/show/from/mobile
-    defaults: { _controller: "AppBundle:Session:showFromMobile" }
+    defaults: { _controller: "AppBundle:SessionConcours:showFromMobile" }
     methods:  GET

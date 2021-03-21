@@ -1,4 +1,4 @@
-AppBundle\Entity\Programme:
+AppBundle\Entity\ProgrammePrepa:
     exclusion_policy: none
     properties:
         id:

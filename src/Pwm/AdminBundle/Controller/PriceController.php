@@ -2,14 +2,14 @@
 
 namespace Pwm\AdminBundle\Controller;
 
-use Pwm\AdminBundle\Entity\Price;
+use Pwm\AdminBundle\Entity\Tarifaire;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use FOS\RestBundle\View\View;
 /**
- * Price controller.
+ * Tarifaire controller.
  *
  */
 class PriceController extends Controller
@@ -22,7 +22,7 @@ class PriceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $prices = $em->getRepository('AdminBundle:Price')->findAll();
+        $prices = $em->getRepository('AdminBundle:Tarifaire')->findAll();
 
         return $this->render('AdminBundle:price:index.html.twig', array(
             'prices' => $prices,
@@ -34,7 +34,7 @@ class PriceController extends Controller
   */
     public function newAction(Request $request)
     {
-        $price = new Price();
+        $price = new Tarifaire();
         $form = $this->createForm('Pwm\AdminBundle\Form\PriceType', $price);
         $form->handleRequest($request);
 
@@ -56,7 +56,7 @@ class PriceController extends Controller
   /**
    * @Security("is_granted('ROLE_PRICER')")
   */
-    public function showAction(Price $price)
+    public function showAction(Tarifaire $price)
     {
         $deleteForm = $this->createDeleteForm($price);
 
@@ -70,11 +70,11 @@ class PriceController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"price"})
      */
-    public function showJsonAction(Price $price=null)
+    public function showJsonAction(Tarifaire $price=null)
     {
     if($price==null){
      $em = $this->getDoctrine()->getManager();
-     $price = $em->getRepository('AdminBundle:Price')->find(self::ZERO_PRICE_ID);
+     $price = $em->getRepository('AdminBundle:Tarifaire')->find(self::ZERO_PRICE_ID);
         return $price;
     }
       return $price;
@@ -83,7 +83,7 @@ class PriceController extends Controller
   /**
    * @Security("is_granted('ROLE_PRICER')")
   */
-    public function editAction(Request $request, Price $price)
+    public function editAction(Request $request, Tarifaire $price)
     {
         $deleteForm = $this->createDeleteForm($price);
         $editForm = $this->createForm('Pwm\AdminBundle\Form\PriceType', $price);
@@ -106,7 +106,7 @@ class PriceController extends Controller
   /**
    * @Security("is_granted('ROLE_PRICER')")
   */
-    public function deleteAction(Request $request, Price $price)
+    public function deleteAction(Request $request, Tarifaire $price)
     {
         $form = $this->createDeleteForm($price);
         $form->handleRequest($request);
@@ -124,11 +124,11 @@ class PriceController extends Controller
     /**
      * Creates a form to delete a price entity.
      *
-     * @param Price $price The price entity
+     * @param Tarifaire $price The price entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Price $price)
+    private function createDeleteForm(Tarifaire $price)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('price_delete', array('id' => $price->getId())))

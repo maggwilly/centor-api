@@ -2,7 +2,7 @@
 
 namespace Pwm\AdminBundle\Entity;
 
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use Doctrine\ORM\Mapping as ORM;
 use Pwm\MessagerBundle\Entity\Registration;
 
@@ -38,12 +38,12 @@ class Groupe
     private $date;
 
    /**
-   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Session", inversedBy="groupe")
+   * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SessionConcours", inversedBy="groupe")
    */
     private $session;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Pwm\AdminBundle\Entity\Info", inversedBy="groupes",  cascade={"persist","remove"})
+     * @ORM\ManyToMany(targetEntity="Pwm\AdminBundle\Entity\UserAccount", inversedBy="groupes",  cascade={"persist","remove"})
      * @ORM\JoinTable(name="groupe_info",
      *      joinColumns={@ORM\JoinColumn(name="groupe_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="info_id", referencedColumnName="uid")}
@@ -61,7 +61,7 @@ class Groupe
     /**
      * Constructor
      */
-    public function __construct($nom, Session $session = null,$tag='public')
+    public function __construct($nom, SessionConcours $session = null, $tag='public')
     {
         $this->date =new \DateTime();
         $this->nom =$nom;
@@ -130,11 +130,11 @@ class Groupe
     /**
      * Set session
      *
-     * @param Session $session
+     * @param SessionConcours $session
      *
      * @return Notification
      */
-    public function setSession(Session $session = null)
+    public function setSession(SessionConcours $session = null)
     {
         $this->session = $session;
 
@@ -144,7 +144,7 @@ class Groupe
     /**
      * Get session
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function getSession()
     {

@@ -1,4 +1,4 @@
-AppBundle\Entity\Resultat:
+AppBundle\Entity\ResultatConcours:
     exclusion_policy: none
     properties:
         id:

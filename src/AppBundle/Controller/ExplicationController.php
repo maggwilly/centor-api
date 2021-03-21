@@ -41,7 +41,7 @@ class ExplicationController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-             $session  = $em->getRepository('AppBundle:Session')->findOneById($this->get("session")->get('current_session_id'));
+             $session  = $em->getRepository('AppBundle:SessionConcours')->findOneById($this->get("session")->get('current_session_id'));
               $explication->setUser($this->getUser());
             $em->persist($explication);
             if(!is_null($question)){

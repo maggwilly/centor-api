@@ -30,19 +30,19 @@ abonnent_show_one_json:
 
 info_edit_json:
     path:     /info/{uid}/edit/json
-    defaults: { _controller: "AdminBundle:Info:editJson" }
+    defaults: { _controller: "AdminBundle:UserAccount:editJson" }
     methods:  [GET,POST]
 
 
 info_new_json:
     path:     /info/{uid}/new/json
-    defaults: { _controller: "AdminBundle:Info:newJson" }
+    defaults: { _controller: "AdminBundle:UserAccount:newJson" }
     methods:  [GET,POST] 
 
 
 info_show_json:
     path:     /info/{uid}/show/json
-    defaults: { _controller: "AdminBundle:Info:showJson"}
+    defaults: { _controller: "AdminBundle:UserAccount:showJson"}
     methods:  [GET,POST] 
 
 ressource_index_json:
@@ -57,7 +57,7 @@ ressource_show_json:
 
 info_show_ambassador:
     path:     /info/{uid}/ambassador/json
-    defaults: { _controller: "AdminBundle:Info:getAmbassadorJson"}
+    defaults: { _controller: "AdminBundle:UserAccount:getAmbassadorJson"}
     methods:  [GET,POST] 
 
 
@@ -73,5 +73,5 @@ analyse_show_json:
 
 price_show_json:
     path:     /price/{id}/show/json
-    defaults: { _controller: "AdminBundle:Price:showJson", id:0 }
+    defaults: { _controller: "AdminBundle:Tarifaire:showJson", id:0 }
     methods:  GET

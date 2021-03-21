@@ -22,7 +22,7 @@ class AbonnementType extends AbstractType
         ->add('studentId')
         ->add('email')
         ->add('user', EntityType::class, array('class' => 'AppBundle:User'))
-        ->add('programme', EntityType::class, array('class' => 'AppBundle:Programme')) ;
+        ->add('programme', EntityType::class, array('class' => 'AppBundle:ProgrammePrepa')) ;
     }
     
     /**

@@ -1,29 +1,29 @@
 resultat_index:
     path:     /
-    defaults: { _controller: "AppBundle:Resultat:index" }
+    defaults: { _controller: "AppBundle:ResultatConcours:index" }
     methods:  GET
 
 resultat_show:
     path:     /{id}/show
-    defaults: { _controller: "AppBundle:Resultat:show" }
+    defaults: { _controller: "AppBundle:ResultatConcours:show" }
     methods:  GET
 
 resultat_get:
     path:     /{id}/get/mobile
-    defaults: { _controller: "AppBundle:Resultat:get" }
+    defaults: { _controller: "AppBundle:ResultatConcours:get" }
     methods:  GET    
 
 resultat_new:
     path:     /new
-    defaults: { _controller: "AppBundle:Resultat:new" }
+    defaults: { _controller: "AppBundle:ResultatConcours:new" }
     methods:  [GET, POST]
 
 resultat_edit:
     path:     /{id}/edit
-    defaults: { _controller: "AppBundle:Resultat:edit" }
+    defaults: { _controller: "AppBundle:ResultatConcours:edit" }
     methods:  [GET, POST]
 
 resultat_delete:
     path:     /{id}/delete
-    defaults: { _controller: "AppBundle:Resultat:delete" }
+    defaults: { _controller: "AppBundle:ResultatConcours:delete" }
     methods:  DELETE

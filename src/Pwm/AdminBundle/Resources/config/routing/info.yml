@@ -1,20 +1,20 @@
 info_index:
     path:     /
-    defaults: { _controller: "AdminBundle:Info:index" }
+    defaults: { _controller: "AdminBundle:UserAccount:index" }
     methods:  GET
 
 info_show:
     path:     /{id}/show
-    defaults: { _controller: "AdminBundle:Info:show" }
+    defaults: { _controller: "AdminBundle:UserAccount:show" }
     methods:  [GET, POST]
 
 info_edit:
     path:     /mobile/{uid}/edit
-    defaults: { _controller: "AdminBundle:Info:edit" }
+    defaults: { _controller: "AdminBundle:UserAccount:edit" }
     methods:  [GET,POST] 
 
 
 info_delete:
     path:     /{id}/delete
-    defaults: { _controller: "AdminBundle:Info:delete" }
+    defaults: { _controller: "AdminBundle:UserAccount:delete" }
     methods:  DELETE

@@ -6,7 +6,7 @@ use AppBundle\Entity\Partie;
 use AppBundle\Service\FMCManager;
 use Doctrine\ORM\EntityManager;
 use AppBundle\Entity\Question;
-use AppBundle\Entity\Resultat;
+use AppBundle\Entity\ResultatConcours;
 use Pwm\AdminBundle\Entity\Ressource;
 use Spatie\PdfToImage\Pdf;
 
@@ -45,7 +45,7 @@ class FileObjectCreationListener
             } elseif ($fileObject instanceof Ressource) {
                 $upladdir = 'documents/';
                $filename = $this->cleanString($fileObject->getNom()) .'.'. $fileEntity->getExtension();
-            } elseif ($fileObject instanceof Resultat) {
+            } elseif ($fileObject instanceof ResultatConcours) {
                 $upladdir = 'arretes/';
                 $filename = $this->cleanString($fileObject->getDescription()) .'.'. $fileEntity->getExtension();
             }elseif ($fileObject instanceof Partie) {

@@ -13,7 +13,7 @@ class ProgrammeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nom','text',array('label'=>'Nom du Programme'))
+        $builder->add('nom','text',array('label'=>'Nom du ProgrammePrepa'))
         ->add('abreviation','textarea',array('label'=>'Brève description '))
         //->add('type')
         ;
@@ -25,7 +25,7 @@ class ProgrammeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Programme'
+            'data_class' => 'AppBundle\Entity\ProgrammePrepa'
         ));
     }
 

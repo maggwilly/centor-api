@@ -55,7 +55,7 @@ class SessionType extends AbstractType
                                   'Olympiades' => 'Olympiades'),
                                    ))
         ->add('price', EntityType::class,
-             array('class' => 'AdminBundle:Price', 
+             array('class' => 'AdminBundle:Tarifaire',
                    'choice_label' => 'getNom', 
                     'placeholder' => 'Choisir un tarifaire',
                     'empty_data'  => null,
@@ -65,16 +65,16 @@ class SessionType extends AbstractType
          ->add('shouldAlert', 'checkbox' ,array('label'=>'Envoyer une alerte','required' => false))
           ->add('archived', 'checkbox' ,array('label'=>'Archivé','required' => false))         
          ->add('preparation', EntityType::class,
-             array('class' => 'AppBundle:Programme', 
+             array('class' => 'AppBundle:ProgrammePrepa',
                    'choice_label' => 'getNom', 
-                   'placeholder' => 'Aucun Programme',
+                   'placeholder' => 'Aucun ProgrammePrepa',
                    'empty_data'  => null,
                     'required' => false,
-                   'label'=>'Programme de prépa',
+                   'label'=>'ProgrammePrepa de prépa',
                    'attr'=>array('data-rel'=>'chosen'))
              )
      /* ->add('owner', EntityType::class,
-             array('class' => 'AdminBundle:Info', 
+             array('class' => 'AdminBundle:UserAccount',
                    'choice_label' => 'getDisplayName', 
                    'placeholder' => 'Aucun administrateur',
                    'label' => 'Administrateur des discussions',
@@ -89,7 +89,7 @@ class SessionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Session'
+            'data_class' => 'AppBundle\Entity\SessionConcours'
         ));
     }
 

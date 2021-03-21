@@ -1,14 +1,14 @@
 <?php
 
 namespace AppBundle\Controller;
-use AppBundle\Entity\Programme;
+use AppBundle\Entity\ProgrammePrepa;
 use AppBundle\Entity\Matiere;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Session; 
+use AppBundle\Entity\SessionConcours;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 /**
@@ -21,7 +21,7 @@ class MatiereController extends Controller
  /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function indexAction(Programme $concours,Session $session=null)
+    public function indexAction(ProgrammePrepa $concours, SessionConcours $session=null)
     {
         $collection=$concours->getMatieres();
         if(!is_null($session))
@@ -42,7 +42,7 @@ class MatiereController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"matiere"})
      */
-    public function jsonIndexAction(Programme $concours=null)
+    public function jsonIndexAction(ProgrammePrepa $concours=null)
     {   if(is_null($concours))
               return array();
          $matieres= $concours->getMatieres();
@@ -51,7 +51,7 @@ class MatiereController extends Controller
  /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function newAction(Request $request,Programme $concours,Session $session=null)
+    public function newAction(Request $request, ProgrammePrepa $concours, SessionConcours $session=null)
     {
         $matiere = new Matiere();
         $form = $this->createForm('AppBundle\Form\MatiereType', $matiere);
@@ -192,7 +192,7 @@ class MatiereController extends Controller
                  ->add('unites', EntityType::class,
                        array('class' => 'AppBundle:Partie', 
                            'choice_label' => 'titre', 
-                           'placeholder' => 'Aucun Programme',
+                           'placeholder' => 'Aucun ProgrammePrepa',
                             'empty_data'  => null,
                             'required' => false,
                             'label'=>'Selectionnez les unités à importer',

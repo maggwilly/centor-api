@@ -84,7 +84,7 @@ class Concours extends SolrSearchResult
 
      /**
 
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Session", mappedBy="concours", cascade={"persist"})
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\SessionConcours", mappedBy="concours", cascade={"persist"})
    */
     private $sessions;
 
@@ -119,7 +119,7 @@ class Concours extends SolrSearchResult
     /**
      * Constructor
      */
-    public function __construct(Programme $programme=null)
+    public function __construct(ProgrammePrepa $programme=null)
     {
          
         $this->sessions = new ArrayCollection();
@@ -131,7 +131,7 @@ class Concours extends SolrSearchResult
         $this->descriptionConcours= $programme->getDescriptionConcours();
         $this->imageUrl= $programme->getImage();
         $this->contacts= $programme->getContact();
-        $session = new Session($this,$programme);
+        $session = new SessionConcours($this,$programme);
         $this-> addSession($session);
     }
     }
@@ -366,11 +366,11 @@ class Concours extends SolrSearchResult
     /**
      * Add session
      *
-     * @param Session $session
+     * @param SessionConcours $session
      *
      * @return Concours
      */
-    public function addSession(Session $session)
+    public function addSession(SessionConcours $session)
     {
        $session->setConcours($this);
         $this->sessions[] = $session;
@@ -381,9 +381,9 @@ class Concours extends SolrSearchResult
     /**
      * Remove session
      *
-     * @param Session $session
+     * @param SessionConcours $session
      */
-    public function removeSession(Session $session)
+    public function removeSession(SessionConcours $session)
     {
         $this->sessions->removeElement($session);
     }
@@ -403,7 +403,7 @@ class Concours extends SolrSearchResult
      *
      * @param string $serie
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setSerie($serie)
     {
@@ -427,7 +427,7 @@ class Concours extends SolrSearchResult
      *
      * @param string $niveau
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setNiveau($niveau)
     {
@@ -451,7 +451,7 @@ class Concours extends SolrSearchResult
      *
      * @param \DateTime $dateMax
      *
-     * @return Session
+     * @return SessionConcours
      */
     public function setDateMax($dateMax)
     {

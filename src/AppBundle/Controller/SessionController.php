@@ -1,9 +1,9 @@
 <?php
 
 namespace AppBundle\Controller;
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 use Pwm\AdminBundle\Entity\Groupe;
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Concours;
@@ -26,13 +26,13 @@ class SessionController extends Controller
         $em = $this->getDoctrine()->getManager();
          $sessions=array();
      /*     if(!$all){
-              $sessions= $em->getRepository('AppBundle:Session')->findListByUser($this->getUser());
+              $sessions= $em->getRepository('AppBundle:SessionConcours')->findListByUser($this->getUser());
               return $this->render('session/index.html.twig', array(
             'sessions' => $sessions,'concour' => $concours,
              ));
            }
           else*/
-             $sessions = $em->getRepository('AppBundle:Session')->findAll($concours); 
+             $sessions = $em->getRepository('AppBundle:SessionConcours')->findAll($concours);
         return $this->render('session/index.html.twig', array(
             'sessions' => $sessions,'concour' => $concours,
         ));
@@ -48,7 +48,7 @@ class SessionController extends Controller
         $order=$request->query->get('order');
         $start=$request->query->get('start');
          $em = $this->getDoctrine()->getManager();
-          $sessions =$em->getRepository('AppBundle:Session')->findList($start,$all,$order);
+          $sessions =$em->getRepository('AppBundle:SessionConcours')->findList($start,$all,$order);
          return  $sessions;
      }
 
@@ -59,7 +59,7 @@ class SessionController extends Controller
      public function jsonRecentsAction(Request $request)
      {
          $em = $this->getDoctrine()->getManager();
-          $sessions =$em->getRepository('AppBundle:Session')->findRecents();
+          $sessions =$em->getRepository('AppBundle:SessionConcours')->findRecents();
          return  $sessions;
      }
 
@@ -70,7 +70,7 @@ class SessionController extends Controller
      public function jsonEnVusAction(Request $request)
      {
          $em = $this->getDoctrine()->getManager();
-          $sessions =$em->getRepository('AppBundle:Session')->findEnVus();
+          $sessions =$em->getRepository('AppBundle:SessionConcours')->findEnVus();
          return  $sessions;
      }
 
@@ -81,7 +81,7 @@ class SessionController extends Controller
      public function jsonOwardsAction(Request $request)
      {
          $em = $this->getDoctrine()->getManager();
-          $sessions =$em->getRepository('AppBundle:Session')->findOwards();
+          $sessions =$em->getRepository('AppBundle:SessionConcours')->findOwards();
          return  $sessions;
      }     
 
@@ -89,10 +89,10 @@ class SessionController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"session"})
      */
-     public function jsonForUserAction(Request $request,Info $info=null)
+     public function jsonForUserAction(Request $request, UserAccount $info=null)
      {
          $em = $this->getDoctrine()->getManager();
-          $sessions =is_null($info)?array():$em->getRepository('AppBundle:Session')->findForUser($info);
+          $sessions =is_null($info)?array():$em->getRepository('AppBundle:SessionConcours')->findForUser($info);
          return  $sessions;
      }
 
@@ -100,7 +100,7 @@ class SessionController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"full"})
      */
-    public function showJsonAction(Session $session){
+    public function showJsonAction(SessionConcours $session){
         $em = $this->getDoctrine()->getManager();
          $ressources =$em->getRepository('AdminBundle:Ressource')->findNewRessources($session);
          $session->setNewressource(!empty( $ressources));
@@ -110,7 +110,7 @@ class SessionController extends Controller
 /**
  * @Security("is_granted('ROLE_SUPERVISEUR') or has_role('ROLE_MESSAGER')")
 */
-    public function decrireAction(Request $request,Session $session)
+    public function decrireAction(Request $request, SessionConcours $session)
     {
          if(!is_null($session->getArticleDescriptif()))
          return $this->redirectToRoute('notification_show', array('id' => $session->getArticleDescriptif()->getId()));
@@ -164,7 +164,7 @@ class SessionController extends Controller
 */
     public function newAction(Concours $concour,Request $request)
     {
-        $session = new Session($concour);
+        $session = new SessionConcours($concour);
         $form = $this->createForm('AppBundle\Form\SessionType', $session);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -201,7 +201,7 @@ class SessionController extends Controller
      * Finds and displays a question entity.
      *
      */
-    public function showFromMobileAction(Session $session)
+    public function showFromMobileAction(SessionConcours $session)
     {
         return $this->render('programme/showFromMobile.html.twig', array(
             'concours' => $session,
@@ -211,7 +211,7 @@ class SessionController extends Controller
 /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function showAction(Session $session)
+    public function showAction(SessionConcours $session)
     {
         $deleteForm = $this->createDeleteForm($session);  
 
@@ -236,7 +236,7 @@ class SessionController extends Controller
 /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function analyseAction(Session $session)
+    public function analyseAction(SessionConcours $session)
     {
     
         return $this->redirectToRoute('session_show', array('id' => $session->getId()));
@@ -246,7 +246,7 @@ class SessionController extends Controller
      * Lists all Produit entities.
      *@Rest\View()
      */
-    public function followsAction(Request $request,Session $session, Info $info=null)
+    public function followsAction(Request $request, SessionConcours $session, UserAccount $info=null)
     {
          $status=$request->query->get('status');
           if ($session!=null && $info!=null) {
@@ -260,7 +260,7 @@ class SessionController extends Controller
                            $this->getDoctrine()->getManager()->flush();
                         return  false;                    
                     default:
-                    return !empty($this->getDoctrine()->getManager()->getRepository('AppBundle:Session')->findByUser($session,$info));  
+                    return !empty($this->getDoctrine()->getManager()->getRepository('AppBundle:SessionConcours')->findByUser($session,$info));
                 }
           }
          return  false;
@@ -269,7 +269,7 @@ class SessionController extends Controller
 /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function editAction(Request $request, Session $session)
+    public function editAction(Request $request, SessionConcours $session)
     {
         $deleteForm = $this->createDeleteForm($session);
         $editForm = $this->createForm('AppBundle\Form\SessionType', $session);
@@ -307,7 +307,7 @@ class SessionController extends Controller
  /**
  * @Security("is_granted('ROLE_CONTROLEUR')")
 */
-    public function deleteAction(Request $request, Session $session)
+    public function deleteAction(Request $request, SessionConcours $session)
     {
         $form = $this->createDeleteForm($session);
         $form->handleRequest($request);
@@ -323,11 +323,11 @@ class SessionController extends Controller
     /**
      * Creates a form to delete a session entity.
      *
-     * @param Session $session The session entity
+     * @param SessionConcours $session The session entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Session $session)
+    private function createDeleteForm(SessionConcours $session)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('session_delete', array('id' => $session->getId())))
@@ -340,7 +340,7 @@ class SessionController extends Controller
  /**
  * @Security("is_granted('ROLE_CONTROLEUR')")
 */
-    public function attrAction(Request $request, Session $session)
+    public function attrAction(Request $request, SessionConcours $session)
     {
          $referer = $this->getRequest()->headers->get('referer');   
         $form = $this->createAttForm();
@@ -366,7 +366,7 @@ class SessionController extends Controller
  /**
  * @Security("is_granted('ROLE_CONTROLEUR')")
 */
-    public function whatsappAction(Request $request, Session $session)
+    public function whatsappAction(Request $request, SessionConcours $session)
     {  
         $form = $this->createWhatsappForm();
         $form->handleRequest($request);

@@ -1,12 +1,12 @@
 <?php
 namespace AppBundle\Event;
 use Symfony\Component\EventDispatcher\Event;
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 class InfoEvent extends Event
 {
 
 protected $info;
-public function __construct(Info $info=null)
+public function __construct(UserAccount $info=null)
 {
 $this->info = $info;
 

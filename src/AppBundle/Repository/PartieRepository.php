@@ -3,7 +3,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use AppBundle\Entity\Partie;
 use AppBundle\Entity\User;
 /**
@@ -23,7 +23,7 @@ class PartieRepository extends EntityRepository
     }
 
 
-    function findPartieBy(Session $session){
+    function findPartieBy(SessionConcours $session){
        $qb =$this->createQueryBuilder('a')->join('a.matiere','m')->where('m.programme=:programme')
        ->setParameter('programme',$session->getPreparation()->getId());
         return   $qb->getQuery()->getResult();

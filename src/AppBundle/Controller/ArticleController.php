@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Partie;
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
@@ -67,7 +67,7 @@ class ArticleController extends Controller
      * Lists all Produit entities.
      *@Rest\View()
      */
-    public function lireCoursAction(Request $request,Article $article, Info $info)
+    public function lireCoursAction(Request $request, Article $article, UserAccount $info)
     {
          $status=$request->query->get('status');
           if ($session!=null && $info!=null) {

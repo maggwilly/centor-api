@@ -1,11 +1,11 @@
 <?php
 
 namespace Pwm\AdminBundle\Repository;
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use AppBundle\Entity\Matiere;
 use AppBundle\Entity\Partie;
 use Doctrine\ORM\NoResultException;
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 /**
  * AnalyseRepository
  *
@@ -33,7 +33,7 @@ class AnalyseRepository extends \Doctrine\ORM\EntityRepository
   }
 
 
-    public function findOllFor(Info $studentId, Session $session, Matiere $matiere=null){
+    public function findOllFor(UserAccount $studentId, SessionConcours $session, Matiere $matiere=null){
          $qb = $this->createQueryBuilder('a')
          ->where('a.studentId=:studentId')->setParameter('studentId',$studentId)
             ->andWhere('a.session=:session')->setParameter('session',$session)->andWhere('a.matiere is not null');
@@ -46,7 +46,7 @@ class AnalyseRepository extends \Doctrine\ORM\EntityRepository
   /**
   *Nombre de synchro effectue par utilisateur 
   */
-  public function getIndex(Session $session, Matiere $matiere=null, Partie $partie=null){
+  public function getIndex(SessionConcours $session, Matiere $matiere=null, Partie $partie=null){
          $qb = $this->createQueryBuilder('a')
           ->where('a.session=:session')->setParameter('session',$session);
          if($matiere!=null)
@@ -64,7 +64,7 @@ class AnalyseRepository extends \Doctrine\ORM\EntityRepository
 
 
 
-  public function noteSuperieur10 (Session $session, Matiere $matiere=null, Partie $partie=null){
+  public function noteSuperieur10 (SessionConcours $session, Matiere $matiere=null, Partie $partie=null){
           $qb = $this->createQueryBuilder('a')
           ->where('a.session=:session')->setParameter('session',$session);
          if($matiere!=null)

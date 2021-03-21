@@ -3,7 +3,7 @@
 namespace Pwm\MessagerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 
 /**
  * Registration
@@ -59,7 +59,7 @@ class Registration
      */
     private $lastControlDate;
      /**
-   * @ORM\ManyToOne(targetEntity="Pwm\AdminBundle\Entity\Info", inversedBy="registrations", cascade={"persist"})
+   * @ORM\ManyToOne(targetEntity="Pwm\AdminBundle\Entity\UserAccount", inversedBy="registrations", cascade={"persist"})
    * @ORM\JoinColumn(referencedColumnName="uid")
    */
      private  $info;
@@ -161,11 +161,11 @@ class Registration
     /**
      * Set info
      *
-     * @param Info $info
+     * @param UserAccount $info
      *
      * @return Registration
      */
-    public function setInfo(Info $info = null)
+    public function setInfo(UserAccount $info = null)
     {
         $this->info = $info;
 
@@ -175,7 +175,7 @@ class Registration
     /**
      * Get info
      *
-     * @return Info
+     * @return UserAccount
      */
     public function getInfo()
     {

@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Pwm\AdminBundle\Repository\InfoRepository")
   * @ORM\HasLifecycleCallbacks
  */
-class Info
-{
+class UserAccount {
      /**
      * @var string
     * @ORM\Id
@@ -147,7 +146,7 @@ class Info
      *
      * @param string $displayName
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setDisplayName($displayName)
     {
@@ -175,7 +174,7 @@ class Info
      *
      * @param string $email
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setEmail($email)
     {
@@ -199,7 +198,7 @@ class Info
      *
      * @param string $photoURL
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setPhotoURL($photoURL)
     {
@@ -223,7 +222,7 @@ class Info
      *
      * @param string $langue
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setLangue($langue)
     {
@@ -250,7 +249,7 @@ class Info
      *
      * @param string $uid
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setUid($uid)
     {
@@ -274,7 +273,7 @@ class Info
      *
      * @param string $phone
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setPhone($phone)
     {
@@ -298,7 +297,7 @@ class Info
      *
      * @param string $ville
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setVille($ville)
     {
@@ -322,7 +321,7 @@ class Info
      *
      * @param string $branche
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setBranche($branche)
     {
@@ -346,7 +345,7 @@ class Info
      *
      * @param string $paymentMethod
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setPaymentMethod($paymentMethod)
     {
@@ -370,7 +369,7 @@ class Info
      *
      * @param boolean $enableNotifications
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setEnableNotifications($enableNotifications)
     {
@@ -396,7 +395,7 @@ class Info
      *
      * @param Registration $registration
      *
-     * @return Info
+     * @return UserAccount
      */
     public function addRegistration(Registration $registration)
     {
@@ -553,7 +552,7 @@ class Info
      *
      * @param Ambassador $ambassador
      *
-     * @return Info
+     * @return UserAccount
      */
     public function setAmbassador(Ambassador $ambassador = null)
     {
@@ -594,5 +593,5 @@ class Info
     public function getDate()
     {
         return $this->date;
-    }  
+    }
 }

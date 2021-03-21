@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Resultat;
+use AppBundle\Entity\ResultatConcours;
 use AppBundle\Event\FileCreationEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Event\ResultEvent;
 use AppBundle\Event\NotificationEvent;
 /**
- * Resultat controller.
+ * ResultatConcours controller.
  *
  */
 class ResultatController extends Controller
@@ -26,7 +26,7 @@ class ResultatController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $resultats = $em->getRepository('AppBundle:Resultat')->findAll();
+        $resultats = $em->getRepository('AppBundle:ResultatConcours')->findAll();
 
         return $this->render('resultat/index.html.twig', array(
             'resultats' => $resultats,
@@ -41,7 +41,7 @@ class ResultatController extends Controller
          $all=$request->query->get('all');
          $start=$request->query->get('start');
          $em = $this->getDoctrine()->getManager();
-         $resultats =$em->getRepository('AppBundle:Resultat')->findList($start,$all);
+         $resultats =$em->getRepository('AppBundle:ResultatConcours')->findList($start,$all);
          return  $resultats;
      }
 
@@ -50,7 +50,7 @@ class ResultatController extends Controller
   */
     public function newAction(Request $request)
     {
-        $resultat = new Resultat();
+        $resultat = new ResultatConcours();
         $form = $this->createForm('AppBundle\Form\ResultatType', $resultat);
         $form->handleRequest($request);
 
@@ -70,7 +70,7 @@ class ResultatController extends Controller
             'form' => $form->createView(),
         ));
        }
-        public function dispatchNotificationEvent(Resultat $resultat){
+        public function dispatchNotificationEvent(ResultatConcours $resultat){
                 $em = $this->getDoctrine()->getManager();
                $notification = new Notification('public',false,true);
                $notification->setTitre($resultat->getDescription())
@@ -89,7 +89,7 @@ class ResultatController extends Controller
      * Finds and displays a resultat entity.
      *
      */
-    public function showAction(Resultat $resultat)
+    public function showAction(ResultatConcours $resultat)
     {
         $deleteForm = $this->createDeleteForm($resultat);
 
@@ -103,7 +103,7 @@ class ResultatController extends Controller
      * Finds and displays a resultat entity.
      *
      */
-    public function getAction(Resultat $resultat)
+    public function getAction(ResultatConcours $resultat)
     {
         $deleteForm = $this->createDeleteForm($resultat);
 
@@ -113,7 +113,7 @@ class ResultatController extends Controller
   /**
    * @Security("is_granted('ROLE_MESSAGER')")
   */
-    public function editAction(Request $request, Resultat $resultat)
+    public function editAction(Request $request, ResultatConcours $resultat)
     {
         $deleteForm = $this->createDeleteForm($resultat);
         $editForm = $this->createForm('AppBundle\Form\ResultatType', $resultat);
@@ -137,7 +137,7 @@ class ResultatController extends Controller
      * Deletes a resultat entity.
      *
      */
-    public function deleteAction(Request $request, Resultat $resultat)
+    public function deleteAction(Request $request, ResultatConcours $resultat)
     {
         $form = $this->createDeleteForm($resultat);
         $form->handleRequest($request);
@@ -156,11 +156,11 @@ class ResultatController extends Controller
     /**
      * Creates a form to delete a resultat entity.
      *
-     * @param Resultat $resultat The resultat entity
+     * @param ResultatConcours $resultat The resultat entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Resultat $resultat)
+    private function createDeleteForm(ResultatConcours $resultat)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('resultat_delete', array('id' => $resultat->getId())))

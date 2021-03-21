@@ -13,7 +13,7 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Event\ResultEvent;
 use Pwm\AdminBundle\Entity\Groupe;
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 use AppBundle\Event\NotificationEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

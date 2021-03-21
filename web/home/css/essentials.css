@@ -51,7 +51,7 @@
 	33. Tables					[shortcode]
 	34. Callouts				[shortcode]
 	35. Process Steps			[shortcode]
-	36. Price Table				[shortcode]
+	36. Tarifaire Table				[shortcode]
 	37. Styled Icons			[shortcode]
 	38. Pickers					[plugins]
 	39. Select2					[plugin]
@@ -6817,7 +6817,7 @@ section.dark .callout-transparent p {
 }
 
 
-/* Info Bar */
+/* UserAccount Bar */
 .info-bar {
 	margin:0;
 	border:0;
@@ -7115,7 +7115,7 @@ ul.process-steps.process-steps-square li a {
 
 
 
-/** 36. Price Table
+/** 36. Tarifaire Table
  **************************************************************** **/
 div.price-table {
 	background:rgba(0,0,0,0.03);

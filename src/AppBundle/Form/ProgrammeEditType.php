@@ -13,11 +13,11 @@ class ProgrammeEditType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nom','text',array('label'=>'Nom du Programme'))
+        $builder->add('nom','text',array('label'=>'Nom du ProgrammePrepa'))
         ->add('abreviation','textarea',array('label'=>'Brève description '))
        /* ->add('auMoinsdeMemeQue', 
             EntityType::class,
-             array('class' => 'AppBundle:Programme',
+             array('class' => 'AppBundle:ProgrammePrepa',
                 'choice_label' => 'nom', 
                 'label'=>'Selectionnez un programme', 'empty_data' => null,
                 'placeholder' => 'Aucun ',
@@ -33,7 +33,7 @@ class ProgrammeEditType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Programme'
+            'data_class' => 'AppBundle\Entity\ProgrammePrepa'
         ));
     }
 

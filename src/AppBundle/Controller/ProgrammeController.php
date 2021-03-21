@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Programme;
+use AppBundle\Entity\ProgrammePrepa;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use FOS\RestBundle\View\View;
-use AppBundle\Entity\Session; 
+use AppBundle\Entity\SessionConcours;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 /**
  * Concour controller.
@@ -23,7 +23,7 @@ class ProgrammeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $concours = $em->getRepository('AppBundle:Programme')->findAll();
+        $concours = $em->getRepository('AppBundle:ProgrammePrepa')->findAll();
 
         return $this->render('programme/index.html.twig', array(
             'concours' => $concours,
@@ -39,7 +39,7 @@ class ProgrammeController extends Controller
     public function jsonIndexAction($start=0)
     {
         $em = $this->getDoctrine()->getManager();
-         $programmes =$em->getRepository('AppBundle:Programme')->findList($start);
+         $programmes =$em->getRepository('AppBundle:ProgrammePrepa')->findList($start);
 
         return  $programmes;
     }
@@ -48,15 +48,15 @@ class ProgrammeController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"full"})
      */
-    public function showJsonAction(Programme $programme){
+    public function showJsonAction(ProgrammePrepa $programme){
         
         return $programme;
     }
 
 
-    public function newAction(Request $request,Session $session=null)
+    public function newAction(Request $request, SessionConcours $session=null)
     {
-        $concours = new Programme($session);
+        $concours = new ProgrammePrepa($session);
         $form = $this->createForm('AppBundle\Form\ProgrammeType', $concours);
 
         $form->handleRequest($request);
@@ -79,7 +79,7 @@ class ProgrammeController extends Controller
     }
 
 
-    public function showAction(Programme $concour,Session $session=null)
+    public function showAction(ProgrammePrepa $concour, SessionConcours $session=null)
     {
         $deleteForm = $this->createDeleteForm($concour);
         return $this->redirectToRoute('matiere_index', array('id' => $concours->getId()));
@@ -91,7 +91,7 @@ class ProgrammeController extends Controller
  /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function editAction(Request $request, Programme $concour,Session $session=null)
+    public function editAction(Request $request, ProgrammePrepa $concour, SessionConcours $session=null)
     {
         $deleteForm = $this->createDeleteForm($concour);
         $editForm = $this->createForm('AppBundle\Form\ProgrammeEditType', $concour);
@@ -114,7 +114,7 @@ class ProgrammeController extends Controller
      * Deletes a concour entity.
      *
      */
-    public function deleteAction(Request $request, Programme $concour)
+    public function deleteAction(Request $request, ProgrammePrepa $concour)
     {
         $form = $this->createDeleteForm($concour);
         $form->handleRequest($request);
@@ -135,7 +135,7 @@ class ProgrammeController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Programme $concour)
+    private function createDeleteForm(ProgrammePrepa $concour)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('concours_delete', array('id' => $concour->getId())))

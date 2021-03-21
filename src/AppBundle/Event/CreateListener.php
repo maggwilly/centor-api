@@ -123,7 +123,7 @@ class CreateListener
 
     public function onFillProfilInvited(InfoEvent $event)
     {
-        $destinations = $this->_em->getRepository('AdminBundle:Info')->findNotProfilFilled();
+        $destinations = $this->_em->getRepository('AdminBundle:UserAccount')->findNotProfilFilled();
         $tokens = array();
         $batchSize = 30;
         $notification = new Notification('private');

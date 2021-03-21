@@ -1,7 +1,7 @@
 <?php
 
 namespace AppBundle\Controller;
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use AppBundle\Entity\Objectif;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ class ObjectifController extends Controller
 /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function indexAction(Session $session=null)
+    public function indexAction(SessionConcours $session=null)
     {
         $em = $this->getDoctrine()->getManager();
         $liens=array();
@@ -40,7 +40,7 @@ class ObjectifController extends Controller
     /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
 */
-    public function newAction(Request $request,Session $session=null)
+    public function newAction(Request $request, SessionConcours $session=null)
     {
         $objectif = new Objectif();
         $form = $this->createForm('AppBundle\Form\ObjectifType', $objectif);

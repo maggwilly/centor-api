@@ -49,7 +49,7 @@ class Objectif
     private $matiere;
 
     /**
-   * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Session",inversedBy="liens", cascade={"persist","remove"})*/
+   * @ORM\ManyToMany(targetEntity="AppBundle\Entity\SessionConcours",inversedBy="liens", cascade={"persist","remove"})*/
     private $sessions;
 
     /**
@@ -59,7 +59,7 @@ class Objectif
      */
     private $date;
 
-     public function __construct(\AppBundle\Entity\Session $session=null)
+     public function __construct(\AppBundle\Entity\SessionConcours $session=null)
     {
         $this->date =new \DateTime();
         $this->sessions = new \Doctrine\Common\Collections\ArrayCollection();
@@ -147,10 +147,10 @@ class Objectif
         /**
      * Set concours
      *
-     * @param \AppBundle\Entity\Programme $concours
+     * @param \AppBundle\Entity\ProgrammePrepa $concours
      * @return Matiere
      */
-    public function setProgramme(\AppBundle\Entity\Session $concours = null)
+    public function setProgramme(\AppBundle\Entity\SessionConcours $concours = null)
     {
         $this->programme = $concours;
 
@@ -160,7 +160,7 @@ class Objectif
     /**
      * Get concours
      *
-     * @return \AppBundle\Entity\Programme 
+     * @return \AppBundle\Entity\ProgrammePrepa
      */
     public function getProgramme()
     {
@@ -170,11 +170,11 @@ class Objectif
         /**
      * Add session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      *
      * @return Partie
      */
-    public function addSession(\AppBundle\Entity\Session $session)
+    public function addSession(\AppBundle\Entity\SessionConcours $session)
     {
         $this->sessions[] = $session;
         return $this;
@@ -183,9 +183,9 @@ class Objectif
     /**
      * Remove session
      *
-     * @param \AppBundle\Entity\Session $session
+     * @param \AppBundle\Entity\SessionConcours $session
      */
-    public function removeSession(\AppBundle\Entity\Session $session)
+    public function removeSession(\AppBundle\Entity\SessionConcours $session)
     {
         $this->sessions->removeElement($session);
     }

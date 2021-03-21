@@ -22,9 +22,9 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $entities = array(
-            'Concours' => 'AppBundle:Session',
+            'Concours' => 'AppBundle:SessionConcours',
             'Ecole' => 'AppBundle:Concours',
-            'Arrêté' => 'AppBundle:Resultat',
+            'Arrêté' => 'AppBundle:ResultatConcours',
             'Annonce' => 'MessagerBundle:Notification',
             'Document' => 'AdminBundle:Ressource'
         );

@@ -9,14 +9,14 @@ use FS\SolrBundle\Doctrine\Annotation as Solr;
 
 
 /**
- * Resultat
+ * ResultatConcours
  * @Solr\Document()
  * @Solr\SynchronizationFilter(callback="indexHandler")
  * @ORM\Table(name="resultat_concours")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ResultatRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Resultat extends SolrSearchResult implements FileObject
+class ResultatConcours extends SolrSearchResult implements FileObject
 {
     /**
      * @var int
@@ -86,7 +86,7 @@ class Resultat extends SolrSearchResult implements FileObject
      *
      * @param string $url
      *
-     * @return Resultat
+     * @return ResultatConcours
      */
     public function setUrl($url)
     {
@@ -108,7 +108,7 @@ class Resultat extends SolrSearchResult implements FileObject
      *
      * @param string $description
      *
-     * @return Resultat
+     * @return ResultatConcours
      */
     public function setDescription($description)
     {
@@ -132,7 +132,7 @@ class Resultat extends SolrSearchResult implements FileObject
      *
      * @param \DateTime $date
      *
-     * @return Resultat
+     * @return ResultatConcours
      */
     public function setDate($date)
     {
@@ -207,7 +207,7 @@ class Resultat extends SolrSearchResult implements FileObject
      */
     public function getType()
     {
-        return 'Resultat';
+        return 'ResultatConcours';
     }
 
     /**

@@ -4,9 +4,9 @@ namespace Pwm\AdminBundle\Controller;
 
 use Pwm\AdminBundle\Entity\Abonnement;
 use Pwm\MessagerBundle\Entity\Notification;
-use Pwm\AdminBundle\Entity\Info;
+use Pwm\AdminBundle\Entity\UserAccount;
 use Pwm\AdminBundle\Entity\Commande;
-use Pwm\AdminBundle\Entity\Price;
+use Pwm\AdminBundle\Entity\Tarifaire;
 use Pwm\MessagerBundle\Controller\NotificationController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use FOS\RestBundle\View\View; 
-use AppBundle\Entity\Session;
+use AppBundle\Entity\SessionConcours;
 use AppBundle\Event\CommandeEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -35,7 +35,7 @@ class AbonnementController extends Controller
         $em = $this->getDoctrine()->getManager();
         $abonnements = $em->getRepository('AdminBundle:Abonnement')->findList();
          $extrats = $em->getRepository('AdminBundle:Abonnement')->findSinceDate();
-        $concours = $em->getRepository('AppBundle:Session')->findList();
+        $concours = $em->getRepository('AppBundle:SessionConcours')->findList();
          foreach ($extrats as $key => $abonnement) {
           $url="https://trainings-fa73e.firebaseio.com/session/".$abonnement->getSession()->getId()."/members/.json";
         $info=$abonnement->getInfo();
@@ -53,7 +53,7 @@ class AbonnementController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"abonnement"})
      */
-    public function indexJsonAction(Info $info)
+    public function indexJsonAction(UserAccount $info)
     {
         $em = $this->getDoctrine()->getManager();
         $abonnements = $em->getRepository('AdminBundle:Abonnement')->findForMe($info);
@@ -66,7 +66,7 @@ class AbonnementController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"commande"})
      */
-    public function startCommandeAction(Request $request,Info $info, $product, $package)
+    public function startCommandeAction(Request $request, UserAccount $info, $product, $package)
     {
          if($package=='ressource')
             $commande=$this->loadCommandeForRessource($info, $product);
@@ -96,7 +96,7 @@ class AbonnementController extends Controller
 
   public function loadCommandeForSesson($info, $produit, $package){
           $em = $this->getDoctrine()->getManager();
-          $session = $em->getRepository('AppBundle:Session')->find($produit);
+          $session = $em->getRepository('AppBundle:SessionConcours')->find($produit);
           $commande=$em->getRepository('AdminBundle:Commande')->findOneByUserSession($info,$session);
             if(is_null($commande)  || ! is_null($commande->getStatus())){
                $commande= new Commande($info, $session);
@@ -126,7 +126,7 @@ class AbonnementController extends Controller
           case 'premium':
               return $price-> getPremium();
            }
-           return new Price();
+           return new Tarifaire();
         }
 
     /**
@@ -204,7 +204,7 @@ class AbonnementController extends Controller
      * Lists all Produit entities.
      *@Rest\View(serializerGroups={"abonnement"})
      */
-    public function showJsonAction(Info $info, Session $session=null){
+    public function showJsonAction(UserAccount $info, SessionConcours $session=null){
         $em = $this->getDoctrine()->getManager();
          $abonnement = $em->getRepository('AdminBundle:Abonnement')->findMeOnThis($info, $session);
           if ( $abonnement!=null&&$session!=null) {
