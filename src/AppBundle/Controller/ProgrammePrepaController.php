@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  * Concour controller.
  *
  */
-class ProgrammeController extends Controller
+class ProgrammePrepaController extends Controller
 {
     /**
      * Lists all concour entities.
