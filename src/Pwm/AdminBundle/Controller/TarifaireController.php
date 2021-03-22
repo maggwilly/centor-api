@@ -12,7 +12,7 @@ use FOS\RestBundle\View\View;
  * Tarifaire controller.
  *
  */
-class PriceController extends Controller
+class TarifaireController extends Controller
 {
     const ZERO_PRICE_ID = 9;
   /**
