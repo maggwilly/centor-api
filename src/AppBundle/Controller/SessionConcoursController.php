@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Event\NotificationEvent;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class SessionController extends Controller
+class SessionConcoursController extends Controller
 {
 /**
  * @Security("is_granted('ROLE_SUPERVISEUR')")
