@@ -36,9 +36,6 @@
          "ext-curl": "*",
          "ext-json": "*"
     },
-    "provide": {
-         "ext-imagick": "*"
-     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
         "symfony/phpunit-bridge": "~2.7",
