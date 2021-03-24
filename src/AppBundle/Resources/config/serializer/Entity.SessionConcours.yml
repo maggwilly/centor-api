@@ -1,4 +1,4 @@
-AppBundle\Entity\Session:
+AppBundle\Entity\SessionConcours:
     exclusion_policy: none
     properties:
         id:
