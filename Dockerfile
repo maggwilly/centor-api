@@ -9,7 +9,7 @@ RUN apt-get install -y libapache2-mod-php7.0 php7.0-common php7.0-pgsql  php7.0-
 RUN \
 curl -sfLO https://download.imagemagick.org/ImageMagick/download/ImageMagick-7.0.11-4.tar.gz && \
 tar -xzf ImageMagick-7.0.11-4.tar.gz && \
-cd ImageMagick-7.0.11-4.tar.gz && \
+cd ImageMagick-7.0.11-4 && \
 ./configure --prefix /usr/local && \
 make install && \
 cd .. && \
