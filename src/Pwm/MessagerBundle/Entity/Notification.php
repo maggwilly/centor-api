@@ -68,7 +68,7 @@ class Notification
     private $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "detach"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $imageEntity;
