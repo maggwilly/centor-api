@@ -30,7 +30,7 @@ class RessourceController extends Controller
     public function indexAction(SessionConcours $session = null)
     {
         $em = $this->getDoctrine()->getManager();
-        if (is_null($session))
+        if (is_null($session) || $session->getId()==0)
             $ressources = $em->getRepository('AdminBundle:Ressource')->findAll();
         else
             $ressources = $session->getRessources();
@@ -260,13 +260,12 @@ class RessourceController extends Controller
     public function pushNotificationEvent(Ressource $ressource, SessionConcours $session=null): array
     {
         $notification = new Notification('public', false, true);
-        $notification
-            ->setTitre($ressource->getNom())
+        $notification->setTitre($ressource->getNom())
             ->setSousTitre( $ressource->getDescription())
             ->setText( $ressource->getDescription())
             ->setUser($this->getUser())->setType("public")
             ->setImageEntity($ressource->getFileEntity());
-        $data = array('page' => 'document', 'id' => $ressource->getId());
+            $data = array('page' => 'document', 'id' => $ressource->getId());
         if (!is_null($session)) {
             $destinations = $session->getInfos();
             $registrations = $this->findRegistrations($destinations);

@@ -14,7 +14,7 @@ use FOS\RestBundle\View\View;
  */
 class TarifaireController extends Controller
 {
-    const ZERO_PRICE_ID = 9;
+    const ZERO_PRICE_ID = 0;
   /**
    * @Security("is_granted('ROLE_PRICER')")
   */

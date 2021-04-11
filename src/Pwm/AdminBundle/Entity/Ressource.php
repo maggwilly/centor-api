@@ -143,7 +143,7 @@ class Ressource extends SolrSearchResult implements FileObject
     private $isPublic;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Image", cascade={"persist", "detach"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $fileEntity;

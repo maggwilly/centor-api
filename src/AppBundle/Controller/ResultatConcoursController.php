@@ -17,7 +17,7 @@ use AppBundle\Event\NotificationEvent;
  * ResultatConcours controller.
  *
  */
-class ResultatController extends Controller
+class ResultatConcoursController extends Controller
 {
   /**
    * @Security("is_granted('ROLE_MESSAGER')")

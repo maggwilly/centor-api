@@ -152,7 +152,7 @@ class Notification
     {
         $this->date =new \DateTime();
         $this->sendDate =new \DateTime();
-         $this->type =$type;
+        $this->type =$type;
         $this->includeMail =$includeMail;
         $this->includChat =$includChat;
         $this->tag ='public';
