@@ -137,32 +137,32 @@ class AbonnementController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($this->get("request")->getContent(), true);
-        if (!array_key_exists('orderid', $data) || !array_key_exists('status', $data))
-            throw new BadRequestHttpException('Invalid expected data', null, 400);
-        $commande = $em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
-        if (is_null($commande))
-            throw new BadRequestHttpException('Order not found', null, 404);
-        $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
-        $form->submit($data, false);
-        if ($form->isValid()) {
-            $commande->setStatus($data['status']);
-            $em->flush();
-            if (!is_null($commande->getSession())) {
-                $abonnement = $em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
-                if (is_null($abonnement)) {
-                       $abonnement = new Abonnement($commande);
-                        $commande->getSession()->removeInfo($commande->getInfo());
-                        $commande->getSession()->addInfo($commande->getInfo());
-                        $commande->getSession()->setNombreInscrit($commande->getSession()->getNombreInscrit() + 1);
-                       $em->persist($abonnement);
+        if (array_key_exists('orderid', $data) && array_key_exists('status', $data)) {
+            $commande = $em->getRepository('AdminBundle:Commande')->findOneByOrderId($data['orderid']);
+            if (!is_null($commande)) {
+                $form = $this->createForm('Pwm\AdminBundle\Form\CommandeType', $commande);
+                $form->submit($data, false);
+                if ($form->isValid()) {
+                    $commande->setStatus($data['status']);
+                    $em->flush();
+                    if (!is_null($commande->getSession()) && 'PAID' == $data['status']) {
+                        $abonnement = $em->getRepository('AdminBundle:Abonnement')->findMeOnThis($commande->getInfo(), $commande->getSession());
+                        if (is_null($abonnement)) {
+                            $abonnement = new Abonnement($commande);
+                            $commande->getSession()->removeInfo($commande->getInfo());
+                            $commande->getSession()->addInfo($commande->getInfo());
+                            $commande->getSession()->setNombreInscrit($commande->getSession()->getNombreInscrit() + 1);
+                            $em->persist($abonnement);
+                        }
+                        $abonnement->setPlan($commande->getPackage());
+                        $abonnement->setPrice($commande->getAmount());
+                        $commande->setAbonnement($abonnement);
+                    }
+                    $em->flush();
+                    $event = new CommandeEvent($commande);
+                    $this->get('event_dispatcher')->dispatch('commande.confirmed', $event);
                 }
-                $abonnement->setPlan($commande->getPackage());
-                $abonnement->setPrice($commande->getAmount());
-                $commande->setAbonnement($abonnement);
             }
-            $em->flush();
-            $event = new CommandeEvent($commande);
-            $this->get('event_dispatcher')->dispatch('commande.confirmed', $event);
         }
         return new JsonResponse("Thanks", 200);
     }
